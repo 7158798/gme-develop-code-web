@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+
+    <!--默认情况下，
+         sitemesh 只对 HTTP 响应头中 Content-Type 为 text/html 的类型进行拦截和装饰，
+          我们可以添加更多的 mime 类型-->
+    <!-- <mime-type>text/html</mime-type>
+    <mime-type>application/vnd.wap.xhtml+xml</mime-type>
+    <mime-type>application/xhtml+xml</mime-type> -->
+
+
+    <content-processor>
+        <tag-rule-bundle class="com.gmebtc.web.portal.common.MyTagRuleBundle" />
+    </content-processor>
+
+    <mapping path="/*" decorator="/decorator/topAndBottom.jsp"/>
+    <!--登录页面不被装饰。没有配置为true的页面，表示使用装饰页面,例如index.jsp -->
+
+</sitemesh>
