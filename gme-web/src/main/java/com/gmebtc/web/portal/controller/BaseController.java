@@ -37,7 +37,7 @@ public class BaseController {
      */
     @RequestMapping(value = "/loginIndex")
     public String loginIndex(Model model) {
-    	model.addAttribute("flag","a");
+    	model.addAttribute("flag","true");
         return "view/loginIndex";
     }
 
@@ -52,7 +52,7 @@ public class BaseController {
      */
     @RequestMapping(value = "/unLoginIndex")
     public String unLoginInde(Model model){
-    	model.addAttribute("flag","a");
+    	model.addAttribute("flag","false");
         return "view/unLoginIndex";
     }
 
@@ -60,19 +60,34 @@ public class BaseController {
 
     /**
      * @Title: login
-     * @Description: 跳转到登录页面
+     * @Description: 跳转到第一步登录页面
      * @param @param model
      * @param @return
      * @return String
      * @throws
      */
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/firstLogin")
     public String login(Model model){
-    	model.addAttribute("flag","a");
-        return "view/login";
+    	model.addAttribute("flag","false");
+        return "view/firstLogin";
     }
     
     
+    
+    /**
+     * 
+     * @Title: login2
+     * @Description:  跳转到第二步登录页面
+     * @param @param model
+     * @param @return
+     * @return String
+     * @throws
+     */
+    @RequestMapping(value = "/secondLogin")
+    public String secondLogin (Model model){
+    	model.addAttribute("flag","false");
+        return "view/secondLogin";
+    }
 
 
     /**
@@ -84,10 +99,41 @@ public class BaseController {
      * @throws
      */
     @RequestMapping(value = "/register")
-    public String register (){
+    public String register (Model model){
+    	model.addAttribute("flag","false");
         return "view/register";
     }
 
+    
+    
+    /**
+     * 
+     * @Title: findPassword
+     * @Description: 重置密码页面
+     * @param @param model
+     * @param @return
+     * @return String
+     * @throws
+     */
+    @RequestMapping(value = "/resetPassword")
+    public String findPassword (Model model){
+    	model.addAttribute("flag","false");
+        return "view/resetPassword";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 
     /**

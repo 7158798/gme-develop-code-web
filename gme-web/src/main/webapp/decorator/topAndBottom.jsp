@@ -39,9 +39,58 @@
                         </div>
                     </a>
                 </li>
+				
+				<c:if test="${flag == 'true' }">
+					<li class='toplogin user-info-con'>
+                            <div id="topLoginBar">
+                                <span class="lv-con"><a class="tier-level tier-icon0" href="/article/16273" title="等级"></a></span>
+                                <a id="nickName" href="/myaccount"><span>zuoyehengudan</span><i class="caret"></i></a>
+                                <div class="tier-info" id="tierMenu">
+                                    <ul>
+                                        <span class="uccaret umc"></span>
+                                        <li>
+                                            <b>当前等级：</b>
+                                            <span><strong class="tier-level tier-icon0"></strong><br/>有效时间至<small> -</small></span>
+                                        </li>
+                                        <li>
+                                            <b>当前交易费折扣：</b>
+                                            <span><strong>无</strong></span>
+                                        </li>
+                                        <li>
+                                            <b>最近30天交易量：</b>
+                                            <p><strong>0.00000</strong> BTC 或
+                                                <strong>0.00</strong> CNY</p>
+                                        </li>
+                                        <li>
+                                            <b>账户总资产：</b>
+                                            <p><strong>0.00000</strong> BTC 或
+                                                <strong>0.00</strong> CNY</p>
+                                        </li>
+                                        <li>
+                                            <b>升级进度：</b>
+                                            <span><strong>0.0%</strong></span>
+                                        </li>
+                                        <li id="progrLi">
+                                            <div id="proBar"></div>
+                                        </li>
+                                        <li>升级还需要 <strong>3.0</strong> BTC 或者
+                                            <strong>165998</strong> CNY 30天交易量
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class='toplogin user-log-out'><a href="/logout">退出</a></li>
+				</c:if>
+				<%-- <c:if test=""></c:if> --%>
+                
+                
+                
+                
                 
 				<c:choose>
-					<c:when test="${flag == 'a' }">
+					<c:when test="${flag == 'true' }">
 						<li class="">
 					        <a href="${pageContext.request.contextPath}/loginIndex">首页</a>
 			            </li>

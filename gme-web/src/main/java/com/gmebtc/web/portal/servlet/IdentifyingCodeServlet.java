@@ -38,29 +38,6 @@ public class IdentifyingCodeServlet extends HttpServlet{
 	
 	
 	
-	
-	  // 验证码字符集
-	  private static final char[] chars = { 
-	    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-	    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
-	    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-	  // 字符数量
-	  private static final int SIZE = 4;
-	  // 干扰线数量
-	  private static final int LINES = 5;
-	  // 宽度
-	  private static final int WIDTH = 80;
-	  // 高度
-	  private static final int HEIGHT = 40;
-	  // 字体大小
-	  private static final int FONT_SIZE = 30;
-	
-	
-	
-	
-	
-	
-	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException,IOException{
 		StringBuffer verifyCode = randomVerifyCode();
 		ServletOutputStream sos=null;
@@ -68,7 +45,7 @@ public class IdentifyingCodeServlet extends HttpServlet{
 			Toolkits t = new Toolkits();
 			HttpSession session = req.getSession(true);
 			session.setAttribute(Constants.VALIDATE_CODE, verifyCode.toString());
-			/*BufferedImage outImg = new BufferedImage(70, 23,  BufferedImage.TYPE_INT_RGB);
+			BufferedImage outImg = new BufferedImage(70, 23,  BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = (Graphics2D) outImg.getGraphics();
 			g.setColor(Color.WHITE);  
 			g.fillRect(0, 0, 70, 23);    
@@ -77,10 +54,10 @@ public class IdentifyingCodeServlet extends HttpServlet{
 			Random random = new Random();  
 			int red = 0, green = 0, blue = 0;  
 			for (int i = 0; i < lineCount; i++) {  
-	            int xs = random.nextInt(70);  
-	            int ys = random.nextInt(23);  
-	            int xe = xs+random.nextInt(70/8);  
-	            int ye = ys+random.nextInt(23/8);  
+	            int xs = random.nextInt(50);  
+	            int ys = random.nextInt(10);  
+	            int xe = xs+random.nextInt(50/8);  
+	            int ye = ys+random.nextInt(10/8);  
 	            red = random.nextInt(255);  
 	            g.setColor(new Color(red, red, red));  
 	            g.drawLine(xs, ys, xe, ye);  
@@ -98,56 +75,13 @@ public class IdentifyingCodeServlet extends HttpServlet{
 					g.drawString(String.valueOf(verifyCode.charAt(i)), i*17, 18);
 				}
 			}
-			g.dispose();*/
-			
-			
-			
-			
-			
-			StringBuffer sb = new StringBuffer();
-		    // 1.创建空白图片
-		    BufferedImage image = new BufferedImage(
-		      WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		    // 2.获取图片画笔
-		    Graphics graphic = image.getGraphics();
-		    // 3.设置画笔颜色
-		    graphic.setColor(Color.LIGHT_GRAY);
-		    // 4.绘制矩形背景
-		    graphic.fillRect(0, 0, WIDTH, HEIGHT);
-		    // 5.画随机字符
-		    Random ran = new Random();
-		    for (int i = 0; i <SIZE; i++) {
-		      // 取随机字符索引
-		      int n = ran.nextInt(chars.length);
-		      // 设置随机颜色
-		      graphic.setColor(getRandomColor());
-		      // 设置字体大小
-		      graphic.setFont(new Font(
-		        null, Font.BOLD + Font.ITALIC, FONT_SIZE));
-		      // 画字符
-		      graphic.drawString(
-		        chars[n] + "", i * WIDTH / SIZE, HEIGHT / 2);
-		      // 记录字符
-		      sb.append(chars[n]);
-		    }
-		    // 6.画干扰线
-		    for (int i = 0; i < LINES; i++) {
-		      // 设置随机颜色
-		      graphic.setColor(getRandomColor());
-		      // 随机画线
-		      graphic.drawLine(ran.nextInt(WIDTH), ran.nextInt(HEIGHT),
-		          ran.nextInt(WIDTH), ran.nextInt(HEIGHT));
-		    }
-		    // 7.返回验证码和图片
-			
-			
-			System.out.println("图片验证码session" + session.getAttribute("VALIDATE_CODE"));
+			g.dispose();
 			
 			
 			sos = resp.getOutputStream();  
-			ImageIO.write(image, "png", sos);  
+			ImageIO.write(outImg, "png", sos);  
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(sos);  
-			encoder.encode(image);  
+			encoder.encode(outImg);  
 			sos.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,7 +93,6 @@ public class IdentifyingCodeServlet extends HttpServlet{
 		}
 		
 	}
-	
 	
 		/**
 		 * 
@@ -182,7 +115,7 @@ public class IdentifyingCodeServlet extends HttpServlet{
 		this.doPost(req, resp);
 	}
 	
-	private StringBuffer randomVerifyCode() {
+	private synchronized StringBuffer randomVerifyCode() {
 		StringBuffer sb = new StringBuffer();
 		Random random = new Random();
 		for(int i=0; i<4; i++) {

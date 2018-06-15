@@ -11,7 +11,6 @@
     <context:component-scan base-package="com.gmebtc.web.portal.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -23,6 +22,7 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+    
     <!--配置视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/"/>
@@ -36,6 +36,7 @@
         <bean class="com.gmebtc.web.portal.filter.Interceptor" />
     </mvc:interceptor>
     </mvc:interceptors>
+
 
      <!--MultipartFile上传文件使用的-->
     <bean id="multipartResolver"
@@ -51,4 +52,5 @@
     <!-- 加载配置属性文件 -->
    <context:property-placeholder location="classpath:/spring-control.properties"/>
 
+	
 </beans>

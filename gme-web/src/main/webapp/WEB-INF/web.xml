@@ -71,6 +71,7 @@
 	</filter-mapping>
 
 
+
 	<!-- springmvc的前端控制器 -->
 	<servlet>
 		<servlet-name>gme-web</servlet-name>
@@ -84,7 +85,7 @@
 
 	<servlet-mapping>
 		<servlet-name>gme-web</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
 	<!-- 图片验证码servlet -->

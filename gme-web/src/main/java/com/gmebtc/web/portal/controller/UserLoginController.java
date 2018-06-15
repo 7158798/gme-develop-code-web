@@ -87,6 +87,7 @@ public class UserLoginController {
         hashMap.put("password", user.getPassword());
 
         String json = userLoginService.login(request,hashMap);
+        session.setAttribute("user", "user");
         return Toolkits.messageTransformation(request, json);
     }
 
@@ -100,6 +101,7 @@ public class UserLoginController {
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public String userLogout (HttpServletRequest request){
         userLoginService.logout(request);
+//        reques
         return "view/unLoginIndex";
     }
 

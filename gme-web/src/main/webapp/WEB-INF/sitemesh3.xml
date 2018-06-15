@@ -13,7 +13,11 @@
         <tag-rule-bundle class="com.gmebtc.web.portal.common.MyTagRuleBundle" />
     </content-processor>
 
-    <mapping path="/*" decorator="/decorator/topAndBottom.jsp"/>
+	<!-- 默认所有的页面都被修饰 -->
+    <!-- <mapping path="/*" decorator="/decorator/topAndBottom.jsp"/> -->
     <!--登录页面不被装饰。没有配置为true的页面，表示使用装饰页面,例如index.jsp -->
+    
+	
+
 
 </sitemesh>

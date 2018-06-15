@@ -93,7 +93,7 @@ function buildDom(t, e, a) {
 				var S = JSON.parse(daysLeftArr)[h];
 				C = '<div class="left-d">' + lang_string("剩余") + '<span class="red"> ' + S + " </span>" + lang_string("天") + "</div>", w = "limi-row"
 			}
-			"qtum" != e && !a && is_cn || (k = "/<em>" + p + "</em>"), is_cn && (D = '<span class="cname">' + g + "</span>", T = g), a && (x = "class=" + e + "_type"), n += "<tr id=" + u + " " + x + ">", n += '<td ><a class="coin-name ' + w + '" href="/trade/' + u.toUpperCase() + '" title="' + T + '"><span class="icon-32 icon-32-' + h.toLowerCase() + '"></span><span class="name-con"><b><span class="curr_a">' + h + "</span>" + k + "</b> " + D + C + " </span></a></td>", is_cn ? (n += '<td class="rate_' + m + '">' + l + f + i + "</td>", n += "<td>" + l + b + "</td>", n += "<td>" + l + v + "</td>", n += '<td class="day-updn">' + (_ < 0 ? "<span class=green>" + _ + " %</span>" : 0 == _ || -0 == _ ? "<span class=red>0.00 %</span>" : "<span class=red>+" + _ + " %</span>") + "</td>") : (n += '<td><span class="rate_' + m + '">' + l + f + i + "</td>", n += "<td>" + l + b + "</td>", n += "<td>" + t[d].supply + "</td>", n += "<td>" + l + v + "</td>", n += '<td class="day-updn">' + (_ < 0 ? "<span class=red>" + _ + " %</span>" : 0 == _ || -0 == _ ? "<span class=green>0.00 %</span>" : "<span class=green>+" + _ + " %</span>") + "</td>"), n += '<td><div class="price-chart" id="' + u + '_plot"></div></td>', n += '<td><a class="go-trade-btn r-btn" href="/trade/' + u.toUpperCase() + '">' + y + "</a></td>", n += '<td class="custom-option">', c.indexOf(u) > -1 ? n += '<i class="add-fav custom-on" data-id=' + u + ' title="' + lang_string("取消自选") + '"></i>' : n += '<i class="add-fav" data-id=' + u + ' title="' + lang_string("加自选") + '"></i>', n += "</td></tr>", a || chartFuc.push(u + "_chart();")
+			"qtum" != e && !a && is_cn || (k = "/<em>" + p + "</em>"), is_cn && (D = '<span class="cname">' + g + "</span>", T = g), a && (x = "class=" + e + "_type"), n += "<tr id=" + u + " " + x + ">", n += '<td ><a class="coin-name ' + w + '" href="/trade/' + u.toUpperCase() + '" title="' + T + '"><span class="icon-32 icon-32-' + h.toLowerCase() + '"></span><span class="name-con"><b><span class="curr_a">' + h + "</span>" + k + "</b> " + D + C + " </span></a></td>", is_cn ? (n += '<td class="rate_' + m + '">' + l + f + i + "</td>", n += "<td>" + l + b + "</td>", n += "<td>" + l + v + "</td>", n += '<td class="day-updn">' + (_ < 0 ? "<span class=green>" + _ + " %</span>" : 0 == _ || -0 == _ ? "<span class=red>0.00 %</span>" : "<span class=red>+" + _ + " %</span>") + "</td>") : (n += '<td><span class="rate_' + m + '">' + l + f + i + "</td>", n += "<td>" + l + b + "</td>", n += "<td>" + t[d].supply + "</td>", n += "<td>" + l + v + "</td>", n += '<td class="day-updn">' + (_ < 0 ? "<span class=red>" + _ + " %</span>" : 0 == _ || -0 == _ ? "<span class=green>0.00 %</span>" : "<span class=green>+" + _ + " %</span>") + "</td>"), n += '<td><div class="price-chart" id="' + u + '_plot"></div></td>', n += '<td class="custom-option">', c.indexOf(u) > -1 ? n += '<i class="add-fav custom-on" data-id=' + u + ' title="' + lang_string("取消自选") + '"></i>' : n += '<i class="add-fav" data-id=' + u + ' title="' + lang_string("加自选") + '"></i>', n += "</td></tr>", a || chartFuc.push(u + "_chart();")
 		}
 	}
 	return n
@@ -103,7 +103,7 @@ function loadChartData(coinType, chartFucRun) {
 	$.ajax({
 		type: "get",
 		//url: "/marketlist/" + coinType + "?u=5",
-		url: "/yyctjys//marketlist/new_file.txt",
+		url: "marketlist/new_file.txt",
 		dataType: "script",
 		success: function(data) {
 			if(data) {
@@ -153,7 +153,7 @@ function buildAll(t, e) {
 	var a = "",
 		i = "",
 		r = "";
-	if("qtum" != t && "custom" != t && (a = "<span class=curr-base>" + t.toUpperCase() + "</span>"), "limited" == t && (a = "<span class=curr-base>ETH</span>"), e && (i = "show-all"), r += '<table id="listTable" class="marketlist dataTable ' + i + '"><thead><tr><th class="sortable"><b>' + lang_string("币种对"), is_cn && (r += a), r += '</b></th><th class="sortable"><b>' + lang_string("价格") + a + '</b></th><th class="sortable"><b>' + lang_string("交易量") + a + "</b></th>", is_cn || (r += '<th class="sortable"><b>' + lang_string("Supply") + "</b></th>"), r += '<th class="sortable"><b>' + lang_string("总市值") + '</b></th><th class="sortable day-updn"><b>' + lang_string("日涨跌") + '</b></th><th class="sorting_disabled price-flot"><b>' + lang_string("价格趋势(3日)") + '</b></th><th class="sorting_disabled"></th><th class="sorting_disabled"><i class="fav-icon" title=' + lang_string("自选") + '></i></th></tr></thead><tbody id="list_tbody">', "custom" == t) {
+	if("qtum" != t && "custom" != t && (a = "<span class=curr-base>" + t.toUpperCase() + "</span>"), "limited" == t && (a = "<span class=curr-base>ETH</span>"), e && (i = "show-all"), r += '<table id="listTable" class="marketlist dataTable ' + i + '"><thead><tr><th class="sortable"><b>' + lang_string("币种对"), is_cn && (r += a), r += '</b></th><th class="sortable"><b>' + lang_string("价格") + a + '</b></th><th class="sortable"><b>' + lang_string("交易量") + a + "</b></th>", is_cn || (r += '<th class="sortable"><b>' + lang_string("Supply") + "</b></th>"), r += '<th class="sortable"><b>' + lang_string("总市值") + '</b></th><th class="sortable day-updn"><b>' + lang_string("日涨跌") + '</b></th><th class="sorting_disabled price-flot"><b>' + lang_string("价格趋势(3日)") + '</b></th><th class="sorting_disabled"><i class="fav-icon" title=' + lang_string("自选") + '></i></th></tr></thead><tbody id="list_tbody">', "custom" == t) {
 		var n = $.cookie("custom");
 		void 0 === n ? r += "<tr class='m-err-tip red'><td colspan='8'>" + lang_string("暂无自选币种！") + "</td></tr>" : (r += buildDom(listDataUSDT, "usdt", !0), r += buildDom(listDataBTC, "btc", !0), r += buildDom(listDataETH, "eth", !0), r += buildDom(listDataQTUM, "qtum", !0), r += buildDom(listDataLIMITED, "limited", !0))
 	} else "usdt" == t ? r += buildDom(listDataUSDT, t) : "btc" == t ? r += buildDom(listDataBTC, t) : "eth" == t ? r += buildDom(listDataETH, t) : "qtum" == t ? r += buildDom(listDataQTUM, t) : "limited" == t && (r += buildDom(listDataLIMITED, t));
@@ -267,10 +267,10 @@ searchInput.on("input propertychange", function() {
 }, 200), winScroll();
 var leftbar_data = LocalStorage.get("leftbar_data", !0);
 if(0 != leftbar_data.status || data_expired) $(".btn_selected").append('<div class="load8"><div class="loader">Loading</div></div>'), $.ajax({
-	type: "get",
+	type: "post",
 	//url: "/json_svr/get_leftbar/?u=128&c=" + Math.floor(1e6 * Math.random()),
-	 url: "/json_svr/get_leftbar/u128c658006.json",
-	//   url: "../json_svr/get_leftbar/u128c658006.json",
+//	url: "json_svr/get_leftbar/u128c658006.json",
+	url: "json_svr/get_leftbar/u128c658006.json",
 	xhrFields: {
 		withCredentials: !0
 	},
@@ -360,7 +360,7 @@ $("#marketMain").on("click", ".add-fav", function() {
 	}), $("#marketlist_controller").on("click", "button", function() {
 		if($(this).hasClass("btn_selected")) return !1;
 		var t = $(this).attr("id"),
-			e = t.toUpperCase() + lang_string("交易区");
+			e = t.toUpperCase() + lang_string("");
 		return listNum = 0, tableSort = null, currType = t, $(this).addClass("btn_selected").siblings().removeClass("btn_selected"), $(this).siblings().find(".load8").remove(), searchInput.val(""), $("#mianBox").on("click", ".sortable", function() {
 			setTableSorter($(this))
 		}).prop("class", t.toUpperCase() + "-box"), "limited" == t && (e = lang_string("限时交易区")), "custom" == t && (e = lang_string("自选区")), $("#fsBar").attr("placeholder", lang_string("搜索") + e), 0 == $(window).scrollTop() ? (atTop = !0, buildAll(currType, !0), $("#listTable").removeClass("show-all"), winScroll()) : (atTop = !1, buildAll(currType, !0), $("#listTable").addClass("show-all")), $.cookie("market_title", t, {

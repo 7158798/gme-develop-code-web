@@ -9,6 +9,25 @@ body,.footer,.maichu-form:before,.maichu-form:after{ /*background: #1b242d;*/ ba
 /*.second-nav > li:hover > a .caret:before {color: #9a5629 !important; }*/
 .second-nav > li {width: 150px;}
 .second-nav > li > a { padding: 12px 0 !important;}
+.dark-body .L_1{background: url(../images/l_2.png) no-repeat 50% 50% scroll;}
+.dark-body .L_5{color: #A5BCE7;}
+.dark-body .L_6{color: #8FA6D0;}
+.dark-body .L_7{color: #5F7296;}
+.dark-body .L_8{color: #8095BC;background: #152137;border: 1px solid #425579;}
+.dark-body .L_9{color: #5F7296;}
+.dark-body .L_10{color: #8095BC;border: 1px solid #425579;}
+.dark-body .L_11{color: #8095BC;background: #152137;border-right: 1px solid #425579;}
+.dark-body .L_12{color: #8095BC;background: #152137;}
+.dark-body .L_13{color: #8095BC;background: #152137;border: 1px solid #425579;}
+.dark-body .L_15{color: #8095BC;background: #152137;border: 1px solid #425579;}
+.dark-body .L_17{color: #8095BC;background: #152137;border: 1px solid #425579;}
+.dark-body .L_18{color: #8095BC;background: #152137;border: 1px solid #425579;}
+.dark-body .L_19{color: #A5BCE7;}
+.dark-body .L_20{background: #26599D;}
+.dark-body .L_20:hover{background: #4071B4;}
+.dark-body .L_21{color: #5F7296;}
+.dark-body .L_22{color: #8095BC;background: #152137;}
+.dark-body .action_6{color: #2583FF;border-bottom: 1px solid #2583FF;}
 .third-nav{ left: 150px}
 .gateio-nav > li ul {background: #333a44 !important;}
 .top-up #nickName .caret:before,.top-up .caret:before{ color:#191b23 }
@@ -36,7 +55,7 @@ a,.gateio-nav > li > a,.ask_ans,.step .wj a,.caret,.login_lan .lang-option,.top-
 .left_con .even:hover, .left_con .odd:hover,.even:hover,.odd:hover,#ask-list li:hover, #bid-list li:hover,.trade-main .trade-list_re li:hover{background: #1b232b !important}
 .side-sev ul li,.footer,.leftbar,.second-nav > li {border-color: #3e404a}
 .left_con .marketlist tr > td,.myacc-con td,.table-inacc td{border-color:#19222b}
-.leftbar,.footer{ border-color: #080d13; border-width: 3px}
+.leftbar,.footer{ }
 .advantage,.your-total,.m_title,div.b-s-title,th,.left_btn ,ul.draw-tools li,.left_con_login,.login-con .maichu,.myacc-con thead td,#top_last_rate_change dl:first-child,.newstitle,.newstail,.gm-head,div .bind_title h3,#top_last_rate_change > span:first-child{border-color: #343a48}
 .left_con .marketlist th{border-color: #19222b;}
 .area-btn-bg {background: none;border-bottom: 1px solid #343a48;}

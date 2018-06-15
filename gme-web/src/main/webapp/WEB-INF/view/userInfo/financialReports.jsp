@@ -36,10 +36,10 @@
     <div class="top-up">
         <div class="top-con">
             <ul class="topprice">
-				<li> BTC/CNY : ￥ <span class="topnum">54999.86</span><i class="icon-arrow-up">&uarr;</i> </li>
-                <li> ETH/CNY : ￥ <span class="topnum">4641.87</span><i class="icon-arrow-up">&uarr;</i> </li>
+				<li> BTC/CNY : ￥ <span class="topnum">54852.74</span><i class="icon-arrow-up">&uarr;</i> </li>
+                <li> ETH/CNY : ￥ <span class="topnum">4644.00</span><i class="icon-arrow-up">&uarr;</i> </li>
                 <li> LTC/CNY : ￥ <span class="topnum">890.42</span><i class="icon-arrow-up">&uarr;</i> </li>
-                <li> QTUM/CNY : ￥ <span class="topnum">106.94</span><i class="icon-arrow-up">&uarr;</i> </li>
+                <li> QTUM/CNY : ￥ <span class="topnum">107.78</span><i class="icon-arrow-up">&uarr;</i> </li>
             </ul>
             <div class="qqtel">
                 <a class="ask_ans" href="https://twitter.com/gate_io" target="_blank">
@@ -3084,7 +3084,7 @@
 		</table>
 	</div>
     <br>
-    <p>当前服务器时间: <b>2018-05-21 17:11:49 UTC+8</b></p>
+    <p>当前服务器时间: <b>2018-05-21 17:15:23 UTC+8</b></p>
 </div>
 <br>
 <script src="js/jquery.dataTables.min.js"></script>
@@ -3357,14 +3357,14 @@
             <span>gate.io&nbsp;&nbsp;版权所有 © 2018</span>
             <div class="vol-all">
                 <span>成交量:</span>
-				<span> USDT : $<span id="usdtAll">129280131</span> </span>
-                <span> BTC : ฿<span id="btcAll">659</span> </span>
-                <span> LTC : Ł<span id="ltcAll">2761</span> </span>
-                <span> ETH : E<span id="ethAll">31009</span> </span>
+				<span> USDT : $<span id="usdtAll">129515090</span> </span>
+                <span> BTC : ฿<span id="btcAll">660</span> </span>
+                <span> LTC : Ł<span id="ltcAll">2762</span> </span>
+                <span> ETH : E<span id="ethAll">31263</span> </span>
             </div>
             <span id="runTime">
                 <!--<a href="#">gate.io</a> is powered by <a href="#">gate.io Dev Team</a>-->
-                <span class="admin-view"> Elapsed:108.402ms - cnst:1.0;14:0.3;12:0.2;13:1.4;1:92.7;2:0.1; .234 &nbsp; a/e/r </span>
+                <span class="admin-view"> Elapsed:201.827ms - cnst:12.6;14:0.4;12:0.5;13:1.1;1:172.1;2:4.9; .234 &nbsp; a/e/r </span>
             </span>
         </div>
     </div>
@@ -3383,15 +3383,15 @@
 
 <script>
         //force user to use https
-      //  if ('https:' != document.location.protocol) { window.location = 'https://' + window.location.hostname + window.location.pathname; }
+       // if ('https:' != document.location.protocol) { window.location = 'https://' + window.location.hostname + window.location.pathname; }
     
     //for footer
     var tier_next_progress='0.0';
    
-    $("#usdtAll").text(toThousands(129280131));
-    $("#btcAll").text(toThousands(659));
-    $("#ltcAll").text(toThousands(2761));
-    $("#ethAll").text(toThousands(31009));
+    $("#usdtAll").text(toThousands(129515090));
+    $("#btcAll").text(toThousands(660));
+    $("#ltcAll").text(toThousands(2762));
+    $("#ethAll").text(toThousands(31263));
     is_login='zuoyehengudan' != '';
 </script>
 <script src="js/footer.js?v=0420"></script>
