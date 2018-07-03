@@ -19,6 +19,13 @@
     <example>${fns:getAdminPath()}</example>
   </function>
   
+   <function>
+    <description>获取页面基础url</description>
+    <name>getPageUrl</name>
+    <function-class>com.gmebtc.web.portal.tag.Global</function-class>
+    <function-signature>java.lang.String getPageUrl()</function-signature>
+    <example>${fns:getPageUrl}</example>
+  </function>
 <!--   <function>
     <description>获取网站URL后缀</description>
     <name>getUrlSuffix</name>

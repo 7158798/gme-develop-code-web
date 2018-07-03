@@ -2,7 +2,6 @@ package com.gmebtc.web.portal.servlet;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,12 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.gmebtc.web.portal.utils.Constants;
-import com.gmebtc.web.portal.utils.Toolkits;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.gmebtc.web.portal.constant.SessionAttributes;
 /**
  * 验证码处理
  *
@@ -29,11 +26,13 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 public class IdentifyingCodeServlet extends HttpServlet{
 	
 	private static final long serialVersionUID = -8765642283107293966L;
-	private static Logger log = Logger.getLogger(IdentifyingCodeServlet.class);
+	private static final Logger log = LoggerFactory.getLogger(IdentifyingCodeServlet.class);
+	
 	 // 验证码干扰线数  
     private int lineCount = 15;  
     
-	private char[] dictinary = new char[]{'0','1','2','3','4','5','6','7','8','9'};
+	private char[] dictinary = new char[]{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+											'A','B','C','D','E','F','G','H','I','J','k','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 	
 	
 	
@@ -42,22 +41,21 @@ public class IdentifyingCodeServlet extends HttpServlet{
 		StringBuffer verifyCode = randomVerifyCode();
 		ServletOutputStream sos=null;
 		try {
-			Toolkits t = new Toolkits();
 			HttpSession session = req.getSession(true);
-			session.setAttribute(Constants.VALIDATE_CODE, verifyCode.toString());
-			BufferedImage outImg = new BufferedImage(70, 23,  BufferedImage.TYPE_INT_RGB);
+			session.setAttribute(SessionAttributes.VALIDATE_CODE, verifyCode.toString());
+			BufferedImage outImg = new BufferedImage(100, 30,  BufferedImage.TYPE_INT_RGB);
 			Graphics2D g = (Graphics2D) outImg.getGraphics();
 			g.setColor(Color.WHITE);  
-			g.fillRect(0, 0, 70, 23);    
+			g.fillRect(0, 0, 100, 30);    
 			g.setFont(new Font("Dialog", Font.BOLD, 19));
 			g.setPaintMode();
 			Random random = new Random();  
 			int red = 0, green = 0, blue = 0;  
 			for (int i = 0; i < lineCount; i++) {  
-	            int xs = random.nextInt(50);  
-	            int ys = random.nextInt(10);  
-	            int xe = xs+random.nextInt(50/8);  
-	            int ye = ys+random.nextInt(10/8);  
+	            int xs = random.nextInt(100);  
+	            int ys = random.nextInt(30);  
+	            int xe = xs+random.nextInt(80);  
+	            int ye = ys+random.nextInt(15);  
 	            red = random.nextInt(255);  
 	            g.setColor(new Color(red, red, red));  
 	            g.drawLine(xs, ys, xe, ye);  
@@ -80,12 +78,11 @@ public class IdentifyingCodeServlet extends HttpServlet{
 			
 			sos = resp.getOutputStream();  
 			ImageIO.write(outImg, "png", sos);  
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(sos);  
-			encoder.encode(outImg);  
+			/*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(sos);  
+			encoder.encode(outImg);  */
 			sos.flush();
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e.getMessage(), e);
+			log.error("{} {} 生成图片验证码失败",e.toString());
 		}finally{
 			if(sos!=null){
 				sos.close();
@@ -118,8 +115,8 @@ public class IdentifyingCodeServlet extends HttpServlet{
 	private synchronized StringBuffer randomVerifyCode() {
 		StringBuffer sb = new StringBuffer();
 		Random random = new Random();
-		for(int i=0; i<4; i++) {
-			sb.append(dictinary[random.nextInt(9)]);
+		for(int i=0; i<6; i++) {
+			sb.append(dictinary[random.nextInt(32)]);
 		}
 		return sb;
 	}

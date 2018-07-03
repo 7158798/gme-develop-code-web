@@ -1,7 +1,10 @@
 package com.gmebtc.web.portal.entity;
 
-public class BindCard {
-    /* 姓名*/
+import java.io.Serializable;
+
+public class BindCard implements Serializable{
+	private static final long serialVersionUID = 1L;
+	/* 姓名*/
     private String name;
     /* 开户行*/
     private String bank;
@@ -10,7 +13,7 @@ public class BindCard {
     /* 银行卡号*/
     private String bankCard;
     /* 资金密码*/
-    private String payPassword;
+    private String tradeAuth;
 
     public String getName() {
         return name;
@@ -44,11 +47,12 @@ public class BindCard {
         this.bankCard = bankCard;
     }
 
-    public String getPayPassword() {
-        return payPassword;
-    }
+	public String getTradeAuth() {
+		return tradeAuth;
+	}
 
-    public void setPayPassword(String payPassword) {
-        this.payPassword = payPassword;
-    }
+	public void setTradeAuth(String tradeAuth) {
+		this.tradeAuth = tradeAuth;
+	}
+
 }

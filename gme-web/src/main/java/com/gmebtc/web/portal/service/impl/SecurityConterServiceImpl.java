@@ -1,6 +1,7 @@
 package com.gmebtc.web.portal.service.impl;
 
 import com.gmebtc.web.portal.service.SecurityConterService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ import java.util.HashMap;
 public class SecurityConterServiceImpl implements SecurityConterService {
 
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -31,22 +32,11 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String modifyLoginPwd(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "modifyLoginPwd&";
+        String method = "modifyLoginPwd&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
-    /**
-     * @Author zhou
-     * @Date 2018/5/30 19:03
-     * @Param [request, hashMap]
-     * @Desc 修改资金密码
-     */
-    @Override
-    public String resetPayPassword(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "resetPayPassword&";
-        return SendRequestUtil.sendMapRequest(request, hashMap, method);
-    }
-
+    
 
     /**
      * @Author zhou
@@ -56,7 +46,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String sendEmail(HttpServletRequest request, HashMap<String, String> hashMap) {
-       String method = SERVICE_BASE_PARAM + "sendEmail&";
+       String method = ConfigUtil.get("SECURITY_SENDEMAIL");
        return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -68,7 +58,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String identifyAuth(HttpServletRequest request, HashMap<String, String> hashMap) {
-       String method = SERVICE_BASE_PARAM + "identifyAuth&";
+       String method = ConfigUtil.get("SECURITY_IDENTIFYAUTH");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -81,7 +71,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String checkHasIdentify(HttpServletRequest request) {
-        String method = SERVICE_BASE_PARAM + "checkHasIdentify&";
+        String method = "checkHasIdentify&";
         return SendRequestUtil.sendRequest(request, method);
     }
 
@@ -94,7 +84,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String payMethedBank(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "payMethedBank&";
+        String method = ConfigUtil.get("SECURITY_PAYMETHODBANK");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -107,20 +97,23 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String payMethedAlipayWeChat(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "payMethedAlipayWeChat&";
+        String method = ConfigUtil.get("SECURITY_PAYMETHODALI");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
-    /**
-     * @Author zhou
-     * @Date 2018/5/30 21:12
-     * @Param [request, hashMap]
-     * @Desc 检查用户是否存在
-     */
+   /**
+    * 
+    * Title: checkUserIdentify
+    * Description: 检查用户信息
+    * @param request
+    * @param hashMap
+    * @return  
+    * @see com.gmebtc.web.portal.service.SecurityConterService#checkUserIdentify(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+    */
     @Override
-    public String checkUserExsit(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "checkUserExsit&";
+    public String checkUserIdentify(HttpServletRequest request, HashMap<String, String> hashMap) {
+        String method = ConfigUtil.get("SECURITY_CHECKUSERIDENTIFY");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -133,7 +126,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String bindPhone(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "bindPhone&";
+        String method = ConfigUtil.get("SECURITY_BINDPHONE");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -146,7 +139,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String bindEmail(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "bindEmail&";
+        String method = ConfigUtil.get("SECURITY_BINDEMAIL");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -159,7 +152,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      */
     @Override
     public String emailActiveCheck(HttpServletRequest request, HashMap<String, String> hashMap) {
-    	 String method = SERVICE_BASE_PARAM + "emailActiveCheck&";
+    	 String method = ConfigUtil.get("SECURITY_ACTIVECHECK");
          return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -170,7 +163,40 @@ public class SecurityConterServiceImpl implements SecurityConterService {
      * @Desc 验证邮箱验证码
      */
 	public String checkEmailCode(HttpServletRequest request, HashMap<String, String> hashMap) {
-		String method = SERVICE_BASE_PARAM + "checkEmailCode&";
+		String method = ConfigUtil.get("SECURITY_CHECKEMAILCODE");
+		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
+
+	
+	
+	 /**
+     * 
+     * Title: resetPayPasswordFirst
+     * Description: 修改资金密码第一步
+     * @param request
+     * @param hashMap
+     * @return  
+     * @see com.gmebtc.web.portal.service.SecurityConterService#resetPayPasswordFirst(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+     */
+    @Override
+    public String resetPayPasswordFirst(HttpServletRequest request, HashMap<String, String> hashMap) {
+        String method = ConfigUtil.get("SECURITY_RESETPAYPWDFIRST");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+    }
+	
+	
+	/**
+	 * 
+	 * Title: resetPayPasswordSecond
+	 * Description: 修改资金密码第
+	 * @param request
+	 * @param hashMap
+	 * @return  
+	 * @see com.gmebtc.web.portal.service.SecurityConterService#resetPayPasswordSecond(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+	 */
+	@Override
+	public String resetPayPasswordSecond(HttpServletRequest request, HashMap<String, String> hashMap) {
+		String method = ConfigUtil.get("SECURITY_RESETPAYPWDSECOND");
 		return SendRequestUtil.sendMapRequest(request, hashMap, method);
 	}
 }

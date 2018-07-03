@@ -35,7 +35,7 @@ public class Global {
 
 	
 	/**
-	 * 获取管理端根路径
+	 * 获取访问页面url
 	 */
 	public static String getAdminPath() {
 		return getConfig("ROOT_PATH");
@@ -44,8 +44,8 @@ public class Global {
 	/**
 	 * 获取URL后缀
 	 */
-	public static String getUrlSuffix() {
-		return getConfig("urlSuffix");
+	public static String getPageUrl() {
+		return getConfig("ACCESS_PAGE");
 	}
 	
 }

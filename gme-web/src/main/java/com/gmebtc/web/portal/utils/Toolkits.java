@@ -16,10 +16,13 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import com.gmebtc.web.portal.result.GlobalResult;
+import com.gmebtc.web.portal.constant.ResultCode;
+import com.gmebtc.web.portal.net.CommonUtil;
+import com.gmebtc.web.portal.result.ResponseResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -28,9 +31,9 @@ import com.google.gson.JsonParser;
  * 实用工具类。
  * Mar 6, 2014 3:15:41 PM
  */
-public final class Toolkits
-{
-	private static final Logger logger = Logger.getLogger(Toolkits.class);
+public final class Toolkits{
+	
+	private static final Logger log = LoggerFactory.getLogger(Toolkits.class);
 	private static final JsonParser jsonParser = new JsonParser();
 	private static Gson gson = null;
 
@@ -338,7 +341,7 @@ public final class Toolkits
 	 * @Param [json:要被转换的json字符串]
 	 * @Desc 验证从后台传过来的状态码,进行国际化的转换
 	 */
-	public static final  GlobalResult messageTransformation (HttpServletRequest request,String json){
+	public static final  ResponseResult messageTransformation (HttpServletRequest request,String json){
 		Locale locale = (Locale) request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		Map<String, String> map = new HashMap<String, String>();
 		if ("zh_CN".equals(locale.toString())) {
@@ -353,32 +356,78 @@ public final class Toolkits
 //			map.put("msg2", "The type of verifying code can not be empty");
 //			map.put("msg3", "The verifying code cannot be empty");
 		}
-		GlobalResult result = null;
+		ResponseResult result = null;
 		if (null == json || "".equals(json)) {
-			result.setCode(400);
+			result = new ResponseResult();
+			result.setCode("-1");
 			result.setMessage("服务器发生异常");
 			result.setData("");
-			logger.info("后台无数据传输");
 			return result;
 		} else {
 			try {
-				result = (GlobalResult) fromJsonToPojo(json, GlobalResult.class);
+				result = (ResponseResult) fromJsonToPojo(json, ResponseResult.class);
 			} catch (Exception e) {
-				logger.error("后台数据格式错误");
-				result.setCode(400);
+				result.setCode("-1");
 				result.setMessage("后台数据格式错误");
 				result.setData("");
 				return result;
 			}
-			if (result.getCode() == 200) {
-				// TODO
-//				result.setMessage(defaultString(map.get("msg1")));
-				return result;
-			}
-
 		}
 		return result;
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @Title: HandleResp
+	 * @Description: TODO 处理从后台返回的json数据
+	 * @param @param request
+	 * @param @param json
+	 * @param @return
+	 * @return ResponseResult
+	 * @throws
+	 */
+	public static ResponseResult handleResp (String json){
+		ResponseResult result = new ResponseResult();
+		try {
+			result = (ResponseResult) fromJsonToPojo(json, ResponseResult.class);
+			if (result.getCode().startsWith("1")) {
+				result.setMessage("服务器正在处理,请稍等");
+				log.info("后台返回状态码code:{}",result.getCode());
+				return result;
+			}else if (result.getCode().startsWith("4")) {
+				if (result.getCode().equals(ResultCode.NO_PASS_VALIDATE)) {
+					result.setMessage("你没有通过验证,请重新验证后重试");
+					log.error("{} 后台返回状态码code:{}",result.getCode());
+					return result;
+				}
+				if (result.getCode().equals(ResultCode.USER_ALREADY_REGISTER)) {
+					result.setMessage("此账号已被注册，请直接登录");
+					log.error("{} 后台返回状态码code:{}",result.getCode());
+					return result;
+				}
+				if (result.getCode().equals(ResultCode.LOGINID_PASSWORD_ERROR)) {
+					result.setMessage("用户名或密码验证错误");
+					log.error("{} 后台返回状态码code:{}",result.getCode());
+					return result;
+				}
+				// 参数传递错误，内部错误，不提示消息
+				result.setCode(ResultCode.WEB_ERROR);
+				result.setMessage("");
+				log.error("{} 后台返回状态码code:{}",result.getCode());
+				return result;
+			}
+			return result;
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage("服务器异常,请稍后重试");
+			result.setData("");
+			log.error("{} 处理后台返回的结果出现错误",e.toString());
+			return result;
+		}
+	}
+	
 	
 
 

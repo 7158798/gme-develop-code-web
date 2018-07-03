@@ -1,14 +1,16 @@
 package com.gmebtc.web.portal.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gmebtc.web.portal.net.CommonUtil;
 import com.gmebtc.web.portal.net.JsonUtil;
 import com.gmebtc.web.portal.net.modle.ResultJson;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * @Author zhou
@@ -17,8 +19,8 @@ import java.util.Map;
  */
 public class SendRequestUtil {
 
-    private static Logger logger = Logger.getLogger(SendRequestUtil.class);
-
+	private static final Logger log = LoggerFactory.getLogger(SendRequestUtil.class);
+	
     // 发送带有java pojo参数的post请求
     public static String sendPojoRequest(HttpServletRequest request, Object object, String method) {
         String data = JsonUtil.getJsonStringJavaPOJO(object);
@@ -26,8 +28,7 @@ public class SendRequestUtil {
         try {
             resultJson = CommonUtil.getResultJson(data, request, method);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            logger.error("发送请求失败:" + e.getMessage());
+            log.error("{} 发送请求失败:" + e.toString());
         }
         if (null == resultJson) {
             return null;
@@ -43,8 +44,7 @@ public class SendRequestUtil {
         try {
             resultJson = CommonUtil.getResultJson(data, request, method);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            logger.error("发送请求失败:" + e.toString());
+            log.error("{} 发送http请求失败:" + e.toString());
         }
         if (null == resultJson) {
             return null;
@@ -59,8 +59,7 @@ public class SendRequestUtil {
         try {
             resultJson = CommonUtil.getResultJson(request, method);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            logger.error("发送请求失败:" + e.getMessage());
+            log.error("{} 发送请求失败:" + e.toString());
         }
         if (null == resultJson) {
             return null;

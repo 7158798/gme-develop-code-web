@@ -2,149 +2,116 @@
 <html>
 
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>฿0.0844 以太币 ETH 对 比特币 BTC - Gate.io - The Gate of Blockchain Assets Exchange</title>
-		<meta name="description" content="ETH and BTC 兑换, 网址是 Gate.io， 是一个区块链数字资产交易平台，支持比特币Bitcoin, 以太坊, Ethereum,莱特币, Litecoin，Qtum 等币种交易，其特点是快捷，安全。 ">
-		<meta name="keywords" content="比特币, bitcoin, BTC, Ethereum, 以太坊, litecoin, LTC, ETC, Qtum, 代币, ICO, 交易平台，交易网站，比特币交易，比特币兑换，比特币市场 ">
-		<meta name="format-detection" content="telephone=no">
-		<!--[if lte IE 9]><script type="text/javascript">location.href = '/update.html';</script><![endif]-->
-		<link href="css/style.css?v=1526375818" rel="stylesheet" type="text/css">
-		<style>
-			.icon-48,
-			.icon-32,
-			.icon-16 {
-				background-image: url("images/coins48.png?v=1526551416")
-			}
-		</style>
-		<link href="css/coins_16.css?v=1526551416" rel="stylesheet" type="text/css">
-		<link href="css/coins_32.css?v=1526551416" rel="stylesheet" type="text/css">
-		<link href="css/coins_48.css?v=1526551416" rel="stylesheet" type="text/css">
-		<link href="css/trade.css?v=1521624193" rel="stylesheet" type="text/css">
-		<link href="css/theme_dark.css?0517" rel="stylesheet" type="text/css" id="darkStyle" disabled="disabled">
-
-		<link href="favicon.ico" rel="shortcut icon">
-		<link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon-120x120.png" />
-		<script>
-			var g_lang = 'cn';
-		</script>
-		<script src="js/jquery-1.8.2.min.js"></script>
-		<script src="js/jquery.common.tools.js?v=0207"></script>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/CZ.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/style-hei.css" />
+		<link rel="stylesheet" href="css/1200.css" />
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 	</head>
 
 	<body class="">
-		<div class="header clearfix">
-			<div class="top-up" style="margin-top: 16px;">
-				<div class="top-con">
-					<ul class="topprice">
-						<li> BTC/CNY : ￥ <span class="topnum">55362.06</span><i class="icon-arrow-up">&uarr;</i> </li>
-						<li> ETH/CNY : ￥ <span class="topnum">4654.00</span><i class="icon-arrow-up">&uarr;</i> </li>
-						<li> LTC/CNY : ￥ <span class="topnum">904.22</span><i class="icon-arrow-up">&uarr;</i> </li>
-						<li> QTUM/CNY : ￥ <span class="topnum">108.62</span><i class="icon-arrow-up">&uarr;</i> </li>
-					</ul>
-					<ul class="login_lan">
-
-						<li class="toplogin">
-							<a href="#">注册&nbsp;</a>|&nbsp; </li>
-						<li class="toplogin" id="toplogin">
-							<a href="login.html">登录</a>
-						</li>
-
-						<li class="lang-option">
-							<span>中文版</span><i class="caret"></i>
-							<div class="more-lan">
-								<a href="https://gateio.io/lang/en">English</a>
-								<a href="https://gateio.io/lang/kr">한국어</a>
-							</div>
-						</li>
-
-					</ul>
-					<ul id="theme">
-						<span>主题:</span>
-						<li id="dark" title="深色">深色</li>
-						<li id="light" title="浅色">浅色</li>
-					</ul>
-				</div>
-			</div>
-			<div class="top-dn" style="height: 66px;">
+		<div class="header">
+			<div class="header_1">
 				<div class="logo">
-					<a href="https://gate.io" target="_top">
-						<!--[if !IE]]--><img src="images/logo@@2x.png" alt="gate.io LOGO" style="margin: 12px 60px 0 0;" />
-						<!--[endif]]-->
-						<!--[if IE]><img src="/images/logo.png" alt="LOGO"/><![endif]-->
+					<a>
+						<img src="img/dblg.png" />
 					</a>
 				</div>
-
-				<ul class="gateio-nav" style="margin-top: 16px;">
-					<li class="nav-active">
-						<a href="gateio_default.html">首页</a>
-					</li>
-					<li class="">
-						<a href="c2c.html" class="tooltip" title="法币交易">C2C交易</a>
-					</li>
-
-					<li class="nav-trade-item ">
-						<a href="bbjy.html">币币交易</a>
-					</li>
-
-					<li class="">
-						<a href="caiwubaogao.html">我的财务</a>
-
-					</li>
-
-					<li class="">
-						<a href="shenfenrenzheng.html">安全设置</a>
-
-					</li>
-					<li class="">
-						<a href="gonggao.html">公告</a>
-
-					</li>
-					<li class="">
-						<a href="wodegongdan.html">提交工单</a>
-					</li>
-				</ul>
-
-				<div id="top_last_rate" style="display: none"></div>
-
+				<div class="header_daohang">
+					<ul>
+						<li>
+							<a href="#">首页</a>
+						</li>
+						<li>
+							<a href="#">C2C交易</a>
+						</li>
+						<li>
+							<a href="#">币币交易</a>
+						</li>
+						<li>
+							<a href="#">我的财务</a>
+						</li>
+						<li>
+							<a href="#">安全设置</a>
+						</li>
+						<li>
+							<a href="#">公告</a>
+						</li>
+						<li>
+							<a href="#">提交工单</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="header_2">
+				<div class="header_denglu">
+					<ul>
+						<li>
+							<a href="#" class="whate">登录</a>
+						</li>
+						<li>|</li>
+						<li>
+							<a href="#" class="whate">注册</a>
+						</li>
+						<li>
+							<span class="zyw">中文版</span>
+							<div class="yybb">
+								<a href="#">ENGLISH</a>
+								<a href="#">한국어</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="header_zhuti">
+					<ul>
+						<span>主题</span>
+						<li id="bai"></li>
+						<li id="hei"></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-
+		
+		
+		<!--
+        	作者：李德芳
+        	时间：2018-06-28
+        	描述：
+        -->
 		<div class="L_1" style="height: 880px;">
 			<div class="L_2">
 				<div class="L_3">
 					<p class="L_5">重置登录密码</p>
 					<a class="L_6 action_6" id="sjzczh">手机找回</a>
-					<a class="L_6" id="yxzczh">邮箱注册</a>
+					<a class="L_6" id="yxzczh">邮箱找回</a>
 					<script>
 						$("#yxzczh").click(function() {
-							if($("#sjczmmtc").css("display") == "none"){
-								$("#sjzczh").removeClass("action_6");
-								$("#yxzczh").addClass("action_6");
-								$("#sjzclbzh").slideUp(300, function() {
-									$("#sjzclbzh").css("display", "none");
-								});
-								$("#yxzclbzh").slideDown(300, function() {
-									$("#yxzclbzh").css("display", "block");
-								});
-							}
+							$("#sjzczh").removeClass("action_6");
+							$("#yxzczh").addClass("action_6");
+							$("#sjzclbzh").slideUp(300, function() {
+								$("#sjzclbzh").css("display", "none");
+							});
+							$("#yxzclbzh").slideDown(300, function() {
+								$("#yxzclbzh").css("display", "block");
+							});
 						});
 						$("#sjzczh").click(function() {
-							if($("#sjczmmtc").css("display") == "none"){
-								$("#yxzczh").removeClass("action_6");
-								$("#sjzczh").addClass("action_6");
-								$("#yxzclbzh").slideUp(300, function() {
-									$("#yxzclbzh").css("display", "none");
-								});
-								$("#sjzclbzh").slideDown(300, function() {
-									$("#sjzclbzh").css("display", "block");
-								});
-							}
+							$("#yxzczh").removeClass("action_6");
+							$("#sjzczh").addClass("action_6");
+							$("#yxzclbzh").slideUp(300, function() {
+								$("#yxzclbzh").css("display", "none");
+							});
+							$("#sjzclbzh").slideDown(300, function() {
+								$("#sjzclbzh").css("display", "block");
+							});
 						});
 					</script>
 					<div id="sjzclbzh">
 						<p class="L_9">手机号码</p>
 						<div class="L_10">
-							<select id="quhao" class="L_11">
+							<select class="L_11">
 								<option value="volvo">+86</option>
 								<option value="saab">+86</option>
 								<option value="opel">+86</option>
@@ -159,17 +126,7 @@
 									alert("不是完整的11位手机号或者正确的手机号前七位");
 									return false;
 								} else {
-									var quhao = $("#quhao").change(function() {}),
-										quhaoxuanz = $("#quhao").find("option:selected").text();
-									$.ajax({
-										type: 'POST',
-										url: "http://192.168.0.148:8082/gme-web/api/v1/user/sendPhoneCheckCode.do",
-										data: "phoneCode=" + $("#sjhm").val() + "&type=3" + "&countryCode=" + quhaoxuanz,
-										dataType: "json",
-										success: function(msg) {
-											alert(msg.code);
-										}
-									});
+									// 验证码发送事件
 								}
 							}
 						</script>
@@ -198,15 +155,7 @@
 									myreg.focus();
 									return false;
 								} else {
-									$.ajax({
-										type: 'POST',
-										url: "http://192.168.0.148:8082/gme-web/api/v1/user/sendEmail.do",
-										data: "email=" + $("#youxianghaoma").val() + "&type=2",
-										dataType: "json",
-										success: function(msg) {
-											alert(msg.code);
-										}
-									});
+									// 邮箱验证码发送
 								}
 							}
 						</script>
@@ -236,61 +185,103 @@
 							if(teb == "") {
 								$.ajax({
 									type: 'POST',
-									url: "http://192.168.0.148:8082/gme-web/api/v1/user/resetPassword.do",
+									url: "http://192.168.0.148:8080/gme-web/api/v1/user/checkIdentCode.json",
+									data: "phoneCode=" + teb + "&identCode=" + sjczyzm,
+									dataType: "json",
+									success: function(data) {
+										/* if (data.code == 200) {
+											alert("验证短信验证码成功");
+											$.ajax({
+												type: 'POST',
+												url: "http://192.168.0.148:8080/gme-web/api/v1/user/resetPassword.json",
+												data: "password=" + "1212122",
+												success: function(data){
+													if (data.code == 200) {
+														window.location.href="http://192.168.0.148:8080/gme-web/firstLogin.html";
+														return;
+													}else {
+														alert(data.msg);
+														return;
+													}
+												}
+											});
+											return;
+										}else {
+											alert(data.msg);
+											return;
+										} */
+									}
+								});
+							} else {
+								$.ajax({
+									type: 'POST',
+									url: "http://192.168.0.148:8080/gme-web/api/v1/user/resetPassword.json",
 									data: "loginId=" + em + "&password=" + mima,
 									dataType: "json",
 									success: function(data) {
-										alert(msg.code);
-									}
-								});
-							} else {
-								$.ajax({
-									type: 'POST',
-									url: "http://192.168.0.148:8082/gme-web/api/v1/user/resetPassword.do",
-									data: "loginId=" + teb + "&password=" + mima,
-									dataType: "json",
-									success: function(data) {
-										alert(msg.code);
+										alert(console.log(data));
 									}
 								});
 							}
-						} else {
+						} else { // 验证手机号验证码
 							if(teb == "") {
 								$.ajax({
 									type: 'POST',
-									url: "http://192.168.0.148:8082/gme-web/api/v1/user/checkPhoneCode.do",
-									data: "phone=" + em + "&identCode=" + yxczyzm + "&type=3",
+									url: "http://192.168.0.148:8080/gme-web/api/v1/user/checkIdentCode.json",
+									data: "phone=" + em + "&identCode=" + yxczyzm,
 									dataType: "json",
 									success: function(data) {
-										if(data.code == 200) {
-											$("#yxzclbzh").slideUp(300, function() {
-												$("#yxzclbzh").css("display", "none");
+										if (data.code == 200) {
+											$.ajax({
+												type: 'POST',
+												url: "http://192.168.0.148:8080/gme-web/api/v1/user/resetPassword.json",
+												data: "password=" + "1212122",
+												success: function(data){
+													if (data.code == 200) {
+														window.location.href="http://192.168.0.148:8080/gme-web/firstLogin.html";
+														return;
+													}else {
+														alert(data.message);
+														return;
+													}
+												}
 											});
-											$("#sjczmmtc").slideDown(300, function() {
-												$("#sjczmmtc").css("display", "block");
-											});
-										} else {
-											alert("验证码错误")
+											return;
 										}
 									}
 								});
 							} else {
 								$.ajax({
 									type: 'POST',
-									url: "http://192.168.0.148:8082/gme-web/api/v1/user/checkPhoneCode.do",
+									url: "http://192.168.0.148:8080/gme-web/api/v1/user/checkIdentCode.json",
 									data: "phone=" + teb + "&identCode=" + sjczyzm + "&type=3",
 									dataType: "json",
 									success: function(data) {
-										if(data.code == 200) {
-											$("#sjzclbzh").slideUp(300, function() {
-												$("#sjzclbzh").css("display", "none");
-											});
-											$("#sjczmmtc").slideDown(300, function() {
-												$("#sjczmmtc").css("display", "block");
-											});
+										/* alert(6);
+										var jsonData = JSON.parse(data);
+										if(jsonData.message == "成功") {
+											alert(3)
 										} else {
-											alert("验证码错误")
-										}
+											alert(4)
+										} */
+										if (data.code == 200) {
+											alert("验证短信验证码成功");
+											$.ajax({
+												type: 'POST',
+												url: "http://192.168.0.148:8080/gme-web/api/v1/user/resetPassword.json",
+												data: "password=" + "1212122",
+												success: function(data){
+													if (data.code == 200) {
+														window.location.href="http://192.168.0.148:8080/gme-web/firstLogin.html";
+														return;
+													}else {
+														alert(data.msg);
+														return;
+													}
+												}
+											});
+											return;
+									}
 									}
 								});
 							}
@@ -299,19 +290,18 @@
 				</script>
 			</div>
 		</div>
-
 		<!-- content -->
 
-		<div class="footer" style="background-color: #152137; ">
+		<div class="footer">
 			<div class="aqgxfw_30">
 				<div class="aqgxfw_31">
 					<div class="aqgxfw_32">
-						<img src="images/dblg.png" />
-						<img src="images/QQ@@2x.png" style="margin:28px 6px 5px 0px;" />
-						<img src="images/微信@@2x.png" style="margin:28px 0px 5px 0px; " />
-						<img src="images/新浪@@2x.png" style="margin:28px 10px 5px 6px; " />
-						<img src="images/1111@@2x.png" style="margin:6px 0px 5px 0px; " />
-						<img src="images/2222@@2x.png" style="margin:6px 10px 5px 6px; " />
+						<img src="img/dblg.png" />
+						<img src="img/QQ@@2x.png" style="margin:28px 6px 5px 0px;" />
+						<img src="img/微信@@2x.png" style="margin:28px 0px 5px 0px; " />
+						<img src="img/新浪@@2x.png" style="margin:28px 10px 5px 6px; " />
+						<img src="img/1111@@2x.png" style="margin:6px 0px 5px 0px; " />
+						<img src="img/2222@@2x.png" style="margin:6px 10px 5px 6px; " />
 					</div>
 					<div class="aqgxfw_33">
 						<p class="aqgxfw_34">关于我们</p>
@@ -345,23 +335,7 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			//force user to use https
-			//  if ('https:' != document.location.protocol) { window.location = 'https://' + window.location.hostname + window.location.pathname; }
-
-			//for footer
-			var tier_next_progress = '0.0';
-
-			$("#usdtAll ").text(toThousands(124632754));
-			$("#btcAll ").text(toThousands(655));
-			$("#ltcAll ").text(toThousands(2721));
-			$("#ethAll ").text(toThousands(30297));
-			is_login = 'zuoyehengudan' != '';
-		</script>
-
-		<script src="js/socket/socket.io.slim.js "></script>
-		<script src="js/chat_room/webim.min.js "></script>
-		<script src="js/footer.js?v=0420 "></script>
+		<script type="text/javascript" src="js/style.js"></script>
 	</body>
 
 </html>

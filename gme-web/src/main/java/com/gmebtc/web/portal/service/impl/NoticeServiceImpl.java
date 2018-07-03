@@ -17,8 +17,8 @@ import java.util.HashMap;
 public class NoticeServiceImpl implements NoticeService {
     
     
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -28,8 +28,8 @@ public class NoticeServiceImpl implements NoticeService {
      * @Desc 币种介绍
      */
     @Override
-    public String getCoinIntroduce2018(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getCoinIntroduce2018&";
+    public String getCoinIntroduce(HttpServletRequest request, HashMap<String, String> hashMap) {
+        String method = "getCoinIntroduce2018&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -42,7 +42,7 @@ public class NoticeServiceImpl implements NoticeService {
      */
     @Override
     public String getNotice(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getNotice&";
+        String method = "getNotice&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 }

@@ -17,8 +17,8 @@ import java.util.HashMap;
 @Service(value = "indexService")
 public class IndexServiceImpl implements IndexService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -29,7 +29,7 @@ public class IndexServiceImpl implements IndexService {
      */
     @Override
     public String getTopPrice(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getTopPrice&";
+        String method = "getTopPrice&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -42,7 +42,7 @@ public class IndexServiceImpl implements IndexService {
      */
     @Override
     public String getCoinInfo (HttpServletRequest request,HashMap<String,String> hashMap){
-        String method = SERVICE_BASE_PARAM + "getCoinInfo&";
+        String method = "getCoinInfo&";
         return SendRequestUtil.sendMapRequest(request, hashMap,method);
     }
 

@@ -1,8 +1,12 @@
 package com.gmebtc.web.portal.controller;
 
-import com.gmebtc.web.portal.entity.Coin;
-import com.gmebtc.web.portal.service.IndexService;
-import com.gmebtc.web.portal.utils.Toolkits;
+import java.util.HashMap;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Locale;
+import com.gmebtc.web.portal.service.IndexService;
+import com.gmebtc.web.portal.utils.Toolkits;
 
 /*
  * @Author zhou
@@ -42,7 +43,7 @@ public class IndexController {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("local", locale.toString());
         String json = indexService.getTopPrice(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -53,7 +54,7 @@ public class IndexController {
         HashMap<String,String> hashMap = new HashMap<>();
         hashMap.put("coinType", coinType);
         String json = indexService.getCoinInfo(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 

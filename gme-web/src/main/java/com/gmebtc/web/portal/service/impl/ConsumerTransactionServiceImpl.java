@@ -16,8 +16,8 @@ import java.util.HashMap;
 @Service(value = "consumerTransactionService")
 public class ConsumerTransactionServiceImpl implements ConsumerTransactionService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -28,7 +28,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cBuySellUsdt(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cBuySellUsdt&";
+        String method = "c2cBuySellUsdt&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -41,7 +41,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cBusAddBuySellOrder(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cBusAddBuySellOrder&";
+        String method = "c2cBusAddBuySellOrder&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -54,7 +54,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cBusCanceOrder(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cBusCanceOrder&";
+        String method = "c2cBusCanceOrder&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -67,7 +67,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cGetBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cGetBuySellOrders&";
+        String method = "c2cGetBuySellOrders&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -80,7 +80,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cCancelByUser(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cCancelByUser&";
+        String method = "c2cCancelByUser&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -93,7 +93,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cUserOrderHistory(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "c2cUserOrderHistory&";
+        String method = "c2cUserOrderHistory&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -106,7 +106,7 @@ public class ConsumerTransactionServiceImpl implements ConsumerTransactionServic
      */
     @Override
     public String c2cApplyBus(HttpServletRequest request) {
-        String method = SERVICE_BASE_PARAM + "c2cApplyBus&";
+        String method = "c2cApplyBus&";
         return SendRequestUtil.sendRequest(request, method);
     }
 

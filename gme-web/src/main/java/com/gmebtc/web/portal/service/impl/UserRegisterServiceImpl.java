@@ -1,19 +1,15 @@
 package com.gmebtc.web.portal.service.impl;
 
-import com.gmebtc.web.portal.entity.Coin;
-import com.gmebtc.web.portal.entity.User;
-import com.gmebtc.web.portal.net.CommonUtil;
-import com.gmebtc.web.portal.net.JsonUtil;
-import com.gmebtc.web.portal.net.modle.ResultJson;
-import com.gmebtc.web.portal.service.UserService;
-import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import com.gmebtc.web.portal.service.UserService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
+import com.gmebtc.web.portal.utils.SendRequestUtil;
 
 
 /**
@@ -24,11 +20,10 @@ import java.util.HashMap;
 @Service(value = "userService")
 public class UserRegisterServiceImpl implements UserService{
 
-//    private Logger logger = Logger.getLogger(UserRegisterServiceImpl.class);
 
     // 获得eolinker的基础参数
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
     /**
      * @Author zhou
@@ -38,7 +33,7 @@ public class UserRegisterServiceImpl implements UserService{
      */
     @Override
     public String userPhoneRegister(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "phoneRegister&";
+        String method = ConfigUtil.get("USER_PHONE_REGISTER");
         return SendRequestUtil.sendPojoRequest(request, hashMap, method);
     }
 
@@ -51,7 +46,7 @@ public class UserRegisterServiceImpl implements UserService{
      */
     @Override
     public String userEmaillRegister(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "emailRegister&";
+        String method = ConfigUtil.get("USER_EMAIL_REGISTER");
         return SendRequestUtil.sendPojoRequest(request, hashMap, method);
     }
 

@@ -1,9 +1,13 @@
 package com.gmebtc.web.portal.controller;
 
-import com.gmebtc.web.portal.result.GlobalResult;
-import com.gmebtc.web.portal.result.ResultCode;
-import com.gmebtc.web.portal.service.ConsumerTransactionService;
-import com.gmebtc.web.portal.utils.Toolkits;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import com.gmebtc.web.portal.result.ResponseResult;
+import com.gmebtc.web.portal.service.ConsumerTransactionService;
+import com.gmebtc.web.portal.utils.Toolkits;
 
 /*
  * @Author zhou
@@ -47,7 +48,7 @@ public class ConsumerTransactionController {
         // 获取当前本地语言
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         Map<String,String> map = new HashMap<String,String>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "交易数量不能为空");
             map.put("msg2", "资金密码不能为空");
@@ -58,13 +59,13 @@ public class ConsumerTransactionController {
             map.put("msg2", "Capital cipher can not be empty");
         }
         if (null == amount || StringUtils.isBlank(amount)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
         }
         if (null == payPassword || StringUtils.isBlank(payPassword)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg2")));
             result.setData("");
             return result;
@@ -77,7 +78,7 @@ public class ConsumerTransactionController {
         hashMap.put("payPassword", payPassword);
 
         String json = consumerTransactionService.c2cBuySellUsdt(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -98,7 +99,7 @@ public class ConsumerTransactionController {
         // 获取当前本地语言
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         Map<String,String> map = new HashMap<String,String>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "交易数量不能为空");
             map.put("msg2", "最小数量不能为空");
@@ -113,25 +114,25 @@ public class ConsumerTransactionController {
             map.put("msg4", "Capital cipher can not be empty");
         }
         if (null == amount || StringUtils.isBlank(amount)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
         }
         if (null == min || StringUtils.isBlank(min)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg2")));
             result.setData("");
             return result;
         }
         if (null == payMethed || StringUtils.isBlank(payMethed)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg3")));
             result.setData("");
             return result;
         }
         if (null == payPassword || StringUtils.isBlank(payPassword)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg4")));
             result.setData("");
             return result;
@@ -147,7 +148,7 @@ public class ConsumerTransactionController {
         hashMap.put("payPassword", payPassword);
 
         String json = consumerTransactionService.c2cBusAddBuySellOrder(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -165,7 +166,7 @@ public class ConsumerTransactionController {
         // 获取当前本地语言
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         Map<String,String> map = new HashMap<String,String>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "资金密码不能为空");
 
@@ -174,7 +175,7 @@ public class ConsumerTransactionController {
             map.put("msg1", "Capital cipher can not be empty");
         }
         if (null == payPassword || StringUtils.isBlank(payPassword)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
@@ -185,7 +186,7 @@ public class ConsumerTransactionController {
         hashMap.put("coinType", coinType);
         hashMap.put("payPassword", payPassword);
         String json = consumerTransactionService.c2cBusCanceOrder(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -203,7 +204,7 @@ public class ConsumerTransactionController {
         hashMap.put("coinType", coinType);
         hashMap.put("page", page);
         String json = consumerTransactionService.c2cGetBuySellOrders(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -222,7 +223,7 @@ public class ConsumerTransactionController {
         // 获取当前本地语言
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         Map<String,String> map = new HashMap<String,String>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "资金密码不能为空");
 
@@ -231,7 +232,7 @@ public class ConsumerTransactionController {
             map.put("msg1", "Capital cipher can not be empty");
         }
         if (null == payPassword || StringUtils.isBlank(payPassword)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
@@ -242,7 +243,7 @@ public class ConsumerTransactionController {
         hashMap.put("payPassword", payPassword);
         hashMap.put("remarks", remarks);
         String json = consumerTransactionService.c2cCancelByUser(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -267,7 +268,7 @@ public class ConsumerTransactionController {
         hashMap.put("endDate", endDate);
         hashMap.put("page", page);
         String json = consumerTransactionService.c2cUserOrderHistory(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -281,6 +282,6 @@ public class ConsumerTransactionController {
     @ResponseBody
     public Object c2cApplyBus (HttpServletRequest request){
         String json = consumerTransactionService.c2cApplyBus(request);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 }

@@ -4,5 +4,26 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface RechargeCoinService {
-    String getWalletRecharge(HttpServletRequest request, HashMap<String, String> hashMap);
+	/**
+	 * 
+	 * @Title: getWalletRechargeRecord
+	 * @Description: TODO 查询充值记录
+	 * @param @param request
+	 * @param @param hashMap
+	 * @param @return
+	 * @return String
+	 * @throws
+	 */
+    String getWalletRechargeRecord(HttpServletRequest request, HashMap<String, Object> hashMap);
+    /**
+     * 
+     * @Title: getRechargeAddress
+     * @Description: TODO 查询充值地址
+     * @param @param request
+     * @param @param hashMap
+     * @param @return
+     * @return String
+     * @throws
+     */
+    String getRechargeAddress(HttpServletRequest request, HashMap<String, Object> hashMap);
 }

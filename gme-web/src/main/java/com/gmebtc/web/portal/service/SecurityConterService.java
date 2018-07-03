@@ -6,7 +6,9 @@ import java.util.HashMap;
 public interface SecurityConterService {
     String modifyLoginPwd(HttpServletRequest request, HashMap<String, String> hashMap);
 
-    String resetPayPassword(HttpServletRequest request, HashMap<String, String> hashMap);
+    String resetPayPasswordFirst(HttpServletRequest request, HashMap<String, String> hashMap);
+    
+    String resetPayPasswordSecond(HttpServletRequest request, HashMap<String, String> hashMap);
 
     String sendEmail(HttpServletRequest request, HashMap<String, String> hashMap);
 
@@ -18,7 +20,7 @@ public interface SecurityConterService {
 
     String payMethedAlipayWeChat(HttpServletRequest request, HashMap<String, String> hashMap);
 
-    String checkUserExsit(HttpServletRequest request, HashMap<String, String> hashMap);
+    String checkUserIdentify(HttpServletRequest request, HashMap<String, String> hashMap);
 
     String bindPhone(HttpServletRequest request, HashMap<String, String> hashMap);
 

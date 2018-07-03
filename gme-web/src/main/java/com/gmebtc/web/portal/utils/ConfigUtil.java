@@ -9,29 +9,38 @@ package com.gmebtc.web.portal.utils;
 
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 项目参数工具类
  * 
- * @author 彭彩云
- * @version [版本号, 2013-7-1]
+ * @Project：gme-web   
+ * @Class：ConfigUtil   
+ * @Description    查找配置文件工具类
+ * @Author：zhou   
+ * @Date：2018年6月27日 下午7:35:10   
+ * @version V1.0
  */
 public class ConfigUtil {
-	// 对应资源文件commonconfig.properties
+	private static final Logger log = LoggerFactory.getLogger(ConfigUtil.class);
+	// 对应资源文件config.properties
 	private static final ResourceBundle bundle = ResourceBundle
 			.getBundle("config");
 
 	/**
-	 * 通过键获取值
 	 * 
-	 * @author 彭彩云
-	 * @param key
-	 * @return [参数说明]
-	 * @return String [返回类型说明]
+	 * @Title: get
+	 * @Description: TODO 查找配置文件中访问后台url
+	 * @param @param key
+	 * @param @return
+	 * @return String
+	 * @throws
 	 */
 	public static final String get(String key) {
 		try {
 			return bundle.getString(key);
 		} catch (Exception e) {
+			log.error("{} {} 没有根据url key在配置文件中查找到相应的value.",e.toString());
 			return null;
 		}
 

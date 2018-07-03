@@ -17,8 +17,8 @@ import java.util.HashMap;
 public class WorkListServiceImpl implements WorkListService {
 
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -29,7 +29,7 @@ public class WorkListServiceImpl implements WorkListService {
      */
     @Override
     public String getWorkListInfo(HttpServletRequest request) {
-        String method = SERVICE_BASE_PARAM + "getWorkListInfo&";
+        String method = "getWorkListInfo&";
         return SendRequestUtil.sendRequest(request, method);
     }
 
@@ -42,7 +42,7 @@ public class WorkListServiceImpl implements WorkListService {
      */
     @Override
     public String sendWorkList(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "sendWorkList&";
+        String method = "sendWorkList&";
         return SendRequestUtil.sendMapRequest(request,hashMap, method);
     }
 
@@ -54,7 +54,7 @@ public class WorkListServiceImpl implements WorkListService {
      */
     @Override
     public String replyWorkList(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "replyWorkList&";
+        String method = "replyWorkList&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 }

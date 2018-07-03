@@ -1,7 +1,10 @@
 package com.gmebtc.web.portal.entity;
 
-public class BindPhone {
-    /* 收款码图片*/
+import java.io.Serializable;
+
+public class BindPhone implements Serializable{
+	private static final long serialVersionUID = 1L;
+	/* 收款码图片*/
     private String alipayImg;
     /* 1，支付宝，2，微信*/
     private String type;
@@ -10,17 +13,19 @@ public class BindPhone {
     /* 备注*/
     private String remark;
     /* 资金密码*/
-    private String payPassword;
+    private String tradeAuth;
 
-    public String getAlipayImg() {
-        return alipayImg;
-    }
 
-    public void setAlipayImg(String alipayImg) {
-        this.alipayImg = alipayImg;
-    }
 
-    public String getType() {
+	public String getAlipayImg() {
+		return alipayImg;
+	}
+
+	public void setAlipayImg(String alipayImg) {
+		this.alipayImg = alipayImg;
+	}
+
+	public String getType() {
         return type;
     }
 
@@ -44,11 +49,12 @@ public class BindPhone {
         this.remark = remark;
     }
 
-    public String getPayPassword() {
-        return payPassword;
-    }
+	public String getTradeAuth() {
+		return tradeAuth;
+	}
 
-    public void setPayPassword(String payPassword) {
-        this.payPassword = payPassword;
-    }
+	public void setTradeAuth(String tradeAuth) {
+		this.tradeAuth = tradeAuth;
+	}
+
 }

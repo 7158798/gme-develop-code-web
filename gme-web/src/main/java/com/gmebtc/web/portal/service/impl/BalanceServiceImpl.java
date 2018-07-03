@@ -15,9 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 @Service(value = "balanceService")
 public class BalanceServiceImpl implements BalanceService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
-
 
     /**
      * @Author zhou
@@ -27,7 +24,7 @@ public class BalanceServiceImpl implements BalanceService {
      */
     @Override
     public String getBalance(HttpServletRequest request) {
-        String method = SERVICE_BASE_PARAM + "getBalance";
+        String method = "getBalance";
         return SendRequestUtil.sendRequest(request, method);
     }
 }

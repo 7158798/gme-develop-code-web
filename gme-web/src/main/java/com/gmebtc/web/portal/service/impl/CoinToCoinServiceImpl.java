@@ -17,8 +17,8 @@ import java.util.HashMap;
 @Service(value = "coinToCoinService")
 public class CoinToCoinServiceImpl implements CoinToCoinService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -29,7 +29,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String cancelBBOrder(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "cancelBBOrder&";
+        String method = "cancelBBOrder&";
         return SendRequestUtil.sendMapRequest(request, hashMap,method);
     }
 
@@ -42,7 +42,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String bbBuySell(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "bbBuySell&";
+        String method = "bbBuySell&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -55,7 +55,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String getTransactions(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getTransactions&";
+        String method = "getTransactions&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -68,7 +68,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String getUserTransactions(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getUserTransactions&";
+        String method = "getUserTransactions&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -81,7 +81,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String getUserOrder(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getUserOrder&";
+        String method = "getUserOrder&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -94,7 +94,7 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
      */
     @Override
     public String getBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getBuySellOrders&";
+        String method = "getBuySellOrders&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 }

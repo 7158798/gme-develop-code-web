@@ -1,20 +1,23 @@
 package com.gmebtc.web.portal.net;
 
-import com.gmebtc.web.portal.net.modle.ResultJson;
-import com.gmebtc.web.portal.utils.ConfigUtil;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.util.JSONTokener;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.gmebtc.web.portal.net.modle.ResultJson;
+import com.gmebtc.web.portal.utils.ConfigUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.util.JSONTokener;
 
 /**
  * @param
@@ -25,9 +28,9 @@ import java.util.Map;
  */
 public class CommonUtil {
 
-    public static final String url = ConfigUtil.get("SERVICE_SITE");
+	private static final Logger log = LoggerFactory.getLogger(CommonUtil.class);
+	
 
-    private static Logger log = Logger.getLogger(CommonUtil.class);
 
     public static final String ROLE_ID = "roleId";
 
@@ -38,13 +41,6 @@ public class CommonUtil {
     public static final String GME = "gme";
     public static final String ACCOUNT = "account";
 
-    public static ResultJson getResultJson(String data, HttpServletRequest request, String method) throws UnsupportedEncodingException {
-        return getResultJson(data, request, method, "");
-    }
-
-    public static ResultJson getResultJson(HttpServletRequest request, String method) throws UnsupportedEncodingException {
-        return getResultJson(request, method, "");
-    }
     /**
      * @param
      * @return
@@ -52,19 +48,18 @@ public class CommonUtil {
      * @description 连接后台服务
      * @date 2015-10-17下午3:54:15
      */
-    public static ResultJson getResultJson(String data, HttpServletRequest request, String method, String reqUrl) throws UnsupportedEncodingException {
-        ResultJson resultJson = new ResultJson(true);
-        //HttpSession session = request.getSession();
+    public static ResultJson getResultJson(String data, HttpServletRequest request, String method) throws UnsupportedEncodingException {
+    	ResultJson resultJson = new ResultJson(true);
         Object json = new JSONTokener(data).nextValue();
-        Map<String, String> param = getCommonHead(request, method);
+//        Map<String, String> param = getCommonHead(request, method);
+        Map<String,String> param = new HashMap<String,String>();
         String postUrl = "";
-        if ("".equals(reqUrl) && !"".equals(method)) {
-            postUrl = url + method;
+        if (!"".equals(method)) {
+            postUrl = method;
         } else {
-            postUrl = reqUrl;
+            postUrl = null;
         }
         if (json instanceof JSONObject) {
-            //param.put("data", data);
             JSONObject dataParam = JSONObject.fromObject(data);
             for (Object keyObject : dataParam.keySet()) {
                 String key = keyObject.toString();
@@ -80,22 +75,32 @@ public class CommonUtil {
         log.info("请求参数：" + paramStr);
 
 
-        //String paramStr =  CryptoUtil.aesEncrypt(paramStr, "12456789");
-        //logger.info("加密后的参数：" + paramStr);
         doPost(resultJson, param, postUrl);
         return resultJson;
     }
 
-    public static ResultJson getResultJson(HttpServletRequest request, String method, String reqUrl) throws UnsupportedEncodingException {
-        ResultJson resultJson = new ResultJson(true);
+    /**
+     * 
+     * @Title: getResultJson
+     * @Description: TODO  没有参数传递的http post请求
+     * @param @param request
+     * @param @param method
+     * @param @return
+     * @param @throws UnsupportedEncodingException
+     * @return ResultJson
+     * @throws
+     */
+    public static ResultJson getResultJson(HttpServletRequest request, String method) throws UnsupportedEncodingException {
+    	ResultJson resultJson = new ResultJson(true);
         //HttpSession session = request.getSession();
-        Map<String, String> param = getCommonHead(request, method);
+//        Map<String, String> param = getCommonHead(request, method);
+        Map<String,String> param = new HashMap<String,String>();
         param.putAll(getParameterMap(request));
         String postUrl = "";
-        if ("".equals(reqUrl) && !"".equals(method)) {
-            postUrl = url + method;
+        if (!"".equals(method)) {
+            postUrl = method;
         } else {
-            postUrl = reqUrl;
+            postUrl = null;
         }
 
         String paramStr = param.toString();
@@ -103,11 +108,10 @@ public class CommonUtil {
         log.info("请求参数：" + paramStr);
 
 
-        //String paramStr =  CryptoUtil.aesEncrypt(paramStr, "12456789");
-        //logger.info("加密后的参数：" + paramStr);
         doPost(resultJson, param, postUrl);
         return resultJson;
     }
+    
 
     private static void doPost(ResultJson resultJson, Map<String, String> param, String postUrl) {
         try {
@@ -115,23 +119,19 @@ public class CommonUtil {
             Integer statusCode = httpData.getStatusCode();
             String statusText = httpData.getStatusText();
             String response = httpData.getResponse();
-            log.info("statusCode:" + statusCode + "  statusText:" + statusText);
-            //response =  CryptoUtil.aesDecrypt(paramStr, "12456789");
-//			byte[] responseByte =  Base64Utils.decode(response);
-//			response = new String(responseByte,"utf-8");
+            log.info("http======>statusCode:" + statusCode + "  statusText:" + statusText);
             log.info("服务器响应内容：" + response);
             if (statusCode == HttpStatus.SC_OK) {
-                JSONObject resultObject = JSONObject.fromObject(response);
+            	JSONObject resultObject = JSONObject.fromObject(response);
                 String msg = resultObject.getString("message");
                 resultJson.setMessage(msg);
-                resultJson.setCode("200");
+                resultJson.setCode(resultObject.getString("code"));
                 resultJson.setData(resultObject);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
             JSONObject resultObject = new JSONObject();
-            resultObject.put("code", "-2");
+            resultObject.put("code", "500");
             resultObject.put("message", "系统繁忙，请稍后再试");
             resultObject.put("data", "");
             resultJson.setMessage("系统繁忙，请稍后再试");

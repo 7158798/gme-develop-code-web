@@ -33,7 +33,7 @@ public class BalanceController {
     @ResponseBody
     public Object getBalance (HttpServletRequest request){
        String json = balanceService.getBalance(request);
-       return Toolkits.messageTransformation(request,json);
+       return Toolkits.handleResp(json);
     }
 
 }

@@ -1,10 +1,12 @@
 package com.gmebtc.web.portal.controller;
 
-import com.gmebtc.web.portal.entity.WorkList;
-import com.gmebtc.web.portal.result.GlobalResult;
-import com.gmebtc.web.portal.result.ResultCode;
-import com.gmebtc.web.portal.service.WorkListService;
-import com.gmebtc.web.portal.utils.Toolkits;
+import java.util.HashMap;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Locale;
+import com.gmebtc.web.portal.entity.WorkList;
+import com.gmebtc.web.portal.result.ResponseResult;
+import com.gmebtc.web.portal.service.WorkListService;
+import com.gmebtc.web.portal.utils.Toolkits;
 
 /*
  * @Author zhou
@@ -42,7 +43,7 @@ public class WorkListController {
     @ResponseBody
     public Object getWorkListInfo (HttpServletRequest request){
         String json = workListService.getWorkListInfo(request);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -58,7 +59,7 @@ public class WorkListController {
         HttpSession session = request.getSession();
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         HashMap<String, String> map = new HashMap<>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "无效的编号");
             map.put("msg2", "文字描述字数太少");
@@ -69,13 +70,13 @@ public class WorkListController {
             map.put("msg2", "Too few descriptive words");
         }
         if (null == workList.getOrderNum() || StringUtils.isBlank(workList.getOrderNum())) {
-            result.setCode(ResultCode.CODE_ERROR_17);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
         }
         if (null == workList.getDesc() || StringUtils.isBlank(workList.getDesc())) {
-            result.setCode(ResultCode.CODE_ERROR_17);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg2")));
             result.setData("");
             return result;
@@ -91,7 +92,7 @@ public class WorkListController {
         hashMap.put("img3", workList.getImg3());
 
         String json = workListService.sendWorkList(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -108,7 +109,7 @@ public class WorkListController {
         hashMap.put("workId", workId);
         hashMap.put("context", context);
         String json = workListService.replyWorkList(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public interface NoticeService {
 
-    String getCoinIntroduce2018(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getCoinIntroduce(HttpServletRequest request, HashMap<String, String> hashMap);
 
     String getNotice(HttpServletRequest request, HashMap<String, String> hashMap);
 }

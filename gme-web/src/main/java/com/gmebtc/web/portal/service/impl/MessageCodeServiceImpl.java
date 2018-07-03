@@ -1,13 +1,14 @@
 package com.gmebtc.web.portal.service.impl;
 
-import com.gmebtc.web.portal.entity.User;
-import com.gmebtc.web.portal.service.MessageCodeService;
-import com.gmebtc.web.portal.utils.SendRequestUtil;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import com.gmebtc.web.portal.service.MessageCodeService;
+import com.gmebtc.web.portal.utils.SendRequestUtil;
 
 /*
  * @Author zhou
@@ -17,8 +18,8 @@ import java.util.HashMap;
 @Service(value = "messageCodeService")
 public class MessageCodeServiceImpl implements MessageCodeService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -29,7 +30,7 @@ public class MessageCodeServiceImpl implements MessageCodeService {
      */
     @Override
     public String getMessageCode(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "sendPhoneCheckCode&";
+        String method = "sendPhoneCheckCode&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -41,7 +42,7 @@ public class MessageCodeServiceImpl implements MessageCodeService {
      */
     @Override
     public String checkPhoneCode(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "checkPhoneCode&";
+        String method = "checkPhoneCode&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 }

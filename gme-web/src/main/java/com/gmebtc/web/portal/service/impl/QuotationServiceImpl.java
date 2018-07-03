@@ -1,18 +1,20 @@
 package com.gmebtc.web.portal.service.impl;
 
-import com.gmebtc.web.portal.service.QuotationService;
-import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+
+import org.springframework.stereotype.Service;
+
+import com.gmebtc.web.portal.service.QuotationService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
+import com.gmebtc.web.portal.utils.SendRequestUtil;
 
 @Service(value = "quotationService")
 public class QuotationServiceImpl implements QuotationService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
     /**
      * @Author zhou
@@ -22,7 +24,7 @@ public class QuotationServiceImpl implements QuotationService {
      */
     @Override
     public String kline(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "kline&";
+        String method = ConfigUtil.get("KLINE_KLINE");
         return SendRequestUtil.sendMapRequest(request,hashMap, method);
     }
 
@@ -35,7 +37,7 @@ public class QuotationServiceImpl implements QuotationService {
      */
     @Override
     public String ticker(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "ticker&";
+        String method = "ticker&";
         return SendRequestUtil.sendMapRequest(request,hashMap, method);
     }
 }

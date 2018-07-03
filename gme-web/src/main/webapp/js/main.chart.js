@@ -1624,7 +1624,7 @@
 						case i.MSG_ELEMENT_TYPE.GROUP_TIP:
 							break;
 						default:
-							i.Log.error("\u672a\u77e5\u6d88\u606f\u5143\u7d20\u7c7b\u578b: elemType=" + r)
+							i.log.error("{} \u672a\u77e5\u6d88\u606f\u5143\u7d20\u7c7b\u578b: elemType=" + r)
 					}
 					return {
 						briefs: s,
@@ -16156,7 +16156,7 @@
 							s.Log.warn("\u8fde\u63a5\u5df2\u65ad\u5f00\uff0c\u65e0\u6cd5\u6536\u5230\u65b0\u6d88\u606f\uff0c\u8bf7\u68c0\u67e5\u4e0b\u4f60\u7684\u7f51\u7edc\u662f\u5426\u6b63\u5e38");
 							break;
 						default:
-							s.Log.error("\u672a\u77e5\u8fde\u63a5\u72b6\u6001,status=" + e.ErrorCode)
+							s.log.error("{} \u672a\u77e5\u8fde\u63a5\u72b6\u6001,status=" + e.ErrorCode)
 					}
 				}
 
@@ -16291,7 +16291,7 @@
 				a = t || this;
 			s.getC2CHistoryMsgs(i, function(t) {
 				if(0 == t.MsgList.length) {
-					s.Log.error("\u6ca1\u6709\u5386\u53f2\u6d88\u606f\u4e86:data=" + JSON.stringify(i));
+					s.log.error("{} \u6ca1\u6709\u5386\u53f2\u6d88\u606f\u4e86:data=" + JSON.stringify(i));
 					var r = document.getElementById("more-history-" + n.target.id);
 					return void(r && r.parentNode.removeChild(r))
 				}
@@ -16344,7 +16344,7 @@
 				o.parentNode.parentNode.removeChild(o.parentNode)
 			} else r = this;
 			var i, a = this.getPrePageGroupHistroyMsgInfoMap[this.selToID];
-			if(!a) return void s.Log.error("\u83b7\u53d6\u4e0b\u4e00\u6b21\u62c9\u53d6\u7684\u7fa4\u6d88\u606fseq\u4e3a\u7a7a");
+			if(!a) return void s.log.error("{} \u83b7\u53d6\u4e0b\u4e00\u6b21\u62c9\u53d6\u7684\u7fa4\u6d88\u606fseq\u4e3a\u7a7a");
 			if((i = a.ReqMsgSeq) <= 0) return void s.Log.warn("\u8be5\u7fa4\u6ca1\u6709\u5386\u53f2\u6d88\u606f\u53ef\u62c9\u53d6\u4e86");
 			var u = {
 				GroupId: this.selToID,
@@ -16374,7 +16374,7 @@
 				};
 				if(null == n.ReqMsgSeq || void 0 == n.ReqMsgSeq || n.ReqMsgSeq <= 0) return void s.Log.warn("\u8be5\u7fa4\u8fd8\u6ca1\u6709\u5386\u53f2\u6d88\u606f:options=" + JSON.stringify(n));
 				s.syncGroupMsgs(n, function(t) {
-					if(e.getGroupSuccess = !0, 0 == t.length) return void s.Log.error("\u8be5\u7fa4\u6ca1\u6709\u5386\u53f2\u6d88\u606f\u4e86:options=" + JSON.stringify(n));
+					if(e.getGroupSuccess = !0, 0 == t.length) return void s.log.error("{} \u8be5\u7fa4\u6ca1\u6709\u5386\u53f2\u6d88\u606f\u4e86:options=" + JSON.stringify(n));
 					var r = t[0].seq - 1;
 					e.getPrePageGroupHistroyMsgInfoMap = [], e.getPrePageGroupHistroyMsgInfoMap[e.selToID] = {
 						ReqMsgSeq: r

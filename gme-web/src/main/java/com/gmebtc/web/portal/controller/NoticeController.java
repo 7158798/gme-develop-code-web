@@ -33,16 +33,16 @@ public class NoticeController {
      * @Param [request, coinType:币种类型。默认全部, page, pageSize]
      * @Desc 币种资料介绍
      */
-    @RequestMapping(value = "/coinIntroduce2018",method = RequestMethod.POST)
+    @RequestMapping(value = "/getCoinIntroduce",method = RequestMethod.POST)
     @ResponseBody
-    public Object getCoinIntroduce2018 (HttpServletRequest request, @RequestParam String coinType
-                                        ,@RequestParam(defaultValue = "1") String page,@RequestParam String pageSize){
+    public Object getCoinIntroduce (HttpServletRequest request, @RequestParam String coinType
+                                        ,@RequestParam String page,@RequestParam String pageSize){
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("coinType", coinType);
         hashMap.put("page", page);
         hashMap.put("pageSize", pageSize);
-        String json = noticeService.getCoinIntroduce2018(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        String json = noticeService.getCoinIntroduce(request,hashMap);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -61,7 +61,7 @@ public class NoticeController {
         hashMap.put("page", page);
         hashMap.put("pageSize", pageSize);
         String json = noticeService.getNotice(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
 
     }
 

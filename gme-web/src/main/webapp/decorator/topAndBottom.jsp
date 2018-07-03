@@ -1,301 +1,120 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ include file="/WEB-INF/include/taglib.jsp" %>
 <html>
 <head>
-    <title>
-        <sitemesh:write property='title'/>
-    </title>
-    <sitemesh:write property='head'/>
+<title><sitemesh:write property='title' /></title>
+<sitemesh:write property='head' />
 </head>
 <body>
-<div id="siteNoty" class="notification-box"><div class="noty_message">【!!!!重要通知!!!!】： <a id="siteNotyCon" href="/article/16451" >gate.io充值量子链(QTUM)赢取QTUM大奖活动公告</a><a class="close pull-right" href=javascript:;></a></div></div><div class="header clearfix">
-    <div class="top-up">
-        <div class="top-con">
-            <ul class="topprice">
-                <li> BTC/CNY : ￥ <span class="topnum">54602.50</span><i class="icon-arrow-up">&uarr;</i> </li>
-                <li> ETH/CNY : ￥ <span class="topnum">4583.50</span><i class="icon-arrow-down">&darr;</i> </li>
-                <li> LTC/CNY : ￥ <span class="topnum">875.65</span><i class="icon-arrow-down">&darr;</i> </li>
-                <li> QTUM/CNY : ￥ <span class="topnum">104.72</span><i class="icon-arrow-down">&darr;</i> </li>
-            </ul>
-            <div class="qqtel">
-                <a class="ask_ans" href="https://twitter.com/gate_io" target="_blank">
-                    <p><i class="tico" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="244 244 24 24"><path fill="#FFF" d="M267.998 248.95c-.882.39-1.83.653-2.825.77 1.016-.606 1.795-1.564 2.164-2.703-.952.56-2.007.966-3.127 1.186-.9-.95-2.177-1.545-3.594-1.545-2.722 0-4.926 2.19-4.926 4.888 0 .38.042.757.126 1.116-4.09-.205-7.72-2.152-10.148-5.106-.425.724-.67 1.563-.67 2.456 0 1.697.872 3.19 2.193 4.07-.806-.027-1.566-.246-2.23-.614v.064c0 2.368 1.7 4.34 3.95 4.792-.414.11-.848.17-1.297.17-.317 0-.625-.026-.925-.087.625 1.94 2.445 3.355 4.6 3.396-1.686 1.31-3.807 2.092-6.113 2.092-.398 0-.79-.025-1.175-.07 2.177 1.387 4.767 2.195 7.547 2.195 9.06 0 14.012-7.448 14.012-13.903 0-.213-.008-.423-.017-.63.96-.694 1.795-1.552 2.457-2.537h-.002z"/></svg></i></p>
-                </a>
-                <a class="ask_ans" href="https://t.me/gate_io" target="_blank">
-                    <p><i class="tico" title="Telegram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="244 244 24 24"><path fill="#FFF" d="M266.38 246.07l-21.26 8.2c-1.45.58-1.442 1.39-.264 1.75l5.302 1.656 2.03 6.22c.246.68.124.95.84.95.55 0 .795-.25 1.103-.55l2.65-2.58 5.517 4.075c1.015.56 1.748.27 2-.94l3.62-17.062c.37-1.486-.567-2.16-1.538-1.72zm-15.39 11.226l11.95-7.54c.598-.363 1.145-.168.695.23l-10.233 9.233-.398 4.248-2.014-6.172z"/></svg></i></p>
-                </a>
-                <a class="ask_ans" href="javascript:ticketsRoute();">
-                    <p><i>?</i>提交工单</p>
-                </a>
-            </div>
-            <ul class="login_lan">
-                <li class="top-links">
-                    <a href="/mobileapp" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="244 244 24 24"><path fill="#010101" d="M262 244h-12c-.83 0-1.5.672-1.5 1.5v21c0 .83.67 1.5 1.5 1.5h12c.83 0 1.5-.67 1.5-1.5v-21c0-.828-.67-1.5-1.5-1.5zm-8.625 1.5h5.25c.208 0 .375.168.375.375s-.167.375-.375.375h-5.25c-.208 0-.375-.168-.375-.375s.167-.375.375-.375zM256 267.25c-.62 0-1.125-.504-1.125-1.125S255.38 265 256 265s1.125.504 1.125 1.125-.504 1.125-1.125 1.125zm6-3h-12v-16.5h12v16.5z"></path></svg>
-                        <span>手机APP</span>
-                        <div class="add-dn-qr">
-                            <h3>扫码下载gate.io APP</h3>
-                            <img src="images/app-code.png" alt="gate.io APP">
-                        </div>
-                    </a>
-                </li>
-				
-				<c:if test="${flag == 'true' }">
-					<li class='toplogin user-info-con'>
-                            <div id="topLoginBar">
-                                <span class="lv-con"><a class="tier-level tier-icon0" href="/article/16273" title="等级"></a></span>
-                                <a id="nickName" href="/myaccount"><span>zuoyehengudan</span><i class="caret"></i></a>
-                                <div class="tier-info" id="tierMenu">
-                                    <ul>
-                                        <span class="uccaret umc"></span>
-                                        <li>
-                                            <b>当前等级：</b>
-                                            <span><strong class="tier-level tier-icon0"></strong><br/>有效时间至<small> -</small></span>
-                                        </li>
-                                        <li>
-                                            <b>当前交易费折扣：</b>
-                                            <span><strong>无</strong></span>
-                                        </li>
-                                        <li>
-                                            <b>最近30天交易量：</b>
-                                            <p><strong>0.00000</strong> BTC 或
-                                                <strong>0.00</strong> CNY</p>
-                                        </li>
-                                        <li>
-                                            <b>账户总资产：</b>
-                                            <p><strong>0.00000</strong> BTC 或
-                                                <strong>0.00</strong> CNY</p>
-                                        </li>
-                                        <li>
-                                            <b>升级进度：</b>
-                                            <span><strong>0.0%</strong></span>
-                                        </li>
-                                        <li id="progrLi">
-                                            <div id="proBar"></div>
-                                        </li>
-                                        <li>升级还需要 <strong>3.0</strong> BTC 或者
-                                            <strong>165998</strong> CNY 30天交易量
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
 
-                        <li class='toplogin user-log-out'><a href="/logout">退出</a></li>
-				</c:if>
-				<%-- <c:if test=""></c:if> --%>
-                
-                
-                
-                
-                
-				<c:choose>
-					<c:when test="${flag == 'true' }">
-						<li class="">
-					        <a href="${pageContext.request.contextPath}/loginIndex">首页</a>
-			            </li>
-					</c:when>
-					<c:otherwise>
-						<li class="">
-			            	<a href="${pageContext.request.contextPath}/unLoginIndex">首页</a>
-		            	</li>
-					</c:otherwise>
-				</c:choose>
-				
-                <li class="lang-option">
-                    <span>中文版</span><i class="caret"></i>
-                    <div class="more-lan">
-                        <a href="/lang/en">English</a>
-                        <a href="/lang/kr">한국어</a>
-                    </div>
-                </li>
-            </ul>
-            <ul id="theme">
-                <span>主题:</span>
-                <li id="dark" title="深色">深色</li>
-                <li id="light" title="浅色">浅色</li>
-            </ul>
-            
-            
-            
-        </div>
-    </div>
-    <div class="top-dn">
-        <div class="logo">
-            <a href="https://gate.io" target="_top">
-                <![if !IE]><img src="images/logo.svg" alt="gate.io LOGO"/><![endif]>
-                <!--[if IE]><img src="images/logo.png" alt="LOGO"/><![endif]-->
-            </a>
-        </div>
+	<div class="header">
+		<div class="header_1">
+			<div class="logo">
+				<a> <img src="img/dblg.png" />
+				</a>
+			</div>
+			<div class="header_daohang">
+				<ul>
+					<li><a href="#">首页</a></li>
+					<li><a href="c2cTrans.html">C2C交易</a></li>
+					<li><a href="#">币币交易</a></li>
+					<li><a href="accounts.hmtl">我的财务</a></li>
+					<li><a href="#">安全设置</a></li>
+					<li><a href="#">公告</a></li>
+					<li><a href="#">提交工单</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="header_2">
+			<div class="header_dengluhou">
+				<ul>
+					<li><a href="#" class="whate">19019382@qq.com<i></i></a></li>
+					<li><span class="zyw">中文版</span>
+						<div class="yybb">
+							<a href="#">ENGLISH</a> <a href="#">한국어</a>
+						</div></li>
+				</ul>
+			</div>
+			<div class="header_zhuti">
+				<ul>
+					<span>主题</span>
+					<li id="bai"></li>
+					<li id="hei"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-        <ul class="gateio-nav">
-       			 <c:choose>
-					<c:when test="${flag == 'true' }">
-						<li class="">
-            		   	 	<a href="${pageContext.request.contextPath}/loginIndex.html">首页</a>
-            			</li>
-					</c:when>
-					<c:otherwise>
-						<li class="">
-            		   	 	<a href="${pageContext.request.contextPath}/unLoginIndex.html">首页</a>
-            			</li>
-					</c:otherwise>
-				</c:choose>
-            
-            
-            <li class="">
-                <a href="/c2c/usdt_cny" class="tooltip" title="法币交易">C2C交易</a>
-            </li>
-
-            <li class="nav-trade-item ">
-                <a href="/trade/BTC_USDT">币币交易<i class="caret"></i></a>
-                <ul class="second-nav clearfix">
-                    <li>
-                        <a href="javascript:;">对BTC交易区<i class="caret"></i></a>
-                        <ul class="third-nav clearfix">
-                            <li><a href='/trade/ADA_BTC'><span class="icon-16-ada icon-16"></span><strong>艾达币 ADA</strong></a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">对ETH交易区<i class="caret"></i></a>
-                        <ul class="third-nav clearfix">
-                            <li><a href='/trade/ABT_ETH'><span class="icon-16-abt icon-16"></span><strong>ArcBlock ABT</strong></a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">对USDT交易区<i class="caret"></i></a>
-                        <ul class="third-nav clearfix">
-                            <li><a href='/trade/ABT_USDT'><span class="icon-16-abt icon-16"></span><strong>ArcBlock ABT</strong></a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">对QTUM交易区<i class="caret"></i></a>
-                        <ul class="third-nav clearfix">
-                            <li><a href='/trade/BOT_QTUM'><span class="icon-16-bot icon-16"></span><strong>菩提 BOT</strong></a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:;">限时交易区<i class="caret"></i></a>
-                        <ul class="third-nav clearfix">
-                            <li><a href='/trade/ELEC_ETH'><span class="icon-16-elec icon-16"></span><strong>ElectrifyAsia ELEC</strong></a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="">
-                <a href="/myaccount">我的财务</a>
-
-            </li>
-
-            <li class="">
-                <a href="/myaccount/totp">安全设置</a>
-
-            </li>
-            <li class="">
-                <a href="/articlelist/ann">公告</a>
-
-            </li>
-            <li class="">
-                <a href="/listing">上币申请</a>
-
-            </li>
-            <li class="nav-active">
-                <a href="javascript:;">帮助<i class="caret"></i></a>
-                <ul class="second-nav clearfix">
-                    <li>
-                        <a href="/help">问题中心</a>
-                    </li>
-                    <li>
-                        <a href="javascript:ticketsRoute();">提交工单</a>
-                    </li>
-                    <li>
-                        <a href="/coins">资料下载<i class="caret"></i></a>
-                        <ul class="third-nav nav-help clearfix">
-                            <li><a href="/mobileapp">手机APP</a></li>
-                            <li><a href="https://github.com/gateio/windows_app/releases/download/v1.0.3/Gateio_Setup.7z?v=101" target="_blank">Windows APP</a></li>
-                            <li><a href="https://github.com/gateio/mac_app/releases/download/v1.0.2/Gate.io.dmg?v=101" target="_blank">Mac APP</a></li>
-                            <li><a href="/coins">币种资料</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-        <div id="top_last_rate" style="display: none"></div>
-
-    </div>
+	<!--
+        	作者：李德芳
+        	时间：2018-06-28
+        	描述：
+        -->
+	<div class="L_34">
+		<div class="L_35">
+			<ul>
+				<li class="L_37"><img src="img/L_5.png" /> 我的资金</li>
+				<li class="L_38"><a href="accounts.html">账户资金</a></li>
+				<li class="L_38"><a href="commission.html">推广佣金</a></li>
+				<li class="L_38"><a href="bill.html">账单明细</a></li>
+				<li class="L_37"><img src="img/L_4.png" /> 交易挂单</li>
+				<li class="L_38"><a href="myDeity.html">我的挂单</a></li>
+				<li class="L_38"><a href="transRecord.html">成交记录</a></li>
+				<li class="L_38"><a href="c2cTransRecord.html">C2C成交记录</a></li>
+				<li class="L_37"><img src="img/L_3.png" /> 充值提现</li>
+				<li class="L_38"><a>购买USDT(C2C)</a></li>
+				<li class="L_38"><a
+					href="rechargeRecord.html?pageNum=1&numPerPage=10">充值记录</a></li>
+				<li class="L_38"><a
+					href="withdrawRecord.html?pageNum=1&numPerPage=10">提现记录</a></li>
+				<li class="L_38"><a
+					href="walletAddress.html?pageNum=1&numPerPage=10">钱包管理地址</a></li>
+			</ul>
+		</div>
 </div>
+		<sitemesh:write property='body' />
 
-
-<sitemesh:write property='body'/>
-
-<div class="footer">
-    <div class="fkicon">
-        <ul class="clearfix">
-            <li><a href="javascript:ticketsRoute();" title="Ticket"><div class="fico fc5"></div>
-                <div class="fkcont">
-                    <div class="ftel">Ticket</div>
-                    <div class="ftelnum">Submit a request</div>
-                </div></a>
-            </li>
-            <li><a href="https://twitter.com/gate_io" target="_blank" title="Twitter"><div class="fico fc-twi"></div>
-                <div class="fkcont">
-                    <div class="ftel">Twitter</div>
-                    <div class="ftelnum">twitter.com/gate_io</div>
-                </div></a>
-            </li>
-            <li><a href="https://t.me/gate_io" target="_blank" title="Telegram"><div class="fico fc3"></div></a></li>
-            <li><a href="https://www.instagram.com/gate.io/" target="_blank" title="Instagram"><div class="fico fc7"></div></a></li>
-            <li><a href="mailto:support@mail.gate.io" target="_blank" title="Email"><div class="fico fc6"></div>
-                <div class="fkcont">
-                    <div class="ftel">Email</div>
-                    <div class="ftelnum">Email us</div>
-                </div></a>
-            </li>
-            <li><a href="https://github.com/gateio" target="_blank" title="Github"><div class="fico fc4"></div>
-                <div class="fkcont">
-                    <div class="ftel">Github</div>
-                    <div class="ftelnum">gate.io Github</div>
-                </div></a>
-            </li>
-        </ul>
-        <div class="fxts">
-            <p style="text-align: center"><i>!</i>比特币等密码币的交易存在风险，在全球范围内一周7天，一天24小时无休止交易，没有每日涨停跌停限制，价格受到新闻事件，各国政策，市场需求等多种因素影响，浮动很大。我们强烈建议您事先调查了解，在自身所能承受的风险范围内参与交易。</p>
-        </div>
-    </div>
-
-    <div class="fnav">
-        <div class="fnavcon">
-            <ul>
-                <li class="fnav_list">
-                    <!--<div class="fnav_title">关于我们</div>-->
-                    <ul>
-                        <li><a href="/page/contacts">联系我们</a></li>
-                        <li><a href="/fee">费率标准</a></li>
-                        <li><a href="/api2">API文档</a></li>
-                        <li><a href="/docs/agreement.pdf">用户协议</a></li>
-                        <li><a href="/articlelist/ann">本站公告</a></li>
-                    </ul>
-                </li>
-
-            </ul>
-        </div>
-        <div class="tail">
-            <span>gate.io&nbsp;&nbsp;版权所有 © 2018</span>
-            <div class="vol-all">
-                <span>成交量:</span>
-                <span> USDT : $<span id="usdtAll">133618084</span> </span>
-                <span> BTC : ฿<span id="btcAll">660</span> </span>
-                <span> LTC : Ł<span id="ltcAll">2418</span> </span>
-                <span> ETH : E<span id="ethAll">31992</span> </span>
-            </div>
-            <span id="runTime">
-                <!--<a href="#">gate.io</a> is powered by <a href="#">gate.io Dev Team</a>-->
-                <span class="admin-view"> Elapsed:39.223ms - cnst:9.2;14:0.3;12:0.3;13:1.6; .234 &nbsp; a/e/r </span>
-            </span>
-        </div>
-    </div>
-</div>
+		<div class="footer">
+			<div class="aqgxfw_30">
+				<div class="aqgxfw_31">
+					<div class="aqgxfw_32">
+						<img src="img/dblg.png" /> <img src="img/QQ@@2x.png"
+							style="margin: 28px 6px 5px 0px;" /> <img src="img/微信@@2x.png"
+							style="margin: 28px 0px 5px 0px;" /> <img src="img/新浪@@2x.png"
+							style="margin: 28px 10px 5px 6px;" /> <img
+							src="img/1111@@2x.png" style="margin: 6px 0px 5px 0px;" /> <img
+							src="img/2222@@2x.png" style="margin: 6px 10px 5px 6px;" />
+					</div>
+					<div class="aqgxfw_33">
+						<p class="aqgxfw_34">关于我们</p>
+						<p class="aqgxfw_36">上币申请</p>
+						<p class="aqgxfw_36">平台简介</p>
+						<p class="aqgxfw_36">公共API</p>
+					</div>
+					<div class="aqgxfw_35">
+						<p class="aqgxfw_34">充币提币</p>
+						<p class="aqgxfw_36">充币地址为何相同</p>
+						<p class="aqgxfw_36">充币说明</p>
+						<p class="aqgxfw_36">提币说明</p>
+						<p class="aqgxfw_36">限币限额和手续费</p>
+					</div>
+					<div class="aqgxfw_33">
+						<p class="aqgxfw_34">常见问题</p>
+						<p class="aqgxfw_36">法币交易</p>
+						<p class="aqgxfw_36">实名认证</p>
+						<p class="aqgxfw_36">账户访问</p>
+						<p class="aqgxfw_36">账户注册</p>
+					</div>
+					<div class="aqgxfw_33">
+						<p class="aqgxfw_34">币币交易</p>
+						<p class="aqgxfw_36">法币交易</p>
+						<p class="aqgxfw_36">拉新返</p>
+						<p class="aqgxfw_36">绑定银行卡</p>
+					</div>
+				</div>
+				<div class="aqgxfw_37">Copyright © 2017-GMEBTC All Rights
+					Resrved</div>
+			</div>
+		</div>
 </body>
 </html>

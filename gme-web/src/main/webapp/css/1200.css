@@ -1,0 +1,40 @@
+@media (max-width: 1200px) {
+.header{
+	width: 1200px;
+}
+.L_1{
+	width: 1200px;
+}
+.footer{
+	width: 1200px;
+}
+.L_3{
+	margin-left: 100px;
+}
+.L_34{
+	width: 1200px;
+}
+.L_72{
+	width: 1200px;
+}
+}
+
+@media (max-width: 1400px) {
+.L_73 ul li img:nth-child(1){
+	position: relative;
+	top: 3px;
+	margin-left: 0px;
+    margin-right: 0px;
+}
+.L_73 ul li img:nth-child(3){
+	position: relative;
+	left: 0%;
+}
+.L_81{
+	width: 46%;
+	float: left;
+}
+.L_82{
+	width: 46%;
+}
+}

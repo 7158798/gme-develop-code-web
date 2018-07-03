@@ -1,9 +1,12 @@
 package com.gmebtc.web.portal.controller;
 
-import com.gmebtc.web.portal.result.GlobalResult;
-import com.gmebtc.web.portal.result.ResultCode;
-import com.gmebtc.web.portal.service.CoinToCoinService;
-import com.gmebtc.web.portal.utils.Toolkits;
+import java.util.HashMap;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Locale;
+import com.gmebtc.web.portal.result.ResponseResult;
+import com.gmebtc.web.portal.service.CoinToCoinService;
+import com.gmebtc.web.portal.utils.Toolkits;
 
 
 /*
@@ -45,7 +46,7 @@ public class CoinToCoinController {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("orderNum", orderNum);
         String json = coinToCoinService.cancelBBOrder(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -62,7 +63,7 @@ public class CoinToCoinController {
         HttpSession session = request.getSession();
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
         HashMap<String, String> map = new HashMap<>();
-        GlobalResult result = new GlobalResult();
+        ResponseResult result = new ResponseResult();
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "交易数量不能为空");
             map.put("msg2", "资金密码不能为空");
@@ -72,13 +73,13 @@ public class CoinToCoinController {
             map.put("msg2", "Capital cipher can not be empty");
         }
         if (null == amount || StringUtils.isBlank(amount)) {
-            result.setCode(ResultCode.CODE_ERROR_17);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
             return result;
         }
         if (null == payPassword || StringUtils.isBlank(payPassword)) {
-            result.setCode(ResultCode.CODE_ERROR_3);
+            result.setCode("-1");
             result.setMessage(Toolkits.defaultString(map.get("msg2")));
             result.setData("");
             return result;
@@ -91,7 +92,7 @@ public class CoinToCoinController {
         hashMap.put("price", price);
         hashMap.put("payPassword", payPassword);
         String json = coinToCoinService.bbBuySell(request, hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -110,7 +111,7 @@ public class CoinToCoinController {
         hashMap.put("page", page);
         hashMap.put("pageSize", pageSize);
         String json = coinToCoinService.getTransactions(request, hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -128,7 +129,7 @@ public class CoinToCoinController {
         hashMap.put("coinTradeId", coinTradeId);
         hashMap.put("page", page);
         String json = coinToCoinService.getUserTransactions(request, hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -148,7 +149,7 @@ public class CoinToCoinController {
         hashMap.put("page", page);
         hashMap.put("pageSize", pageSize);
         String json = coinToCoinService.getUserOrder(request, hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 
 
@@ -167,6 +168,6 @@ public class CoinToCoinController {
         hashMap.put("tradeType", type);
         hashMap.put("pageSize", pageSize);
         String json = coinToCoinService.getBuySellOrders(request,hashMap);
-        return Toolkits.messageTransformation(request, json);
+        return Toolkits.handleResp(json);
     }
 }

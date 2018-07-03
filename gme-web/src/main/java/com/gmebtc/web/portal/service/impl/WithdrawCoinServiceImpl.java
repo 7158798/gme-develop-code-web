@@ -1,6 +1,7 @@
 package com.gmebtc.web.portal.service.impl;
 
 import com.gmebtc.web.portal.service.WithdrawCoinService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ import java.util.HashMap;
 @Service(value = "withdrawCoinService")
 public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
 
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
+    
+    
 
 
     /**
@@ -28,7 +29,7 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      */
     @Override
     public String cancelWithdraw(HttpServletRequest request, HashMap<String,String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "cancelWithdraw&";
+        String method = "cancelWithdraw&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -37,11 +38,11 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      * @Author zhou
      * @Date 2018/5/29 17:25
      * @Param [request, hashMap]
-     * @Desc 删除提币地址
+     * @Desc 删除钱包地址
      */
     @Override
     public String withdrawAddressDel(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "withdrawAddressDel&";
+        String method = ConfigUtil.get("WALLET_DELETEWALLETADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -54,7 +55,7 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      */
     @Override
     public String withdrawAddressAdd(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "withdrawAddressAdd&";
+        String method = ConfigUtil.get("WALLET_ADDWITHDRAWADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -67,7 +68,7 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      */
     @Override
     public String getWithdrawAddress(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getWithdrawAddress&";
+        String method = ConfigUtil.get("WALLET_WITHDRAWADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -80,22 +81,27 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      */
     @Override
     public String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "widthrawCoin&";
+        String method = "widthrawCoin&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
+    
     /**
-     * @Author zhou
-     * @Date 2018/5/30 16:54
-     * @Param [request]
-     * @Desc 查询提币历史记录
+     * 
+    * @Title: getWithdrawRecordPage  
+    * @Description:  分页查询提币记录
+    * @param request
+    * @param hashMap
+    * @return
+    * @return String
      */
     @Override
-    public String getWithdrawHistory(HttpServletRequest request,HashMap<String,String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getWithdrawHistory&";
+    public String getWithdrawRecordPage(HttpServletRequest request,HashMap<String,Object> hashMap) {
+        String method = ConfigUtil.get("WALLET_WITHDRAWPAGE");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
+
 
 
 }

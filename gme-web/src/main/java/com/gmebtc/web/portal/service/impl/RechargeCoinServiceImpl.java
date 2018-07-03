@@ -1,12 +1,14 @@
 package com.gmebtc.web.portal.service.impl;
 
-import com.gmebtc.web.portal.service.RechargeCoinService;
-import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+
+import org.springframework.stereotype.Service;
+
+import com.gmebtc.web.portal.service.RechargeCoinService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
+import com.gmebtc.web.portal.utils.SendRequestUtil;
 
 /*
  * @Author zhou
@@ -16,10 +18,7 @@ import java.util.HashMap;
 @Service(value = "rechargeCoinService")
 public class RechargeCoinServiceImpl implements RechargeCoinService {
     
-    @Value("${SERVICE_BASE_PARAM}")
-    private String SERVICE_BASE_PARAM;
-
-
+    
 
     /**
      * @Author zhou
@@ -27,9 +26,27 @@ public class RechargeCoinServiceImpl implements RechargeCoinService {
      * @Param [request, hashMap]
      * @Desc 查询充币记录
      */
-    @Override
-    public String getWalletRecharge(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = SERVICE_BASE_PARAM + "getWalletRecharge&";
+    
+    public String getWalletRechargeRecord(HttpServletRequest request, HashMap<String, Object> hashMap) {
+        String method = ConfigUtil.get("WALLET_RECHARGERECORD");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
+    
+    
+    /**
+     * 
+     * @Title: getRechargeAddress
+     * @Description: TODO 查询充币地址
+     * @param @param request
+     * @param @param hashMap
+     * @param @return
+     * @return String
+     * @throws
+     */
+    @Override
+	public String getRechargeAddress(HttpServletRequest request, HashMap<String, Object> hashMap) {
+		String method = ConfigUtil.get("WALLET_RECHARGERECORD");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
+
 }
