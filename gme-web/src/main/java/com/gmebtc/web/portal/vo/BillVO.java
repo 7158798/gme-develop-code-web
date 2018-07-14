@@ -17,21 +17,21 @@ public class BillVO extends BaseVO implements Serializable{
 	/**
 	 * currencyId: 币种类型
 	 */
-	private Integer currencyId;
+	private String currencyId;
 	/**
 	 * operationType: 操作类型
 	 */
-	private Integer operationType;
-	public Integer getCurrencyId() {
+	private String operationType;
+	public String getCurrencyId() {
 		return currencyId;
 	}
-	public void setCurrencyId(Integer currencyId) {
+	public void setCurrencyId(String currencyId) {
 		this.currencyId = currencyId;
 	}
-	public Integer getOperationType() {
+	public String getOperationType() {
 		return operationType;
 	}
-	public void setOperationType(Integer operationType) {
+	public void setOperationType(String operationType) {
 		this.operationType = operationType;
 	}
 

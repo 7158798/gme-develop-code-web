@@ -22,6 +22,7 @@ import com.gmebtc.web.portal.constant.SessionAttributes;
 import com.gmebtc.web.portal.entity.User;
 import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.MessageCodeService;
+import com.gmebtc.web.portal.utils.RegexUtil;
 import com.gmebtc.web.portal.utils.Toolkits;
 import com.gmebtc.web.portal.vo.UserVO;
 
@@ -38,14 +39,17 @@ public class MessageCodeController {
 	@Resource(name = "messageCodeService")
 	private MessageCodeService messageCodeService;
 
+	
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/28 18:15
-	 * @Param [request, user]
-	 * @Desc 发送短信验证码
+	 * 
+	* @Title: getMessageCode  
+	* @Description: 发送短信验证码 
+	* @param request
+	* @param user
+	* @return
+	* @return Object
 	 */
 	@RequestMapping(value = "/sendPhoneCheckCode", method = RequestMethod.POST)
-	@ResponseBody
 	public Object getMessageCode(HttpServletRequest request, User user) {
 		HttpSession session = request.getSession();
 		// 获取当前本地语言
@@ -53,14 +57,27 @@ public class MessageCodeController {
 		Map<String, String> map = new HashMap<String, String>();
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
-			map.put("msg1", "您的操作失败,请重试");
+			map.put("msg1", "手机号格式错误");
+			map.put("msg2", "服务器异常,请稍后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
-			map.put("msg1", "Your operation failed,please try again");
+			map.put("msg1", "Cell phone number error");
+			map.put("msg2", "Server exception,please try again later.");
 		}
 
+		
+		
+		result.setCode(ResultCode.FORM_INFO_ERROR);
+		result.setData("");
+		
+		if (null != user.getPhoneCode() && !RegexUtil.isPhoneNumber(user.getPhoneCode())) {
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
+			return result;
+		}
+		
+		
 		HashMap<String, String> hashMap = new HashMap<String, String>();
-		try {
+		/*try {
 			UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_FIRSTLOGIN);
 			// 如果是 登录二次验证发送短信验证码,需要传uid给后台
 			if (user.getType().equals("2")) {
@@ -71,13 +88,35 @@ public class MessageCodeController {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
 			result.setData("");
 			return result;
+		}*/
+		
+		// 注册时，不需要用户id
+		if (user.getType() != "1") {
+			hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
 		}
-		hashMap.put("phoneCode", user.getPhoneCode());
+		if (null != user.getCountryCode()) {
+			hashMap.put("countryCode", user.getCountryCode());
+		}
+		if (null != user.getSendByVoice()) {
+			hashMap.put("sendByVoice", user.getSendByVoice());
+		}
+		if (null != user.getPhoneCode()) {
+			hashMap.put("phoneCode", user.getPhoneCode());
+		}
+		
 		hashMap.put("type", user.getType());
-		hashMap.put("countryCode", user.getCountryCode());
 
-		String json = messageCodeService.getMessageCode(request, hashMap);
-		return Toolkits.handleResp(json);
+		
+		try {
+			String json = messageCodeService.getMessageCode(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
+			result.setData("");
+			log.error("{} 发送短信验证码 解析后台数据出错", e.toString());
+			return result;
+		}
 	}
 
 	/**

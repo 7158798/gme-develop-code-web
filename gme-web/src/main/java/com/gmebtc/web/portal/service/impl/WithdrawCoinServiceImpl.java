@@ -22,65 +22,70 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/29 17:12
      * @Param [request, withdrawId:	提币编号, payPassword:资金密码]
      * @Desc 取消提币
      */
     @Override
-    public String cancelWithdraw(HttpServletRequest request, HashMap<String,String> hashMap) {
+    public String cancelWithdraw(HttpServletRequest request, HashMap<String,String> hashMap) throws Exception {
         String method = "cancelWithdraw&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/29 17:25
      * @Param [request, hashMap]
      * @Desc 删除钱包地址
      */
     @Override
-    public String withdrawAddressDel(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String withdrawAddressDel(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = ConfigUtil.get("WALLET_DELETEWALLETADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/29 21:04
      * @Param [request, hashMap]
      * @Desc 添加提币地址
      */
     @Override
-    public String withdrawAddressAdd(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String withdrawAddressAdd(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = ConfigUtil.get("WALLET_ADDWITHDRAWADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/30 10:53
      * @Param [request, hashMap]
      * @Desc 查询提币地址
      */
     @Override
-    public String getWithdrawAddress(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String getWithdrawAddress(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception {
         String method = ConfigUtil.get("WALLET_WITHDRAWADDRESS");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/30 16:43
      * @Param [request, hashMap]
      * @Desc 提币请求
      */
     @Override
-    public String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = "widthrawCoin&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
@@ -95,9 +100,10 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
     * @param hashMap
     * @return
     * @return String
+     * @throws Exception 
      */
     @Override
-    public String getWithdrawRecordPage(HttpServletRequest request,HashMap<String,Object> hashMap) {
+    public String getWithdrawRecordPage(HttpServletRequest request,HashMap<String,Object> hashMap) throws Exception {
         String method = ConfigUtil.get("WALLET_WITHDRAWPAGE");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }

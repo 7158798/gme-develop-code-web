@@ -18,7 +18,7 @@ public class Page {
 	/**
 	 * 一页显示多少数据
 	 */
-	public static final String NUMPERPAGE = "10";
+	public static final String NUMPERPAGE = "3";
 	
 	
 }

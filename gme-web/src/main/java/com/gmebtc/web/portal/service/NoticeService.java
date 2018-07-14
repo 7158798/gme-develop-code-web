@@ -4,8 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface NoticeService {
+	
+	String getCoinList(HttpServletRequest request,HashMap<String, Object> hashMap) throws Exception;
+	
+	String getCoinTradePairList(HttpServletRequest request,HashMap<String, Object> hashMap) throws Exception;
 
-    String getCoinIntroduce(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getCoinIntroduce(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getNotice(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getNotice(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 }

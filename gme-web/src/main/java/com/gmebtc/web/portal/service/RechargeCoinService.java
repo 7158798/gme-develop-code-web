@@ -14,16 +14,27 @@ public interface RechargeCoinService {
 	 * @return String
 	 * @throws
 	 */
-    String getWalletRechargeRecord(HttpServletRequest request, HashMap<String, Object> hashMap);
+    String getWalletRechargeRecord(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception;
     /**
      * 
      * @Title: getRechargeAddress
-     * @Description: TODO 查询充值地址
+     * @Description: TODO 查询充值地址 分页
      * @param @param request
      * @param @param hashMap
      * @param @return
      * @return String
      * @throws
      */
-    String getRechargeAddress(HttpServletRequest request, HashMap<String, Object> hashMap);
+    String getRechargeAddressPage(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception;
+    /**
+     * 
+    * @Title: getRechargeAddress  
+    * @Description: 查询充值地址 
+    * @param request
+    * @param hashMap
+    * @return
+    * @return String
+     */
+    String getRechargeAddress(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception;
+    
 }

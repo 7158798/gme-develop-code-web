@@ -1,6 +1,7 @@
 package com.gmebtc.web.portal.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.gmebtc.web.portal.constant.Page;
 
@@ -23,6 +24,19 @@ public class BaseVO implements Serializable{
 	 * numPerPage: 一页显示多少数据,默认为10
 	 */
 	private String numPerPage = Page.NUMPERPAGE;
+	
+	
+	/**
+	 * startDate: 开始时间
+	 */
+	private String startTime;
+	
+	/**
+	 * endDate: 结束时间
+	 */
+	private String endTime;
+	
+	
 	public String getPageNum() {
 		return pageNum;
 	}
@@ -34,6 +48,18 @@ public class BaseVO implements Serializable{
 	}
 	public void setNumPerPage(String numPerPage) {
 		this.numPerPage = numPerPage;
+	}
+	public String getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 	
 }

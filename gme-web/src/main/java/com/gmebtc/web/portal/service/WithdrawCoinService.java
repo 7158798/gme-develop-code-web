@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface WithdrawCoinService {
-    String cancelWithdraw(HttpServletRequest request, HashMap<String,String> hashMap);
+    String cancelWithdraw(HttpServletRequest request, HashMap<String,String> hashMap) throws Exception;
 
     /**
      * 
@@ -16,7 +16,7 @@ public interface WithdrawCoinService {
      * @return String
      * @throws
      */
-    String withdrawAddressDel(HttpServletRequest request, HashMap<String, String> hashMap);
+    String withdrawAddressDel(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
     /**
      * 
      * @Title: withdrawAddressAdd
@@ -27,7 +27,7 @@ public interface WithdrawCoinService {
      * @return String
      * @throws
      */
-    String withdrawAddressAdd(HttpServletRequest request, HashMap<String, String> hashMap);
+    String withdrawAddressAdd(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
     /**
      * 
      * @Title: getWithdrawAddress
@@ -38,7 +38,7 @@ public interface WithdrawCoinService {
      * @return String
      * @throws
      */
-    String getWithdrawAddress(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getWithdrawAddress(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception;
     /**
      * 
      * @Title: widthrawCoin
@@ -49,7 +49,7 @@ public interface WithdrawCoinService {
      * @return String
      * @throws
      */
-    String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap);
+    String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
     /**
      * 
      * @Title: getWithdrawHistory
@@ -60,6 +60,6 @@ public interface WithdrawCoinService {
      * @return String
      * @throws
      */
-    String getWithdrawRecordPage(HttpServletRequest request,HashMap<String, Object> hashMap);
+    String getWithdrawRecordPage(HttpServletRequest request,HashMap<String, Object> hashMap) throws Exception;
     
 }

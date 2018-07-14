@@ -37,6 +37,9 @@ public class SessionAttributes {
 	 * 存用户是否绑定过手机号
 	 */
 	public static final String USER_ISBINDPHONE = "USER_ISBINDPHONE";
-	
+	/**
+	 * 添加钱包地址的时候保存currencyId,回显
+	 */
+	public static final String SAVE_CURRENCYID_REVIEW = "SAVE_CURRENCYID_REVIEW";
 	
 }

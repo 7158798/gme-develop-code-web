@@ -4,15 +4,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface CoinToCoinService {
-    String cancelBBOrder(HttpServletRequest request,HashMap<String, String> hashMap);
+    String cancelCoinOrder(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception;
 
-    String bbBuySell(HttpServletRequest request, HashMap<String, String> hashMap);
+    String bbBuySell(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getTransactions(HttpServletRequest request, HashMap<String, String> hashMap);
+    String realTimeTradeRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getUserTransactions(HttpServletRequest request, HashMap<String, String> hashMap);
+    String transRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getUserOrder(HttpServletRequest request, HashMap<String, String> hashMap);
+    String entrustRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    
+    String queryDetial(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    
 }

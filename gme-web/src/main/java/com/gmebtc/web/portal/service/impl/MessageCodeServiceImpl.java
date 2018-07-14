@@ -23,25 +23,27 @@ public class MessageCodeServiceImpl implements MessageCodeService {
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/28 18:09
      * @Param [request, user:短信验证码用户信息]
      * @Desc 发送短信验证码
      */
     @Override
-    public String getMessageCode(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String getMessageCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = "sendPhoneCheckCode&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/28 18:34
      * @Param [request, user]
      * @Desc 验证验证码
      */
     @Override
-    public String checkPhoneCode(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String checkPhoneCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = "checkPhoneCode&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }

@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface IndexService {
-    String getTopPrice(HttpServletRequest request, HashMap<String, String> hashMap);
+    String getTopPrice(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
-    String getCoinInfo(HttpServletRequest request,HashMap<String,String> hashMap);
+    String getCoinInfo(HttpServletRequest request,HashMap<String,String> hashMap) throws Exception;
 
 }

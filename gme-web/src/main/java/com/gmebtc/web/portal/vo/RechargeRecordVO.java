@@ -18,17 +18,18 @@ public class RechargeRecordVO extends BaseVO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * currencyId: 币种类型 1.USDT,2.BTC,3.ETH
+	 * currencyId: 币种类型 
 	 */
-	private Integer currencyId;
+	private String currencyId;
 	/**
 	 * status: 状态1-等待确认;2-成功;3-失败;
 	 */
 	private Integer status;
-	public Integer getCurrencyId() {
+	
+	public String getCurrencyId() {
 		return currencyId;
 	}
-	public void setCurrencyId(Integer currencyId) {
+	public void setCurrencyId(String currencyId) {
 		this.currencyId = currencyId;
 	}
 	public Integer getStatus() {

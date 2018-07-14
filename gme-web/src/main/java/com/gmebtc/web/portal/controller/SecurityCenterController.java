@@ -22,10 +22,11 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import com.gmebtc.web.portal.constant.ResultCode;
 import com.gmebtc.web.portal.constant.SessionAttributes;
 import com.gmebtc.web.portal.entity.BindCard;
-import com.gmebtc.web.portal.entity.BindPhone;
+import com.gmebtc.web.portal.entity.BindAliPayWeChat;
 import com.gmebtc.web.portal.entity.UploadIDCard;
 import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.SecurityConterService;
+import com.gmebtc.web.portal.utils.Regex;
 import com.gmebtc.web.portal.utils.RegexUtil;
 import com.gmebtc.web.portal.utils.Toolkits;
 import com.gmebtc.web.portal.vo.UserVO;
@@ -60,11 +61,13 @@ public class SecurityCenterController {
 			map.put("msg1", "旧密码不能为空");
 			map.put("msg2", "新密码不能为空");
 			map.put("msg3", "图像验证码不能为空");
+			map.put("msg4", "服务器异常,请稍后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Old passwords cannot be empty");
 			map.put("msg2", "New passwords cannot be empty");
 			map.put("msg3", "Image verification code can not be empty");
+			map.put("msg4", "Server exception,please try again later.");
 		}
 
 		if (null == oldPassword || StringUtils.isBlank(oldPassword)) {
@@ -91,8 +94,17 @@ public class SecurityCenterController {
 		hashMap.put("newPassword", newPassword);
 		hashMap.put("checkCode", checkCode);
 
-		String json = securityConterService.modifyLoginPwd(request, hashMap);
-		return Toolkits.handleResp(json);
+		
+		try {
+			String json = securityConterService.modifyLoginPwd(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg4")));
+			result.setData("");
+			log.error("{} ", e.toString());
+			return result;
+		}
 	}
 
 	/**
@@ -232,12 +244,15 @@ public class SecurityCenterController {
 	
 	
 	
-
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/30 20:01
-	 * @Param [request, email]
-	 * @Desc 发送邮件
+	 * 
+	* @Title: sendEmail  
+	* @Description: 发送邮件
+	* @param request
+	* @param email
+	* @param type 1.激活邮箱url；2.用户登录code，3重置登录密码code，4.重置资金密码code，5.提币申请code,6绑定邮箱
+	* @return
+	* @return Object
 	 */
 	@RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
 	public Object sendEmail(HttpServletRequest request, String email, @RequestParam String type) {
@@ -247,35 +262,42 @@ public class SecurityCenterController {
 		ResponseResult result = new ResponseResult();
 
 		if ("zh_CN".equals(locale.toString())) {
-			map.put("msg1", "邮箱格式错误");
-			map.put("msg2", "服务器异常,请稍后重试");
-			map.put("msg3", "你还没有登录,请登录后重试");
+			map.put("msg1", "邮箱不能为空");
+			map.put("msg2", "邮箱格式错误");
+			map.put("msg3", "服务器异常,请稍后重试");
+			map.put("msg4", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
-			map.put("msg1", "Email format error");
-			map.put("msg2", "Server exception,please try again later.");
-			map.put("msg3", "You haven't logged in yet,please login and try again");
+			map.put("msg1", "Email cannot be empty");
+			map.put("msg2", "Email format error");
+			map.put("msg3", "Server exception,please try again later.");
+			map.put("msg4", "You haven't logged in yet,please login and try again");
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
-		session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, "1");
+		result.setData("");
+		/*session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, "1");
 		UserVO userVO = null;
 		userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
 		if (null == userVO) {
 			result.setMessage(Toolkits.defaultString(map.get("msg3")));
 			result.setData("");
 			return result;
-		}
+		}*/
 
-		if (null == email || StringUtils.isBlank(email) || !RegexUtil.isEmail(email)) {
+		if (null == email || StringUtils.isBlank(email)) {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
-			result.setData("");
 			return result;
 		}
+		if (!RegexUtil.isEmail(email)) {
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
+			return result;
+		}
+		
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		hashMap.put("email", email);
 		hashMap.put("type", type);
-		hashMap.put("uid", userVO.getUid());
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
 
 		try {
 			String json = securityConterService.sendEmail(request, hashMap);
@@ -289,11 +311,15 @@ public class SecurityCenterController {
 		}
 	}
 
+	
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/30 20:22
-	 * @Param [request, uploadIdCard]
-	 * @Desc 实名认证
+	 * 
+	* @Title: identifyAuth  
+	* @Description: 实名认证 
+	* @param request
+	* @param uploadIdCard
+	* @return
+	* @return Object
 	 */
 	@RequestMapping(value = "/identifyAuth", method = RequestMethod.POST)
 	public Object identifyAuth(HttpServletRequest request, UploadIDCard uploadIdCard) {
@@ -319,30 +345,26 @@ public class SecurityCenterController {
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
+		result.setData("");
 
 		if (null == uploadIdCard.getName() || StringUtils.isBlank(uploadIdCard.getName())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
-			result.setData("");
 			return result;
 		}
 		if (null == uploadIdCard.getCardNumber() || StringUtils.isBlank(uploadIdCard.getCardNumber())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg2")));
-			result.setData("");
 			return result;
 		}
 		if (null == uploadIdCard.getFaceImgId() || StringUtils.isBlank(uploadIdCard.getFaceImgId())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg3")));
-			result.setData("");
 			return result;
 		}
 		if (null == uploadIdCard.getBackImgId() || StringUtils.isBlank(uploadIdCard.getBackImgId())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg4")));
-			result.setData("");
 			return result;
 		}
 		if (null == uploadIdCard.getHandImgId() || StringUtils.isBlank(uploadIdCard.getHandImgId())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg4")));
-			result.setData("");
 			return result;
 		}
 
@@ -353,7 +375,8 @@ public class SecurityCenterController {
 		hashMap.put("faceImgId", uploadIdCard.getFaceImgId());
 		hashMap.put("backImgId", uploadIdCard.getBackImgId());
 		hashMap.put("handImgId", uploadIdCard.getHandImgId());
-		hashMap.put("uid", "1");
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		
 		try {
 			String json = securityConterService.identifyAuth(request, hashMap);
 			return Toolkits.handleResp(json);
@@ -374,8 +397,18 @@ public class SecurityCenterController {
 	 */
 	@RequestMapping(value = "/checkHasIdentify", method = RequestMethod.POST)
 	public Object checkHasIdentify(HttpServletRequest request) {
-		String json = securityConterService.checkHasIdentify(request);
-		return Toolkits.handleResp(json);
+		ResponseResult result = new ResponseResult();
+		
+		try {
+			String json = securityConterService.checkHasIdentify(request);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			//result.setMessage(Toolkits.defaultString(map.get(value)));
+			result.setData("");
+			log.error("{} ", e.toString());
+			return result;
+		}
 	}
 
 	/**
@@ -391,25 +424,24 @@ public class SecurityCenterController {
 		HashMap<String, String> map = new HashMap<>();
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
-			map.put("msg1", "姓名必填");
-			map.put("msg2", "开户行不能为空");
-			map.put("msg3", "支行不能为空");
-			map.put("msg4", "银行卡号不能为空");
-			map.put("msg5", "资金密码不能为空");
-			map.put("msg6", "服务器异常,请稍后重试");
-			map.put("msg7", "你还没有登录,请登录后重试");
+			map.put("msg1", "开户行不能为空");
+			map.put("msg2", "支行不能为空");
+			map.put("msg3", "银行卡号不能为空");
+			map.put("msg4", "资金密码不能为空");
+			map.put("msg5", "服务器异常,请稍后重试");
+			map.put("msg6", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
-			map.put("msg1", "The name cannot be empty");
-			map.put("msg2", "The opening bank cannot be empty");
-			map.put("msg3", "Branches cannot be empty");
-			map.put("msg4", "The bank card number cannot be empty");
-			map.put("msg5", "Capital cipher can not be empty");
-			map.put("msg6", "Server exception,please try again later.");
-			map.put("msg7", "You haven't logged in yet,please login and try again");
+			map.put("msg1", "The opening bank cannot be empty");
+			map.put("msg2", "Branches cannot be empty");
+			map.put("msg3", "The bank card number cannot be empty");
+			map.put("msg4", "Capital cipher can not be empty");
+			map.put("msg5", "Server exception,please try again later.");
+			map.put("msg6", "You haven't logged in yet,please login and try again");
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
+		result.setData("");
 		/*session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, "1");
 		UserVO userVO = null;
 		userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
@@ -419,35 +451,24 @@ public class SecurityCenterController {
 			return result;
 		}*/
 
-		if (null == bindCard.getName() || StringUtils.isBlank(bindCard.getName())) {
-			result.setCode("-1");
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
-			result.setData("");
-			return result;
-		}
 		if (null == bindCard.getBank() || StringUtils.isBlank(bindCard.getBank())) {
-			result.setMessage(Toolkits.defaultString(map.get("msg2")));
-			result.setData("");
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
 			return result;
 		}
 		if (null == bindCard.getBranch() || StringUtils.isBlank(bindCard.getBranch())) {
-			result.setMessage(Toolkits.defaultString(map.get("msg3")));
-			result.setData("");
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			return result;
 		}
 		if (null == bindCard.getBankCard() || StringUtils.isBlank(bindCard.getBankCard())) {
-			result.setMessage(Toolkits.defaultString(map.get("msg4")));
-			result.setData("");
+			result.setMessage(Toolkits.defaultString(map.get("msg3")));
 			return result;
 		}
 		if (null == bindCard.getTradeAuth() || StringUtils.isBlank(bindCard.getTradeAuth())) {
-			result.setMessage(Toolkits.defaultString(map.get("msg5")));
-			result.setData("");
+			result.setMessage(Toolkits.defaultString(map.get("msg4")));
 			return result;
 		}
 
 		HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("name", bindCard.getName());
 		hashMap.put("bank", bindCard.getBank());
 		hashMap.put("branch", bindCard.getBranch());
 		hashMap.put("bankCard", bindCard.getBankCard());
@@ -461,20 +482,24 @@ public class SecurityCenterController {
 			result.setCode(ResultCode.SYSTEM_ERROR);
 			result.setMessage(Toolkits.defaultString(map.get("msg6")));
 			result.setData("");
-			log.error("{} 绑定银行卡发生异常", e.toString());
+			log.error("{} 绑定银行卡 发生异常", e.toString());
 			return result;
 
 		}
 	}
 
+	
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/30 20:54
-	 * @Param [request, bindPhone:支付宝或者微信信息]
-	 * @Desc 绑定支付宝或者微信
+	 * 
+	* @Title: payMethodAlipayWeChat  
+	* @Description: 绑定支付宝或者微信 
+	* @param request
+	* @param payMethod
+	* @return
+	* @return Object
 	 */
-	@RequestMapping(value = "/payMethedAlipayWeChat", method = RequestMethod.POST)
-	public Object payMethedAlipayWeChat(HttpServletRequest request, BindPhone bindPhone) {
+	@RequestMapping(value = "/payMethodAlipayWeChat", method = RequestMethod.POST)
+	public Object payMethodAlipayWeChat(HttpServletRequest request, BindAliPayWeChat payMethod) {
 		HttpSession session = request.getSession();
 		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		HashMap<String, String> map = new HashMap<>();
@@ -495,6 +520,7 @@ public class SecurityCenterController {
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
+		result.setData("");
 		/*session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, "1");
 		UserVO userVO = null;
 		userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
@@ -504,28 +530,25 @@ public class SecurityCenterController {
 			return result;
 		}*/
 
-		if (null == bindPhone.getAlipayImg() || StringUtils.isBlank(bindPhone.getAlipayImg())) {
+		if (null == payMethod.getQrImgId() || StringUtils.isBlank(payMethod.getQrImgId())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
-			result.setData("");
 			return result;
 		}
-		if (null == bindPhone.getAccount() || StringUtils.isBlank(bindPhone.getAccount())) {
+		if (null == payMethod.getAccount() || StringUtils.isBlank(payMethod.getAccount())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg2")));
-			result.setData("");
 			return result;
 		}
-		if (null == bindPhone.getTradeAuth() || StringUtils.isBlank(bindPhone.getTradeAuth())) {
+		if (null == payMethod.getTradeAuth() || StringUtils.isBlank(payMethod.getTradeAuth())) {
 			result.setMessage(Toolkits.defaultString(map.get("msg3")));
-			result.setData("");
 			return result;
 		}
 
 		HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("alipayImg", bindPhone.getAlipayImg());
-		hashMap.put("type", bindPhone.getType());
-		hashMap.put("account", bindPhone.getAccount());
-		hashMap.put("remark", bindPhone.getRemark());
-		hashMap.put("tradeAuth", bindPhone.getTradeAuth());
+		hashMap.put("qrImgId", payMethod.getQrImgId());
+		hashMap.put("type", payMethod.getType());
+		hashMap.put("account", payMethod.getAccount());
+		hashMap.put("remark", payMethod.getRemark());
+		hashMap.put("tradeAuth", payMethod.getTradeAuth());
 		hashMap.put("uid", "42");
 		try {
 			String json = securityConterService.payMethedAlipayWeChat(request, hashMap);
@@ -577,7 +600,7 @@ public class SecurityCenterController {
 		try {
 			String json = securityConterService.checkUserIdentify(request, hashMap);
 			return Toolkits.handleResp(json);
-			/*String json = "'{'code':'200','message':'检查用户信息成功','data':{'idCard':'544323424234','email':'sfee@qq.com','phone':'15013668499','payMethod':{'name':'ld','bank':'中商银行','branch':'酹太想爱你支行','bankCard':'42108234234324324321','alipayImg':'http://img.zcool.cn/community/010a1b554c01d1000001bf72a68b37.jpg@1280w_1l_2o_100sh.png','alipayAccount':'1','alipayDesc':'1','wechatImg':'http://img.zcool.cn/community/010a1b554c01d1000001bf72a68b37.jpg@1280w_1l_2o_100sh.png','wechatAccount':'1','wechatDesc':'1'},'bankCard':true,'alipay':true,'wechat':true,'bindEmail':true,'authIdCard':true,'bindPhone':false},'ext':null}'";*/
+			/*String json = "'{'code':'200','message':'检查用户信息成功','data':{'idCard':'544323424234','email':'sfee@qq.com','phone':'15013668499','payMethod':{'name':'ld','bank':'中商银行','branch':'酹太想爱你支行','bankCard':'42108234234324324321','alipayImg':'http://img.zcool.cn/community/010a1b554c01d1000001bf72a68b37.jpg@1280w_1l_2o_100sh.png','alipayAccount':'1','alipayDesc':'1','wechatImg':'http://img.zcool.cn/community/010a1b554c01d1000001bf72a68b37.jpg@1280w_1l_2o_100sh.png','wechatAccount':'1','wechatDesc':'1'},'bankCard':true,'alipay':true,'wechat':true,'bindEmail':true,'authIdCard':true,'payMethod':false},'ext':null}'";*/
 			//return Toolkits.handleResp(json);
 		} catch (Exception e) {
 			result.setCode(ResultCode.SYSTEM_ERROR);
@@ -589,10 +612,16 @@ public class SecurityCenterController {
 	}
 
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/30 21:18
-	 * @Param [request, phone, countryCode, phoneCode, payPassword]
-	 * @Desc 绑定手机号
+	 * 
+	* @Title: payMethod  
+	* @Description: 绑定手机号 
+	* @param request
+	* @param phoneCode
+	* @param countryCode
+	* @param identCode
+	* @param tradeAuth
+	* @return
+	* @return Object
 	 */
 	@RequestMapping(value = "/bindPhone", method = RequestMethod.POST)
 	public Object bindPhone(HttpServletRequest request, String phoneCode, String countryCode, String identCode,
@@ -670,11 +699,17 @@ public class SecurityCenterController {
 		}
 	}
 
+	
 	/**
-	 * @Author zhou
-	 * @Date 2018/5/30 21:27
-	 * @Param [request, email, emailCode, payPassword]
-	 * @Desc 绑定邮箱
+	 * 
+	* @Title: bindEmail  
+	* @Description: 绑定邮箱 
+	* @param request
+	* @param email
+	* @param emailCode
+	* @param tradeAuth
+	* @return
+	* @return Object
 	 */
 	@RequestMapping(value = "/bindEmail", method = RequestMethod.POST)
 	public Object bindEmail(HttpServletRequest request, String email, String emailCode, String tradeAuth) {
@@ -700,6 +735,7 @@ public class SecurityCenterController {
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
+		result.setData("");
 
 		/*
 		 * UserVO userVO = new UserVO(); userVO.setUid("1");
@@ -711,22 +747,18 @@ public class SecurityCenterController {
 
 		if (null == email || StringUtils.isBlank(email)) {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
-			result.setData("");
 			return result;
 		}
-		if (!Toolkits.isEmail(email)) {
+		if (!RegexUtil.isEmail(email)) {
 			result.setMessage(Toolkits.defaultString(map.get("msg2")));
-			result.setData("");
 			return result;
 		}
 		if (null == emailCode || StringUtils.isBlank(emailCode)) {
 			result.setMessage(Toolkits.defaultString(map.get("msg3")));
-			result.setData("");
 			return result;
 		}
 		if (null == tradeAuth || StringUtils.isBlank(tradeAuth)) {
 			result.setMessage(Toolkits.defaultString(map.get("msg4")));
-			result.setData("");
 			return result;
 		}
 
@@ -735,6 +767,7 @@ public class SecurityCenterController {
 		hashMap.put("emailCode", emailCode);
 		hashMap.put("tradeAuth", tradeAuth);
 		hashMap.put("uid", "41");
+		
 		try {
 			String json = securityConterService.bindEmail(request, hashMap);
 			return Toolkits.handleResp(json);
@@ -855,5 +888,217 @@ public class SecurityCenterController {
 			return result;
 		}
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: openCloseTwoStep  
+	* @Description: 开启或者关闭二步登录保护 
+	* @param request
+	* @param checkCode
+	* @param type
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/openCloseTwoStep", method = RequestMethod.POST)
+	public Object openCloseTwoStep(HttpServletRequest request, String checkCode, @RequestParam String type) {
+		HttpSession session = request.getSession();
+		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		HashMap<String, String> map = new HashMap<>();
+		ResponseResult result = new ResponseResult();
+		if ("zh_CN".equals(locale.toString())) {
+			map.put("msg1", "邮箱验证码不能为空");
+			map.put("msg2", "服务器异常,请稍后重试");
+			map.put("msg3", "你还没有登录,请登录后重试");
+		}
+		if ("en_US".equals(locale.toString())) {
+			map.put("msg1", "Mailbox verification code can not be empty");
+			map.put("msg2", "Server exception,please try again later");
+			map.put("msg3", "You haven't logged in yet,please login and try again");
+		}
 
+		
+
+		/*
+		 * UserVO userVO = null; userVO = (UserVO)
+		 * session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN); if (null ==
+		 * userVO) { result.setMessage(Toolkits.defaultString(map.get("msg5")));
+		 * result.setData(""); return result; }
+		 */
+
+		if (null == checkCode || StringUtils.isBlank(checkCode)) {
+			result.setCode(ResultCode.FORM_INFO_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+			result.setData("");
+			return result;
+		}
+
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("checkCode", checkCode);
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		hashMap.put("type", type);
+		
+		
+		try {
+			String json = securityConterService.checkEmailCode(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
+			result.setData("");
+			log.error("{} 开启或者关闭二步登录保护 发生异常.", e.toString());
+			return result;
+		}
+	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: getSecurityLogList  
+	* @Description:  查询安全日志
+	* @param request
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/securityLogList", method = RequestMethod.GET)
+	public Object getSecurityLogList(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		HashMap<String, String> map = new HashMap<>();
+		ResponseResult result = new ResponseResult();
+		if ("zh_CN".equals(locale.toString())) {
+			map.put("msg1", "服务器异常,请稍后重试");
+		}
+		if ("en_US".equals(locale.toString())) {
+			map.put("msg1", "Server exception,please try again later");
+		}
+
+		
+
+		/*
+		 * UserVO userVO = null; userVO = (UserVO)
+		 * session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN); if (null ==
+		 * userVO) { result.setMessage(Toolkits.defaultString(map.get("msg5")));
+		 * result.setData(""); return result; }
+		 */
+
+
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		
+		
+		try {
+			String json = securityConterService.getSecurityLogList(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+			result.setData("");
+			log.error("{} 查询安全日志 发生异常.", e.toString());
+			return result;
+		}
+	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: securityOperationHistory  
+	* @Description: 查询安全设置历史记录
+	* @param request
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/securityOperationHistory", method = RequestMethod.GET)
+	public Object getSecurityOperationHistory(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		HashMap<String, String> map = new HashMap<>();
+		ResponseResult result = new ResponseResult();
+		if ("zh_CN".equals(locale.toString())) {
+			map.put("msg1", "服务器异常,请稍后重试");
+		}
+		if ("en_US".equals(locale.toString())) {
+			map.put("msg1", "Server exception,please try again later");
+		}
+
+		
+
+		/*
+		 * UserVO userVO = null; userVO = (UserVO)
+		 * session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN); if (null ==
+		 * userVO) { result.setMessage(Toolkits.defaultString(map.get("msg5")));
+		 * result.setData(""); return result; }
+		 */
+
+
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		
+		
+		try {
+			String json = securityConterService.getSecurityOperationHistory(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+			result.setData("");
+			log.error("{} 查询安全设置历史记录 发生异常.", e.toString());
+			return result;
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: systemTime  
+	* @Description: 查询当前服务器时间
+	* @param request
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/systemTime", method = RequestMethod.GET)
+	public Object systemTime(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		HashMap<String, String> map = new HashMap<>();
+		ResponseResult result = new ResponseResult();
+		if ("zh_CN".equals(locale.toString())) {
+			map.put("msg1", "服务器异常,请稍后重试");
+		}
+		if ("en_US".equals(locale.toString())) {
+			map.put("msg1", "Server exception,please try again later");
+		}
+
+		
+
+		/*
+		 * UserVO userVO = null; userVO = (UserVO)
+		 * session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN); if (null ==
+		 * userVO) { result.setMessage(Toolkits.defaultString(map.get("msg5")));
+		 * result.setData(""); return result; }
+		 */
+
+
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		
+		
+		try {
+			String json = securityConterService.systemTime(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+			result.setData("");
+			log.error("{} 查询当前服务器时间 发生异常.", e.toString());
+			return result;
+		}
+	}
+	
+	
 }

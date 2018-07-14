@@ -1,9 +1,12 @@
 package com.gmebtc.web.portal.entity;
 
-public class UploadIDCard {
-    /* 姓名*/
+import java.io.Serializable;
+
+public class UploadIDCard implements Serializable{
+	private static final long serialVersionUID = 1L;
+	/* 姓名*/
     private String name;
-    /* 证件类型（1，身份证，2，护照，3，军官证，4，台湾居民通行证，2港澳居民通行证）*/
+    /* 证件类型（1，身份证，2，护照，3，军官证，4，台湾居民通行证，5港澳居民通行证）*/
     private String cardType;
     /* 证件号码*/
     private String cardNumber;
@@ -14,7 +17,7 @@ public class UploadIDCard {
     /* 手持*/
     private String handImgId;
 
-    public String getName() {
+	public String getName() {
         return name;
     }
 

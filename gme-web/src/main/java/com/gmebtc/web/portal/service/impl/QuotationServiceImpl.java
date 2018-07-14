@@ -17,27 +17,48 @@ public class QuotationServiceImpl implements QuotationService {
     
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/29 11:54
      * @Param [request, map]
      * @Desc k线接口
      */
     @Override
-    public String kline(HttpServletRequest request,HashMap<String, String> hashMap) {
+    public String kline(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception {
         String method = ConfigUtil.get("KLINE_KLINE");
         return SendRequestUtil.sendMapRequest(request,hashMap, method);
     }
 
 
     /**
-     * @Author zhou
-     * @Date 2018/5/29 12:00
-     * @Param [request, map]
-     * @Desc 币行情
+     * 
+     * Title: ticker
+     * Description: 币行情  带有symbol参数
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.QuotationService#ticker(javax.servlet.http.HttpServletRequest, java.util.HashMap)
      */
     @Override
-    public String ticker(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = "ticker&";
+    public String ticker(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("MARKET_TICKET");
         return SendRequestUtil.sendMapRequest(request,hashMap, method);
     }
+
+    
+    /**
+     * 
+     * Title: ticker
+     * Description: 币行情 
+     * @param request
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.QuotationService#ticker(javax.servlet.http.HttpServletRequest)
+     */
+	@Override
+	public String ticker(HttpServletRequest request) throws Exception {
+		String method = ConfigUtil.get("MARKET_TICKET");
+        return SendRequestUtil.sendRequest(request, method);
+	}
 }

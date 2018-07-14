@@ -1,6 +1,7 @@
 package com.gmebtc.web.portal.service.impl;
 
 import com.gmebtc.web.portal.service.CoinToCoinService;
+import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,79 +23,121 @@ public class CoinToCoinServiceImpl implements CoinToCoinService {
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/30 17:05
      * @Param [request]
      * @Desc 取消订单
      */
     @Override
-    public String cancelBBOrder(HttpServletRequest request,HashMap<String, String> hashMap) {
-        String method = "cancelBBOrder&";
+    public String cancelCoinOrder(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_CANCELORDER");
         return SendRequestUtil.sendMapRequest(request, hashMap,method);
     }
 
 
+    
     /**
-     * @Author zhou
-     * @Date 2018/5/30 17:28
-     * @Param [request, hashMap]
-     * @Desc 币币交易
+     * 
+     * Title: bbBuySell
+     * Description:  币币交易
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#bbBuySell(javax.servlet.http.HttpServletRequest, java.util.HashMap)
      */
     @Override
-    public String bbBuySell(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = "bbBuySell&";
+    public String bbBuySell(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_BUYSELL");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+    }
+
+
+    
+    /**
+     * 
+     * Title: realTimeTradeRecord
+     * Description: 平台实时交易记录
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#realTimeTradeRecord(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+     */
+    @Override
+    public String realTimeTradeRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_REALTIMETRADE");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
-     * @Author zhou
-     * @Date 2018/5/31 14:57
-     * @Param [request, hashMap]
-     * @Desc 平台实时交易记录
+     * 
+     * Title: getUserTransactions
+     * Description: 查询我的交易记录
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#getUserTransactions(javax.servlet.http.HttpServletRequest, java.util.HashMap)
      */
     @Override
-    public String getTransactions(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = "getTransactions&";
+    public String transRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_TRADERECORD");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
-     * @Author zhou
-     * @Date 2018/5/31 15:04
-     * @Param [request, hashMap]
-     * @Desc 我的交易记录
+     * 
+     * Title: entrustRecord
+     * Description: 我的委托记录
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#entrustRecord(javax.servlet.http.HttpServletRequest, java.util.HashMap)
      */
     @Override
-    public String getUserTransactions(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = "getUserTransactions&";
+    public String entrustRecord(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_ENTRUSTRECORD");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
+
+
+    
+    /**
+     * 
+     * Title: getBuySellOrders
+     * Description: 买卖委托单
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#getBuySellOrders(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+     */
+    @Override
+    public String getBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("COIN_BUYSELLORDER");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+    }
+
 
 
     /**
-     * @Author zhou
-     * @Date 2018/5/31 15:08
-     * @Param [request, hashMap]
-     * @Desc 我的委托记录
+     * 
+     * Title: queryDetial
+     * Description: 查询详情
+     * @param request
+     * @param hashMap
+     * @return  
+     * @throws Exception 
+     * @see com.gmebtc.web.portal.service.CoinToCoinService#queryDetial(javax.servlet.http.HttpServletRequest, java.util.HashMap)
      */
-    @Override
-    public String getUserOrder(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = "getUserOrder&";
+	@Override
+	public String queryDetial(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = "aaaa";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
-    }
-
-
-    /**
-     * @Author zhou
-     * @Date 2018/5/31 15:11
-     * @Param [request, hashMap]
-     * @Desc 买卖委托单
-     */
-    @Override
-    public String getBuySellOrders(HttpServletRequest request, HashMap<String, String> hashMap) {
-        String method = "getBuySellOrders&";
-        return SendRequestUtil.sendMapRequest(request, hashMap, method);
-    }
+	}
 }

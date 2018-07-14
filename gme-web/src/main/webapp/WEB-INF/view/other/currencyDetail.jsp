@@ -12,63 +12,6 @@
 	</head>
 
 	<body class="">
-		<div class="header">
-			<div class="header_1">
-				<div class="logo">
-					<a>
-						<img src="img/dblg.png" />
-					</a>
-				</div>
-				<div class="header_daohang">
-					<ul>
-						<li>
-							<a href="#">首页</a>
-						</li>
-						<li>
-							<a href="#">C2C交易</a>
-						</li>
-						<li>
-							<a href="#">币币交易</a>
-						</li>
-						<li>
-							<a href="#">我的财务</a>
-						</li>
-						<li>
-							<a href="#">安全设置</a>
-						</li>
-						<li>
-							<a href="#">公告</a>
-						</li>
-						<li>
-							<a href="#">提交工单</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="header_2">
-				<div class="header_dengluhou">
-					<ul>
-						<li>
-							<a href="#" class="whate">19019382@qq.com<i></i></a>
-						</li>
-						<li>
-							<span class="zyw">中文版</span>
-							<div class="yybb">
-								<a href="#">ENGLISH</a>
-								<a href="#">한국어</a>
-							</div>
-						</li>
-					</ul>
-				</div>
-				<div class="header_zhuti">
-					<ul>
-						<span>主题</span>
-						<li id="bai"></li>
-						<li id="hei"></li>
-					</ul>
-				</div>
-			</div>
-		</div>
 
 		<!--
         	作者：李德芳
@@ -77,51 +20,11 @@
         -->
 		<div class="L_69">
 			<div class="L_70">
-				<ul>
+				<ul id="currencyList">
 					<li style="font-size: 16px;font-weight: 700;color: #23344a;">
 						数字资产列表
 					</li>
 					<li class="action_70">
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/L_7.png" /> BTC 比特币
-						</a>
-					</li>
-					<li>
 						<a href="#">
 							<img src="img/L_7.png" /> BTC 比特币
 						</a>
@@ -179,51 +82,55 @@
 				<p>&nbsp;</p>
 			</div>
 		</div>
-		<!-- footer -->
-		<div class="footer">
-			<div class="aqgxfw_30">
-				<div class="aqgxfw_31">
-					<div class="aqgxfw_32">
-						<img src="img/dblg.png" />
-						<img src="img/QQ@@2x.png" style="margin:28px 6px 5px 0px;" />
-						<img src="img/微信@@2x.png" style="margin:28px 0px 5px 0px; " />
-						<img src="img/新浪@@2x.png" style="margin:28px 10px 5px 6px; " />
-						<img src="img/1111@@2x.png" style="margin:6px 0px 5px 0px; " />
-						<img src="img/2222@@2x.png" style="margin:6px 10px 5px 6px; " />
-					</div>
-					<div class="aqgxfw_33">
-						<p class="aqgxfw_34">关于我们</p>
-						<p class="aqgxfw_36">上币申请</p>
-						<p class="aqgxfw_36">平台简介</p>
-						<p class="aqgxfw_36">公共API</p>
-					</div>
-					<div class="aqgxfw_35">
-						<p class="aqgxfw_34">充币提币</p>
-						<p class="aqgxfw_36">充币地址为何相同</p>
-						<p class="aqgxfw_36">充币说明</p>
-						<p class="aqgxfw_36">提币说明</p>
-						<p class="aqgxfw_36">限币限额和手续费</p>
-					</div>
-					<div class="aqgxfw_33">
-						<p class="aqgxfw_34">常见问题</p>
-						<p class="aqgxfw_36">法币交易</p>
-						<p class="aqgxfw_36">实名认证</p>
-						<p class="aqgxfw_36">账户访问</p>
-						<p class="aqgxfw_36">账户注册</p>
-					</div>
-					<div class="aqgxfw_33">
-						<p class="aqgxfw_34">币币交易</p>
-						<p class="aqgxfw_36">法币交易</p>
-						<p class="aqgxfw_36">拉新返</p>
-						<p class="aqgxfw_36">绑定银行卡</p>
-					</div>
-				</div>
-				<div class="aqgxfw_37">
-					Copyright © 2017-GMEBTC All Rights Resrved
-				</div>
-			</div>
-		</div>
 		<script type="text/javascript" src="js/style.js"></script>
+		
+		
+		<script type="text/javascript">
+			// 查询所有的币种
+			function getCurrencyList(){
+				$.ajax({
+					type: "GET",
+					url: "http://192.168.0.148:8080/gme-web/api/v1/operation/coinList.json",
+					dataType: "json",
+					success: function(data){
+						if (data.code == 200) {
+							$("#currencyList li:not(:first)").remove();
+							var dataChar = data.data;
+							for (var i = 0; i < dataChar.length; i++) {
+								var data = dataChar[i];
+								$("#currencyList").append("<li><a><img src="img/L_7.png" />"+data.currencySymbol+"</a><input type='hidden' value='"+data.currencyId+"'/></li>");
+							}
+							// 给第一个默认选中样式
+							$("#currencyList li:first").css("class","action_70");
+							
+							// 给每一个币种添加点击事件
+							$("#currencyList").children().each(function(){
+								$(this).children().click(function(){
+									var currencyId = $(this).parent().children().eq(-1).val();
+									$.ajax({
+										type: "GET",
+										url: "http://192.168.0.148:8080/gme-web/api/v1/operation/getCurrencyDetail.json",
+										dataType: "json",
+										data: "currencyId=" + currencyId,
+										success: function(data){
+											if (data.code == 200) {
+											}
+										}
+									});
+								});
+							});
+						}else {
+							alert("查询所有的币种:" + data.message);
+						}
+					}
+				})
+			}
+		</script>
+		
+		<script type="text/javascript">
+			getCurrencyList();
+		</script>
+		
 	</body>
 
 </html>

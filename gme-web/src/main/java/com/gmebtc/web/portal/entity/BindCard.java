@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class BindCard implements Serializable{
 	private static final long serialVersionUID = 1L;
-	/* 姓名*/
-    private String name;
     /* 开户行*/
     private String bank;
     /* 支行*/
@@ -15,13 +13,6 @@ public class BindCard implements Serializable{
     /* 资金密码*/
     private String tradeAuth;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getBank() {
         return bank;

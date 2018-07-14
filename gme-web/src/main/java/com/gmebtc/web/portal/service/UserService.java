@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface UserService {
-    String userPhoneRegister(HttpServletRequest request,HashMap<String, String> hashMap);
+    String userPhoneRegister(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception;
 
 
-    String userEmaillRegister(HttpServletRequest request, HashMap<String, String> hashMap);
+    String userEmaillRegister(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 }

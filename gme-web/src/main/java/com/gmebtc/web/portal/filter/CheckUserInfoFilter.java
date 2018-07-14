@@ -39,12 +39,12 @@ public class CheckUserInfoFilter extends HandlerInterceptorAdapter{
 		HttpSession session = request.getSession();
 		
 		// 检查用户是否登录，
-		/*UserVO userVO = null;
+		UserVO userVO = null;
 		userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
 		if (null == userVO) {
 			response.sendRedirect("http://192.168.0.148:8080/gme-web/firstLogin.html");
 			return false;
-		}*/
+		}
 		
 		
 		HashMap<String, String> hashMap = new HashMap<String, String>();

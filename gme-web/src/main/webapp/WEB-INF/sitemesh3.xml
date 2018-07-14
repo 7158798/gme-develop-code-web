@@ -13,19 +13,37 @@
         <tag-rule-bundle class="com.gmebtc.web.portal.common.MyTagRuleBundle" />
     </content-processor>
 
-	<!-- 默认所有的页面都被修饰 -->
-    <!-- <mapping path="/c2cTrans.html" decorator="/decorator/topAndBottom.jsp"/> -->
+
 	
-    <mapping path="/accounts.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/commission.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/bill.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/myDeity.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/transRecord.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/c2cTransRecord.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/rechargeRecord.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/withdrawRecord.html" decorator="/decorator/topAndBottom.jsp"/>
-    <mapping path="/walletAddress.html" decorator="/decorator/topAndBottom.jsp"/>
-    <!--登录页面不被装饰。没有配置为true的页面，表示使用装饰页面,例如index.jsp -->
+	<!-- 带有左边菜装饰单的页面 -->
+    <mapping path="/accounts.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/commission.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/bill.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/myDeity.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/transRecord.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/c2cTransRecord.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/rechargeRecord.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/withdrawRecord.html" decorator="/decorator/accountMenu.jsp"/>
+    <mapping path="/walletAddress.html" decorator="/decorator/accountMenu.jsp"/>
+    <!-- 安全相关 -->
+  	<mapping path="/securityLog.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/paySetting.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/withdrawDoubleValida.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/bindEmail.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/api.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/secondLoginProtect.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/bindPhone.html" decorator="/decorator/securityMenu.jsp"/>
+    <mapping path="/realNameAuth.html" decorator="/decorator/securityMenu.jsp"/>
+    
+    <!-- 只有头部和底部的装饰页面 -->
+    <mapping path="/c2cTrans.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/bbTrans.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/notice.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/noticeDetail.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/currencyDetail.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/myWorkList.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/workListDetail.html" decorator="/decorator/topAndButtom.jsp"></mapping>
+    <mapping path="/resetPassword.html" decorator="/decorator/topAndButtom.jsp"></mapping>
     
 	
 

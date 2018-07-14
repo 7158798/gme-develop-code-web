@@ -23,8 +23,23 @@ public class User implements Serializable {
 	private String imgCode;
 	/* 手机号或者邮箱 */
 	private String loginId;
-	/* 发送的短信验证码类型 */
+	/**
+	 * 发送的短信验证码类型 类型（1，注册，2，登陆二次验证，3，找回登陆密码，4，绑定钱包地址，5，提币，6，重置资金密码），7绑定手机，8关闭开启二步登录
+	 */
 	private String type;
+	
+	/**
+	 * sendByVoice: 是否是语音短信
+	 */
+	private String sendByVoice;
+	
+	public String getSendByVoice() {
+		return sendByVoice;
+	}
+
+	public void setSendByVoice(String sendByVoice) {
+		this.sendByVoice = sendByVoice;
+	}
 
 	public Integer getId() {
 		return id;

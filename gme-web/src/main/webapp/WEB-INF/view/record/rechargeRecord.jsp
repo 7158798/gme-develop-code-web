@@ -11,7 +11,32 @@
 		<link rel="stylesheet" href="css/style-hei.css" />
 		<link rel="stylesheet" href="css/1200.css" />
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-
+		<script type="text/javascript">
+			$.ajax({
+				type: 'GET',
+				url: "http://192.168.0.148:8080/gme-web/api/v1/operation/coinList.json",
+				dataType: "json",
+				success: function(data) {
+					if (data.code == 200) {
+						var currencyId = $("#hiddenId").val();
+						$.each(data.data,function(index,item){
+							$.each(item,function(index,item){
+								if (currencyId == null || currencyId == "") {
+									$("#currencyId").append("<option value='"+item.currencyId+"'>"+item.name+"</option>");
+								}else {
+									if (currencyId == item.currencyId) {
+										$("#currencyId").append("<option value='"+item.currencyId+"' selected='selected'>"+item.name+"</option>");
+									}else {
+										$("#currencyId").append("<option value='"+item.currencyId+"'>"+item.name+"</option>");
+									}
+								}
+								
+							});
+						});
+					}
+				}
+			});
+		</script>
 	</head>
 
 	<body class="">
@@ -19,26 +44,25 @@
 				<div class="L_39" style="border-bottom: 1px solid #E6EAF0;">
 					充值记录
 				</div>
+				<form action="rechargeRecord.html" method="post">
 				<div class="L_42">
 					<span>币种</span>
-					<select>
-						<option value="volvo">全部</option>
-						<option value="saab">BTC</option>
-						<option value="opel">ETH</option>
-						<option value="audi">CBD</option>
+					<input type="hidden" value="${review.currencyId}" id="hiddenId"/>
+					<select id="currencyId" name="currencyId">
+						<option value="">全部</option>
 					</select>
 					<span>状态</span>
-					<select>
-						<option value="volvo">全部</option>
-						<option value="saab">BTC</option>
-						<option value="opel">ETH</option>
-						<option value="audi">CBD</option>
+					<select id="status" name="status">
+						<option value="">全部</option>
+						<option value="1" <c:if test="${review.status == 1}"> <c:out value='selected="selected"'></c:out></c:if>>等待确认</option>
+						<option value="2" <c:if test="${review.status == 2}"> <c:out value='selected="selected"'></c:out></c:if>>成功</option>
+						<option value="3" <c:if test="${review.status == 3}"> <c:out value='selected="selected"'></c:out></c:if>>失败</option>
 					</select>
 					<span>时间</span>
-					<input type="date" name="user_date" />
+					<input type="date" id="startTime" name="startTime" value="${review.startTime}" />
 					<span style="margin: 0px;">-</span>
-					<input type="date" name="user_date" />
-					<input type="button" value="查询" style="width: 48px;height: 30px;color: #FFFFFF;background: #00BEC1;border-radius: 2px;" />
+					<input type="date" id="endTime" name="endTime" value="${review.endTime}"/>
+					<input type="submit" id="button" value="查询" style="width: 48px;height: 30px;color: #FFFFFF;background: #00BEC1;border-radius: 2px;" />
 				</div>
 				<table class="L_40">
 					<tr>
@@ -78,48 +102,42 @@
 				<div class="L_41">
 					<span>1</span>
 					<span style="background: #2B6FC9;color: #FFFFFF;">2</span>
-					<c:if test="${pageBean != null}">
-						<span><a href="rechargeRecord.html?pageNum=${pageBean.currentPage + 1 > ${pageBean.pageCount} ? ${pageBean.currentPage} : ${pageBean.currentPage + 1} } ">下一页</a></span>
-						
-						<span><a href="rechargeRecord.html?pageNum=${pageBean.currentPage - 1 < 1 ? ${pageBean.currentPage} : ${pageBean.currentPage - 1} } ">上一页</a></span>
-					</c:if>
+					<span>...</span>
+					<span><a id="prePage">上一页</a></span>
+					<span><a id="nextPage">下一页</a></span>
 				</div>
+				</form>
 			</div>
 		<script type="text/javascript" src="js/style.js"></script>
 		<script type="text/javascript">
 			var currentPage = ${pageBean.currentPage}; 
-			var totalPage = ${pageBean.totalCount};
+			var totalPage = ${pageBean.pageCount};
 			// 是否能下一页
-			function nextPageIsEnable (){
-				// 如果当前页加1大于总页数
-				if ((currentPage + 1) > totalPage) {
-					return false;
-				}
-				return true;
+			// 如果当前页加1大于总页数
+			if ((currentPage + 1) <= totalPage) {
+				$("#nextPage").click(function(){
+					var currencyId = $("#currencyId").val();
+					var status = $("#status").val();
+					var startTime = $("#startTime").val();
+					var endTime = $("#endTime").val();
+					$("#nextPage").attr("href","rechargeRecord.html?pageNum="+(currentPage+1)+"&currencyId=" + currencyId + "&status=" +
+																			status + "&startTime=" + startTime + "&endTime=" + endTime);
+				});
 			}
 			
 			// 是否能上一页
-			function prePageIsEnable (){
-				if ((currentPage - 1) < 1) {
-					return false;
-				}
-				return true;
-			}
-			
-			function nextPage (){
-				if (nextPageIsEnable) {
-					var pageNum = currentPage+1;
-					window.location.href = "rechargeRecord.html?pageNum=${pageBean.currentPage + 1 }";
-				}
-			}
-			
-			function prePage (){
-				if (prePageIsEnable) {
-					var pageNum = currentPage-1;
-					window.location.href = "rechargeRecord.html?pageNum="+pageNum;
-				}
+			if ((currentPage - 1) >= 1) {
+				$("#prePage").click(function(){
+				var currencyId = $("#currencyId").val();
+				var status = $("#status").val();
+				var startTime = $("#startTime").val();
+				var endTime = $("#endTime").val();
+				$("#prePage").attr("href","rechargeRecord.html?pageNum="+(currentPage-1)+"&currencyId=" + currencyId + "&status=" +
+																		status + "&startTime=" + startTime + "&endTime=" + endTime);
+				});
 			}
 		</script>
+		
 	</body>
 
 </html>

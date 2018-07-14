@@ -95,7 +95,7 @@ public class CommonUtil {
         //HttpSession session = request.getSession();
 //        Map<String, String> param = getCommonHead(request, method);
         Map<String,String> param = new HashMap<String,String>();
-        param.putAll(getParameterMap(request));
+//        param.putAll(getParameterMap(request));
         String postUrl = "";
         if (!"".equals(method)) {
             postUrl = method;
@@ -120,7 +120,8 @@ public class CommonUtil {
             String statusText = httpData.getStatusText();
             String response = httpData.getResponse();
             log.info("http======>statusCode:" + statusCode + "  statusText:" + statusText);
-            log.info("服务器响应内容：" + response);
+            String msgInfo = postUrl.substring(postUrl.lastIndexOf('/')+1, postUrl.lastIndexOf('.'));
+            log.info("服务器响应内容："  + msgInfo + "=" + response);
             if (statusCode == HttpStatus.SC_OK) {
             	JSONObject resultObject = JSONObject.fromObject(response);
                 String msg = resultObject.getString("message");
@@ -129,7 +130,6 @@ public class CommonUtil {
                 resultJson.setData(resultObject);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             JSONObject resultObject = new JSONObject();
             resultObject.put("code", "500");
             resultObject.put("message", "系统繁忙，请稍后再试");

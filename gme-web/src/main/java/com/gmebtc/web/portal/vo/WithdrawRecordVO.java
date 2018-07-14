@@ -20,15 +20,16 @@ public class WithdrawRecordVO extends BaseVO implements Serializable{
 	/**
 	 * currencyId: 币种类型 1.USDT,2.BTC,3.ETH
 	 */
-	private Integer currencyId;
+	private String currencyId;
 	/**
 	 * status: 提现状态1-申请;2-处理中;3-已处理;4-已拒绝;5-撤销;
 	 */
 	private Integer status;
-	public Integer getCurrencyId() {
+	
+	public String getCurrencyId() {
 		return currencyId;
 	}
-	public void setCurrencyId(Integer currencyId) {
+	public void setCurrencyId(String currencyId) {
 		this.currencyId = currencyId;
 	}
 	public Integer getStatus() {

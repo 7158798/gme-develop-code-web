@@ -66,4 +66,9 @@ public class PageBean implements Serializable{
 	public void setPageCount(Integer pageCount) {
 		this.pageCount = pageCount;
 	}
+	@Override
+	public String toString() {
+		return "PageBean [currentPage=" + currentPage + ", numPerPage=" + numPerPage + ", totalCount=" + totalCount
+				+ ", pageCount=" + pageCount + ", recordList=" + recordList + "]";
+	}
 }

@@ -38,13 +38,14 @@ public class SendRequestUtil {
     }
 
     // 发送带有map参数的post请求
-    public static String sendMapRequest (HttpServletRequest request, HashMap map, String method){
+    public static String sendMapRequest (HttpServletRequest request, HashMap map, String method) throws Exception{
         String data = JsonUtil.hashMapToJson(map);
         ResultJson resultJson = null;
         try {
             resultJson = CommonUtil.getResultJson(data, request, method);
         } catch (UnsupportedEncodingException e) {
             log.error("{} 发送http请求失败:" + e.toString());
+            throw new Exception();
         }
         if (null == resultJson) {
             return null;
@@ -54,12 +55,13 @@ public class SendRequestUtil {
 
 
     // 发送没有参数的post请求 直接转发,不做任何处理
-    public static String sendRequest(HttpServletRequest request, String method){
+    public static String sendRequest(HttpServletRequest request, String method) throws Exception{
         ResultJson resultJson = null;
         try {
             resultJson = CommonUtil.getResultJson(request, method);
         } catch (UnsupportedEncodingException e) {
             log.error("{} 发送请求失败:" + e.toString());
+            throw new Exception();
         }
         if (null == resultJson) {
             return null;

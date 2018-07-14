@@ -22,26 +22,28 @@ public class IndexServiceImpl implements IndexService {
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/29 10:38
      * @Param [request, map:存放的是当前语言]
      * @Desc 首页Top行情
      */
     @Override
-    public String getTopPrice(HttpServletRequest request, HashMap<String, String> hashMap) {
+    public String getTopPrice(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
         String method = "getTopPrice&";
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
 
     /**
+     * @throws Exception 
      * @Author zhou
      * @Date 2018/5/30 14:32
      * @Param [request]
      * @Desc 首页币种行情信息
      */
     @Override
-    public String getCoinInfo (HttpServletRequest request,HashMap<String,String> hashMap){
+    public String getCoinInfo (HttpServletRequest request,HashMap<String,String> hashMap) throws Exception{
         String method = "getCoinInfo&";
         return SendRequestUtil.sendMapRequest(request, hashMap,method);
     }

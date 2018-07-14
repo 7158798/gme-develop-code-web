@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import com.gmebtc.web.portal.constant.ResultCode;
 import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.ConsumerTransactionService;
 import com.gmebtc.web.portal.utils.Toolkits;
@@ -28,7 +31,8 @@ import com.gmebtc.web.portal.utils.Toolkits;
 @Controller
 @RequestMapping("${ROOT_PATH}/user")
 public class ConsumerTransactionController {
-
+	
+	private static final Logger log = LoggerFactory.getLogger(ConsumerTransactionController.class);
 
     @Resource(name = "consumerTransactionService")
     private ConsumerTransactionService consumerTransactionService;
@@ -40,7 +44,7 @@ public class ConsumerTransactionController {
      * @Param [request, orderNum:订单ID, type:1买，2卖, amount:数量, payPassword:资金密码]
      * @Desc 买卖USDT
      */
-    @RequestMapping(value = "/c2cBuySellUsdt",method = RequestMethod.POST)
+  /*  @RequestMapping(value = "/c2cBuySellUsdt",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cBuySellUsdt (HttpServletRequest request, @RequestParam String orderNum,@RequestParam String type
                                   ,@RequestParam String amount,@RequestParam String payPassword){
@@ -52,11 +56,12 @@ public class ConsumerTransactionController {
         if ("zh_CN".equals(locale.toString())) {
             map.put("msg1", "交易数量不能为空");
             map.put("msg2", "资金密码不能为空");
-
+            map.put("msg3", "服务器异常,请稍后重试");
         }
         if ("en_US".equals(locale.toString())) {
             map.put("msg1", "The number of transactions can not be empty");
             map.put("msg2", "Capital cipher can not be empty");
+            map.put("msg3", "Server exception,please try again later.");
         }
         if (null == amount || StringUtils.isBlank(amount)) {
             result.setCode("-1");
@@ -77,19 +82,28 @@ public class ConsumerTransactionController {
         hashMap.put("amount", amount);
         hashMap.put("payPassword", payPassword);
 
-        String json = consumerTransactionService.c2cBuySellUsdt(request,hashMap);
-        return Toolkits.handleResp(json);
+        
+        try {
+        	String json = consumerTransactionService.c2cBuySellUsdt(request,hashMap);
+        	return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg3")));
+			result.setData("");
+			log.error("{} ", e.toString());
+			return result;
+		}
     }
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:13
      * @Param [request, coinType:币种类型，现在默认USDT,
      * amount:数量, type:1买。2卖, min:最小数量, price:价格,
      * payMethed:支付宝，微信，银行卡, payPassword:资金密码]
      * @Desc 商家发布买卖订单
-     */
+     *//*
     @RequestMapping(value = "/c2cBusAddBuySellOrder",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cBusAddBuySellOrder (HttpServletRequest request,@RequestParam String coinType
@@ -149,15 +163,17 @@ public class ConsumerTransactionController {
 
         String json = consumerTransactionService.c2cBusAddBuySellOrder(request,hashMap);
         return Toolkits.handleResp(json);
+        
+        
     }
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:28
      * @Param [request, orderNum, coinType, payPassword]
      * @Desc 商家取消订单
-     */
+     *//*
     @RequestMapping(value = "/c2cBusCanceOrder",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cBusCanceOrder (HttpServletRequest request,@RequestParam String orderNum
@@ -190,12 +206,12 @@ public class ConsumerTransactionController {
     }
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:32
      * @Param [request, coinType, page]
      * @Desc 获取市场挂单
-     */
+     *//*
     @RequestMapping(value = "/c2cGetBuySellOrders",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cGetBuySellOrders (HttpServletRequest request,@RequestParam String coinType
@@ -209,12 +225,12 @@ public class ConsumerTransactionController {
 
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:36
      * @Param [request, orderNum, payPassword, remarks:备注]
      * @Desc 用户取消订单
-     */
+     *//*
     @RequestMapping(value = "/c2cCancelByUser",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cCancelByUser (HttpServletRequest request,@RequestParam String orderNum
@@ -248,12 +264,12 @@ public class ConsumerTransactionController {
 
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:40
      * @Param [request, coinType, tradeType, status, startDate, endDate, page]
      * @Desc 用户订单记录
-     */
+     *//*
     @RequestMapping(value = "/c2cUserOrderHistory",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cUserOrderHistory (HttpServletRequest request,@RequestParam String coinType
@@ -272,16 +288,16 @@ public class ConsumerTransactionController {
     }
 
 
-    /**
+    *//**
      * @Author zhou
      * @Date 2018/5/31 17:45
      * @Param [request]
      * @Desc 申请成为商家
-     */
+     *//*
     @RequestMapping(value = "/c2cApplyBus",method = RequestMethod.POST)
     @ResponseBody
     public Object c2cApplyBus (HttpServletRequest request){
         String json = consumerTransactionService.c2cApplyBus(request);
         return Toolkits.handleResp(json);
-    }
+    }*/
 }
