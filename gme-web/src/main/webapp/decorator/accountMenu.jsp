@@ -4,6 +4,7 @@
 <head>
 <title><sitemesh:write property='title' /></title>
 <sitemesh:write property='head' />
+
 </head>
 <body>
 
@@ -26,15 +27,11 @@
 			</div>
 		</div>
 		<div class="header_2">
-			<div class="header_dengluhou">
-				<ul>
-					<li><a href="#" class="whate">19019382@qq.com<i></i></a></li>
-					<li><span class="zyw">中文版</span>
-						<div class="yybb">
-							<a href="#">ENGLISH</a> <a href="#">한국어</a>
-						</div></li>
-				</ul>
+			<div id="isLogin" class="header_dengluhou">
 			</div>
+			<input id="LOGIN_SECONDLOGIN_ACCOUNT" type="hidden" value="${LOGIN_SECONDLOGIN.account}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTID" type="hidden" value="${LOGIN_SECONDLOGIN.accountId}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTBTC" type="hidden" value="${LOGIN_SECONDLOGIN.balanceBTC}">
 			<div class="header_zhuti">
 				<ul>
 					<span>主题</span>
@@ -44,6 +41,7 @@
 			</div>
 		</div>
 	</div>
+	
 
 	<!--
         	作者：李德芳
@@ -53,27 +51,75 @@
 	<div class="L_34">
 		<div class="L_35">
 			<ul>
-				<li class="L_37"><img src="img/L_5.png" /> 我的资金</li>
-				<li class="L_38"><a href="accounts.html">账户资金</a></li>
-				<li class="L_38"><a href="commission.html">推广佣金</a></li>
-				<li class="L_38"><a href="bill.html">账单明细</a></li>
-				<li class="L_37"><img src="img/L_4.png" /> 交易挂单</li>
-				<li class="L_38"><a href="myDeity.html">我的挂单</a></li>
-				<li class="L_38"><a href="transRecord.html">成交记录</a></li>
-				<li class="L_38"><a href="c2cTransRecord.html">C2C成交记录</a></li>
-				<li class="L_37"><img src="img/L_3.png" /> 充值提现</li>
-				<li class="L_38"><a>购买USDT(C2C)</a></li>
-				<li class="L_38"><a
-					href="rechargeRecord.html">充值记录</a></li>
-				<li class="L_38"><a
-					href="withdrawRecord.html">提现记录</a></li>
-				<li class="L_38"><a
-					href="walletAddress.html">钱包管理地址</a></li>
+				<li class="L_37">
+					<img src="img/L_5.png" /> 我的资金
+				</li>
+				<li class="L_38">
+					<a id="accounts" href="accounts.html">账户资金</a>
+				</li>
+				<li class="L_38">
+					<a id="commission" href="commission.html">推广佣金</a>
+				</li>
+				<li class="L_38">
+					<a id="bill" href="bill.html">账单明细</a>
+				</li>
+				<li class="L_37">
+					<img src="img/L_4.png" /> 交易挂单
+				</li>
+				<li class="L_38">
+					<a id="myDeity" href="myDeity.html">我的挂单</a>
+				</li>
+				<li class="L_38">
+					<a id="transRecord" href="transRecord.html">成交记录</a>
+				</li>
+				<li class="L_38">
+					<a id="c2cTransRecord" href="c2cTransRecord.html">C2C成交记录</a>
+				</li>
+				<li class="L_38">
+					<a id="c2cBusTransRecord" href="c2cBusTransRecord.html">C2C商家成交记录</a>
+				</li>
+				<li class="L_37">
+					<img src="img/L_3.png" /> 充值提现
+				</li>
+				<li class="L_38">
+					<a id="c2cTrans" href="c2cTrans.html">购买USDT(C2C)</a>
+				</li>
+				<li class="L_38">
+					<a id="rechargeRecord" href="rechargeRecord.html">充值记录</a>
+				</li>
+				<li class="L_38">
+					<a id="withdrawRecord" href="withdrawRecord.html">提现记录</a>
+				</li>
+				<li class="L_38">
+					<a id="walletAddressManager" href="walletAddressManager.html">钱包管理地址</a>
+				</li>
 			</ul>
 		</div>
-
-		<sitemesh:write property='body' />
-</div>
+		<div class="L_36">
+				<div id="L_84" class="L_84">
+					您尚未实名认证！为保障您的资金安全，在完成实名认证之前，您将不能进行C2C交易，提币等操作。
+					<a href="realNameAuth.html" style="display: inline-block;background: #fb9a00;color: #FFFFFF;">立即认证</a>
+				</div>
+			<sitemesh:write property='body' />
+		
+		</div>
+		
+	</div>
+			<div class="tc">
+				<div class="tc_1">
+					<div class="tc_1_1">
+						<span>信息提示</span>
+						<img src="img/L_10.png" onclick="$('.tc').css('display','none');" />
+					</div>
+					<div class="tc_1_2">
+						<p>您确定要退出系统吗？如果是请点击确定，如果不是请点击取消。</p>
+						<div class="tc_1_3">
+							<input type="button" onclick="confirmLogout();" value="确定" />
+							<input type="button" onclick="cancleLogout();" value="取消" />
+						</div>
+						</div>
+					</div>
+				</div>
 		<div class="footer">
 			<div class="aqgxfw_30">
 				<div class="aqgxfw_31">
@@ -116,5 +162,13 @@
 					Resrved</div>
 			</div>
 		</div>
+		<input type="hidden" value="${isAuth}" id="isAuth">
+		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript" src="js/auth.js"></script>
+		
+		<script type="text/javascript">
+			var flag = '${pageFlag}';
+			$(flag).parent().attr("class","L_38 action_38");
+		</script>
 </body>
 </html>

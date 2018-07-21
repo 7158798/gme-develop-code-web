@@ -1,6 +1,5 @@
 package com.gmebtc.web.portal.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -20,19 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import com.gmebtc.web.portal.constant.ResultCode;
 import com.gmebtc.web.portal.constant.SessionAttributes;
+import com.gmebtc.web.portal.entity.UserInfo;
+import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.RechargeCoinService;
+import com.gmebtc.web.portal.service.SecurityConterService;
 import com.gmebtc.web.portal.service.WithdrawCoinService;
 import com.gmebtc.web.portal.utils.Toolkits;
 import com.gmebtc.web.portal.vo.BillVO;
-import com.gmebtc.web.portal.vo.C2CTransRecordVO;
 import com.gmebtc.web.portal.vo.MyDeityVO;
-import com.gmebtc.web.portal.vo.PageBean;
-import com.gmebtc.web.portal.vo.PageVO;
-import com.gmebtc.web.portal.vo.RechargeRecordVO;
-import com.gmebtc.web.portal.vo.TransRecordVO;
 import com.gmebtc.web.portal.vo.UserVO;
-import com.gmebtc.web.portal.vo.WithdrawRecordVO;
 
 /*
  * @Author zhou
@@ -48,6 +45,9 @@ public class BaseController {
 	private RechargeCoinService rechargeCoinService;
 	@Resource(name = "withdrawCoinService")
 	private WithdrawCoinService withdrawCoinService;
+	@Resource(name = "securityConterService")
+	private SecurityConterService securityConterService;
+	
 
 	/**
 	 * 
@@ -100,8 +100,14 @@ public class BaseController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/secondLogin")
-	public String secondLogin(Model model, String redirect) {
-		model.addAttribute("redirect", redirect);
+	public String secondLogin(HttpServletRequest request,Model model) {
+		HttpSession session = request.getSession();
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_FIRSTLOGIN_TEMP);
+		// 检查用户是否已经第一次登录
+		if (null == userVO) {
+			model.addAttribute("sessionOver","请重新登录");
+			return "firstLogin";
+		}
 		return "secondLogin";
 	}
 
@@ -130,182 +136,32 @@ public class BaseController {
 	@RequestMapping(value = "/resetPassword")
 	public String findPassword(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		// 先把用户信息从session中清除,保留uid
-		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
-		if (null != userVO) {
-			// 清除用户登录状态
-			session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, null);
-		}
-
+		// 清除用户登录状态
+		session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, null);
 		return "resetPassword";
 	}
-
+	
+	
 	/**
 	 * 
-	 * @Title: rechargeRecord
-	 * @Description: 跳转到查询充值记录页面
-	 * @return
-	 * @return String
-	 */
-	@RequestMapping(value = "/rechargeRecord")
-	public String rechargeRecord(HttpServletRequest request, Model model, RechargeRecordVO rechargeRecordVO) {
-		HttpSession session = request.getSession();
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			if (null != rechargeRecordVO.getStartTime() && !StringUtils.isBlank(rechargeRecordVO.getStartTime())) {
-				Long startTime = simple.parse(rechargeRecordVO.getStartTime()).getTime();
-				hashMap.put("startTime", startTime);
-			}
-			if (null != rechargeRecordVO.getEndTime() && !StringUtils.isBlank(rechargeRecordVO.getEndTime())) {
-				Long endTime = simple.parse(rechargeRecordVO.getEndTime()).getTime();
-				hashMap.put("endTime", endTime);
-			}
-		} catch (Exception e) {
-			log.error("{} 查询充值记录 页面时间转换失败");
-		}
-
-		if (null != rechargeRecordVO.getCurrencyId() && !StringUtils.isBlank(rechargeRecordVO.getCurrencyId())) {
-			hashMap.put("currencyId", rechargeRecordVO.getCurrencyId());
-		}
-		if (null != rechargeRecordVO.getStatus()) {
-			hashMap.put("status", rechargeRecordVO.getStatus());
-		}
-
-		hashMap.put("pageNum", rechargeRecordVO.getPageNum());
-		hashMap.put("numPerPage", rechargeRecordVO.getNumPerPage());
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		model.addAttribute("review", rechargeRecordVO);
-
-		try {
-			// 查询出的存储分页数据的对象json字符串
-			String json = rechargeCoinService.getWalletRechargeRecord(request, hashMap);
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-				model.addAttribute("pageBean", pageBean);
-//				model.addAttribute("list", pageBean.getRecordList());
-			}
-			return "record/rechargeRecord";
-		} catch (Exception e) {
-			log.error("{} 分页查询充值记录解析后台数据发生异常", e.toString());
-			model.addAttribute("pageBean", null);
-			return "record/rechargeRecord";
-		}
-
-	}
-
-	/**
-	 * 
-	 * @Title: withdrawRecord
-	 * @Description: 查询提现记录
-	 * @param request
-	 * @param model
-	 * @param currencyId
-	 * @param pageNum
-	 * @param numPerPage
-	 * @return
-	 * @return String
-	 */
-	@RequestMapping(value = "/withdrawRecord")
-	public String withdrawRecord(HttpServletRequest request, Model model, WithdrawRecordVO withdrawRecordVO) {
-		HttpSession session = request.getSession();
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			if (null != withdrawRecordVO.getStartTime() && !StringUtils.isBlank(withdrawRecordVO.getStartTime())) {
-				Long startTime = simple.parse(withdrawRecordVO.getStartTime()).getTime();
-				hashMap.put("startTime", startTime);
-			}
-			if (null != withdrawRecordVO.getEndTime() && !StringUtils.isBlank(withdrawRecordVO.getEndTime())) {
-				Long endTime = simple.parse(withdrawRecordVO.getEndTime()).getTime();
-				hashMap.put("endTime", endTime);
-			}
-		} catch (Exception e) {
-			log.error("{} 查询提现记录 页面时间转换失败");
-		}
-
-		if (null != withdrawRecordVO.getCurrencyId() && !StringUtils.isBlank(withdrawRecordVO.getCurrencyId())) {
-			hashMap.put("currencyId", withdrawRecordVO.getCurrencyId());
-		}
-		if (null != withdrawRecordVO.getStatus()) {
-			hashMap.put("status", withdrawRecordVO.getStatus());
-		}
-
-		hashMap.put("pageNum", withdrawRecordVO.getPageNum());
-		hashMap.put("numPerPage", withdrawRecordVO.getNumPerPage());
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		model.addAttribute("review", withdrawRecordVO);
-
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			// 查询出的存储分页数据的对象json字符串
-			String json = withdrawCoinService.getWithdrawRecordPage(request, hashMap);
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-//				model.addAttribute("pageBean", pageBean);
-				request.setAttribute("pageBean", pageBean);
-				/*
-				 * if (withdrawRecordVO.getStartTime()!=null &&
-				 * !StringUtils.isBlank(withdrawRecordVO.getStartTime())) {
-				 * request.setAttribute("pageBean", null); }
-				 */
-//				model.addAttribute("pageBean",pageBean);
-				log.info(pageBean.toString());
-			}
-			return "record/withdrawRecord";
-		} catch (Exception e) {
-			log.error("{} 分页查询提现记录解析后台数据发生异常", e.toString());
-			model.addAttribute("pageBean", null);
-			return "record/withdrawRecord";
-		}
-	}
-
-	@RequestMapping(value = "/withdrawRecordPage")
-	public String page() {
-		System.out.println("page");
-		return "withdrawRecord";
-	}
-
-	/**
-	 * 
-	 * @Title: walletAddress
-	 * @Description: 重置资金密码（自动登出）
-	 * @param request
-	 * @param model
-	 * @return
-	 * @return String
+	* @Title: resetPayPassword  
+	* @Description: TODO 重置资金密码页面 
+	* @param request
+	* @return
+	* @return String
 	 */
 	@RequestMapping(value = "/resetPayPassword")
 	public String resetPayPassword(HttpServletRequest request) {
-		/*
-		 * UserVO userVO = (UserVO)
-		 * request.getSession().getAttribute(SessionAttributes.LOGIN_SECONDLOGIN); //
-		 * 说明用户存在 if (null != userVO) { // 登出
-		 * request.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, null); }
-		 */
-		return "userInfo/resetPayPassword";
+		HttpSession session = request.getSession();
+		// 清除用户登录状态
+		session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, null);
+		
+		return "security/resetPayPassword";
 	}
+
+	
+	
+
 
 	/**
 	 * 
@@ -316,106 +172,14 @@ public class BaseController {
 	 * @return String
 	 */
 	@RequestMapping(value = "/accounts")
-	public String accounts(HttpServletRequest request) {
-
-		return "userInfo/accounts";
-	}
-
-	/**
-	 * 
-	 * @Title: c2cTrans
-	 * @Description: c2c交易记录页面   见c2cTransRecordController
-	 * @param request
-	 * @return
-	 * @return String
-	 */
-	@RequestMapping(value = "/c2cTransRecord")
-	public String c2cTransRecord(HttpServletRequest request, Model model, C2CTransRecordVO c2cTransRecordVO) {
+	public String accounts(HttpServletRequest request,Model model) {
 		HttpSession session = request.getSession();
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			if (null != c2cTransRecordVO.getStartTime() && !StringUtils.isBlank(c2cTransRecordVO.getStartTime())) {
-				Long startTime = simple.parse(c2cTransRecordVO.getStartTime()).getTime();
-				hashMap.put("startTime", startTime);
-			}
-			if (null != c2cTransRecordVO.getEndTime() && !StringUtils.isBlank(c2cTransRecordVO.getEndTime())) {
-				Long endTime = simple.parse(c2cTransRecordVO.getEndTime()).getTime();
-				hashMap.put("endTime", endTime);
-			}
-		} catch (Exception e) {
-			log.error("{} c2c交易记录 页面时间转换失败");
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
 		}
-
-		if (null != c2cTransRecordVO.getSymbol()) {
-			hashMap.put("symbol", c2cTransRecordVO.getSymbol());
-		}
-		if (null != c2cTransRecordVO.getType()) {
-			hashMap.put("type", c2cTransRecordVO.getType());
-		}
-		if (null != c2cTransRecordVO.getStatus()) {
-			hashMap.put("status", c2cTransRecordVO.getStatus());
-		}
-		
-
-		hashMap.put("pageNum", c2cTransRecordVO.getPageNum());
-		hashMap.put("numPerPage", c2cTransRecordVO.getNumPerPage());
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		model.addAttribute("review", c2cTransRecordVO);
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			// 查询出的存储分页数据的对象json字符串
-			String json = withdrawCoinService.getWithdrawRecordPage(request,hashMap);
-			/*String json = "{\r\n" + "	\"code\": \"200\",\r\n" + "	\"message\": \"Successful\",\r\n"
-					+ "	\"data\": {\r\n" + "		\"currentPage\": 1,\r\n" + "		\"numPerPage\": 2,\r\n"
-					+ "		\"totalCount\": 5,\r\n" + "		\"recordList\": [{\r\n"
-					+ "			\"time\": 1528807990000,\r\n" + "			\"operationType\": \"c2c交易\",\r\n"
-					+ "			\"assetId\": \"20180630\",\r\n" + "			\"operationAsset\": \"80.0000 USDT\",\r\n"
-					+ "			\"balance\": \"80.0000 USDT\",\r\n" + "			\"totalAsset\": \"80.0000 USDT\"\r\n"
-					+ "		}, {\r\n" + "			\"time\": 1533337990000,\r\n"
-					+ "			\"operationType\": \"币币交易\",\r\n" + "			\"assetId\": \"20180631\",\r\n"
-					+ "			\"operationAsset\": \"20.0000 USDT\",\r\n"
-					+ "			\"balance\": \"100.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"120.0000 USDT\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1528807992333,\r\n" + "			\"operationType\": \"推广返利\",\r\n"
-					+ "			\"assetId\": \"20180622\",\r\n" + "			\"operationAsset\": \"333.0000 USDT\",\r\n"
-					+ "			\"balance\": \"11111.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"123233.0000 USDT\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 23228807992333,\r\n" + "			\"operationType\": \"c2c交易\",\r\n"
-					+ "			\"assetId\": \"20180222\",\r\n" + "			\"operationAsset\": \"11.0000 USDT\",\r\n"
-					+ "			\"balance\": \"34.0000 USDT\",\r\n" + "			\"totalAsset\": \"34.0000 USDT\"\r\n"
-					+ "		}, {\r\n" + "			\"time\": 152880799213,\r\n"
-					+ "			\"operationType\": \"推广返利\",\r\n" + "			\"assetId\": \"20180621\",\r\n"
-					+ "			\"operationAsset\": \"3233.0000 USDT\",\r\n"
-					+ "			\"balance\": \"32.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"1236633.0000 USDT\"\r\n" + "		}],\r\n"
-					+ "		\"pageCount\": 3,\r\n" + "		\"beginPageIndex\": 1,\r\n"
-					+ "		\"endPageIndex\": 3,\r\n" + "		\"countResultMap\": null\r\n" + "	},\r\n"
-					+ "	\"ext\": null\r\n" + "}";*/
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-				model.addAttribute("pageBean", pageBean);
-			}
-			return "record/c2cTransRecord";
-		} catch (Exception e) {
-			log.error("{} c2c成交记录解析后台数据发生异常", e.toString());
-			model.addAttribute("pageBean", null);
-			return "record/c2cTransRecord";
-		}
+		model.addAttribute("pageFlag","#accounts");
+		return "userInfo/accounts";
 	}
 
 	/**
@@ -431,7 +195,8 @@ public class BaseController {
 
 		return "userInfo/commission";
 	}
-
+	
+	
 	/**
 	 * 
 	 * @Title: bill
@@ -442,88 +207,16 @@ public class BaseController {
 	 */
 	@RequestMapping(value = "/bill")
 	public String bill(HttpServletRequest request, Model model, BillVO billVO) {
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			if (null != billVO.getStartTime() && !StringUtils.isBlank(billVO.getStartTime())) {
-				Long startTime = simple.parse(billVO.getStartTime()).getTime();
-				hashMap.put("startTime", startTime);
-			}
-			if (null != billVO.getEndTime() && !StringUtils.isBlank(billVO.getEndTime())) {
-				Long endTime = simple.parse(billVO.getEndTime()).getTime();
-				hashMap.put("endTime", endTime);
-			}
-		} catch (Exception e) {
-			log.error("{} 账单明细 页面时间转换失败");
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
 		}
-
-		if (null != billVO.getCurrencyId()) {
-			hashMap.put("currencyId", billVO.getCurrencyId());
-		}
-		if (null != billVO.getOperationType()) {
-			hashMap.put("operationType", billVO.getOperationType());
-		}
-
-		hashMap.put("pageNum", billVO.getPageNum());
-		hashMap.put("numPerPage", billVO.getNumPerPage());
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		model.addAttribute("review", billVO);
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			// 查询出的存储分页数据的对象json字符串
-//			String json = withdrawCoinService.getWithdrawRecordPage(request,hashMap);
-			String json = "{\r\n" + "	\"code\": \"200\",\r\n" + "	\"message\": \"Successful\",\r\n"
-					+ "	\"data\": {\r\n" + "		\"currentPage\": 1,\r\n" + "		\"numPerPage\": 2,\r\n"
-					+ "		\"totalCount\": 5,\r\n" + "		\"recordList\": [{\r\n"
-					+ "			\"time\": 1528807990000,\r\n" + "			\"operationType\": \"c2c交易\",\r\n"
-					+ "			\"assetId\": \"20180630\",\r\n" + "			\"operationAsset\": \"80.0000 USDT\",\r\n"
-					+ "			\"balance\": \"80.0000 USDT\",\r\n" + "			\"totalAsset\": \"80.0000 USDT\"\r\n"
-					+ "		}, {\r\n" + "			\"time\": 1533337990000,\r\n"
-					+ "			\"operationType\": \"币币交易\",\r\n" + "			\"assetId\": \"20180631\",\r\n"
-					+ "			\"operationAsset\": \"20.0000 USDT\",\r\n"
-					+ "			\"balance\": \"100.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"120.0000 USDT\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1528807992333,\r\n" + "			\"operationType\": \"推广返利\",\r\n"
-					+ "			\"assetId\": \"20180622\",\r\n" + "			\"operationAsset\": \"333.0000 USDT\",\r\n"
-					+ "			\"balance\": \"11111.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"123233.0000 USDT\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 23228807992333,\r\n" + "			\"operationType\": \"c2c交易\",\r\n"
-					+ "			\"assetId\": \"20180222\",\r\n" + "			\"operationAsset\": \"11.0000 USDT\",\r\n"
-					+ "			\"balance\": \"34.0000 USDT\",\r\n" + "			\"totalAsset\": \"34.0000 USDT\"\r\n"
-					+ "		}, {\r\n" + "			\"time\": 152880799213,\r\n"
-					+ "			\"operationType\": \"推广返利\",\r\n" + "			\"assetId\": \"20180621\",\r\n"
-					+ "			\"operationAsset\": \"3233.0000 USDT\",\r\n"
-					+ "			\"balance\": \"32.0000 USDT\",\r\n"
-					+ "			\"totalAsset\": \"1236633.0000 USDT\"\r\n" + "		}],\r\n"
-					+ "		\"pageCount\": 3,\r\n" + "		\"beginPageIndex\": 1,\r\n"
-					+ "		\"endPageIndex\": 3,\r\n" + "		\"countResultMap\": null\r\n" + "	},\r\n"
-					+ "	\"ext\": null\r\n" + "}";
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-				model.addAttribute("pageBean", pageBean);
-			}
-			return "userInfo/bill";
-		} catch (Exception e) {
-			log.error("{} 分页查询账单明细解析后台数据发生异常", e.toString());
-			model.addAttribute("pageBean", null);
-			return "userInfo/bill";
-		}
+		model.addAttribute("pageFlag","#bill");
+		return "userInfo/bill";
 	}
-
+	
+	
 	/**
 	 * 
 	 * @Title: myDeity
@@ -535,62 +228,21 @@ public class BaseController {
 	@RequestMapping(value = "/myDeity")
 	public String myDeity(HttpServletRequest request, Model model, MyDeityVO myDeityVO) {
 		HttpSession session = request.getSession();
-		HashMap<String, String> hashMap = new HashMap<String, String>();
-
-		// 测试数据，
-		UserVO userVO = new UserVO();
-		userVO.setUid("1");
-		session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, userVO);
-
-		hashMap.put("pageNum", myDeityVO.getPageNum());
-		hashMap.put("numPerPage", "2");
-		hashMap.put("uid", userVO.getUid());
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			// 查询出的存储分页数据的对象json字符串
-//			String json = withdrawCoinService.getWithdrawRecordPage(request,hashMap);
-			String json = "{\r\n" + "	\"code\": \"200\",\r\n" + "	\"message\": \"Successful\",\r\n"
-					+ "	\"data\": {\r\n" + "		\"currentPage\": 1,\r\n" + "		\"numPerPage\": 2,\r\n"
-					+ "		\"totalCount\": 5,\r\n" + "		\"recordList\": [{\r\n"
-					+ "			\"time\": 1528807990000,\r\n" + "			\"type\": \"买入\",\r\n"
-					+ "			\"symbol\": \"USDT/BTC\",\r\n" + "			\"transPrice\": \"80.0000\",\r\n"
-					+ "			\"num\": \"1024USDT\",\r\n" + "			\"amount\": \"100000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}],\r\n"
-					+ "		\"pageCount\": 3,\r\n" + "		\"beginPageIndex\": 1,\r\n"
-					+ "		\"endPageIndex\": 3,\r\n" + "		\"countResultMap\": null\r\n" + "	},\r\n"
-					+ "	\"ext\": null\r\n" + "}";
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-				model.addAttribute("pageBean", pageBean);
-			}
-			return "userInfo/myDeity";
-		} catch (Exception e) {
-			log.error("{} 分页查询账单明细解析后台数据发生异常", e.toString());
-			model.addAttribute("list", null);
-			return "userInfo/myDeity";
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
 		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#myDeity");
+		return "userInfo/myDeity";
 	}
-
+	
+	
 	/**
 	 * 
 	 * @Title: transRecord
@@ -599,145 +251,159 @@ public class BaseController {
 	 * @return
 	 * @return String
 	 */
-	@RequestMapping(value = "/transRecord", method = { RequestMethod.POST, RequestMethod.GET })
-	public String transRecord(HttpServletRequest request, Model model, TransRecordVO transRecordVO) {
+	@RequestMapping(value = "/transRecord", method = RequestMethod.GET)
+	public String transRecord(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			if (null != transRecordVO.getStartTime() && !StringUtils.isBlank(transRecordVO.getStartTime())) {
-				Long startTime = simple.parse(transRecordVO.getStartTime()).getTime();
-				hashMap.put("startTime", startTime);
-			}
-			if (null != transRecordVO.getEndTime() && !StringUtils.isBlank(transRecordVO.getEndTime())) {
-				Long endTime = simple.parse(transRecordVO.getEndTime()).getTime();
-				hashMap.put("endTime", endTime);
-			}
-		} catch (Exception e) {
-			log.error("{} 我的成交记录 页面时间转换失败");
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
 		}
-
-		// 测试数据，
-		UserVO userVO = new UserVO();
-		userVO.setUid("1");
-		session.setAttribute(SessionAttributes.LOGIN_SECONDLOGIN, userVO);
-
-		if (null != transRecordVO.getCurrencyId() && !StringUtils.isBlank(transRecordVO.getCurrencyId())) {
-			hashMap.put("currencyId", transRecordVO.getCurrencyId());
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
 		}
-		if (null != transRecordVO.getCurrencySymbol() && !StringUtils.isBlank(transRecordVO.getCurrencySymbol())) {
-			hashMap.put("currencySymbol", transRecordVO.getCurrencySymbol());
-		}
-
-		hashMap.put("pageNum", transRecordVO.getPageNum());
-		hashMap.put("numPerPage", "2");
-		hashMap.put("uid", userVO.getUid());
-
-		model.addAttribute("review", transRecordVO);
-
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			// 查询出的存储分页数据的对象json字符串
-//			String json = withdrawCoinService.getWithdrawRecordPage(request,hashMap);
-			String json = "{\r\n" + "	\"code\": \"200\",\r\n" + "	\"message\": \"Successful\",\r\n"
-					+ "	\"data\": {\r\n" + "		\"currentPage\": 1,\r\n" + "		\"numPerPage\": 2,\r\n"
-					+ "		\"totalCount\": 5,\r\n" + "		\"recordList\": [{\r\n"
-					+ "			\"time\": 1528807990000,\r\n" + "			\"type\": \"买入\",\r\n"
-					+ "			\"symbol\": \"USDT/BTC\",\r\n" + "			\"transPrice\": \"80.0000\",\r\n"
-					+ "			\"num\": \"1024USDT\",\r\n" + "			\"amount\": \"100000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}, {\r\n"
-					+ "			\"time\": 1533337990000,\r\n" + "			\"type\": \"卖出\",\r\n"
-					+ "			\"symbol\": \"BTC/USDT\",\r\n" + "			\"transPrice\": \"20\",\r\n"
-					+ "			\"num\": \"100USDT\",\r\n" + "			\"amount\": \"12000\"\r\n" + "		}],\r\n"
-					+ "		\"pageCount\": 3,\r\n" + "		\"beginPageIndex\": 1,\r\n"
-					+ "		\"endPageIndex\": 3,\r\n" + "		\"countResultMap\": null\r\n" + "	},\r\n"
-					+ "	\"ext\": null\r\n" + "}";
-			if (null != json) {
-				PageVO<PageBean> pageVo = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!pageVo.getCode().equals("200")) {
-					throw new Exception();
-				}
-				String data = Toolkits.fromPojotoJson(pageVo.getData());
-				PageBean pageBean = (PageBean) Toolkits.fromJsonToPojo(data, PageBean.class);
-				model.addAttribute("pageBean", pageBean);
-			}
-			return "record/transRecord";
-		} catch (Exception e) {
-			log.error("{} 分页查询我的交易记录解析后台数据发生异常", e.toString());
-			model.addAttribute("pageBean", null);
-			return "record/transRecord";
-		}
+		model.addAttribute("pageFlag","#transRecord");
+		return "record/transRecord";
 	}
-
+	
+	
+	
 	/**
 	 * 
-	 * @Title: c2cTransRecord
-	 * @Description: c2c交易页面
+	 * @Title: c2cTrans
+	 * @Description: c2c交易记录页面   见c2cTransRecordController
 	 * @param request
 	 * @return
 	 * @return String
 	 */
-	@RequestMapping(value = "/c2cTrans")
-	public String c2cTrans(HttpServletRequest request) {
-
-		return "transaction/c2cTrans";
+	@RequestMapping(value = "/c2cTransRecord")
+	public String c2cTransRecord(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#c2cTransRecord");
+		return "record/c2cTransRecord";
 	}
+	
+	
+	/**
+	 * 
+	* @Title: c2cBusTransRecord  
+	* @Description: TODO c2c商家成交记录 
+	* @return
+	* @return String
+	 */
+	@RequestMapping(value = "/c2cBusTransRecord")
+	public String c2cBusTransRecord(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#c2cBusTransRecord");
+		return "record/c2cBusTransRecord";
+	}
+
+	
+	
+	/**
+	 * 
+	 * @Title: rechargeRecord
+	 * @Description: 充值记录页面
+	 * @return
+	 * @return String
+	 */
+	@RequestMapping(value = "/rechargeRecord")
+	public String rechargeRecord(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#rechargeRecord");
+		return "record/rechargeRecord";
+	}
+
+
+	
+	/**
+	 * 
+	 * @Title: withdrawRecord
+	 * @Description: 查询提现记录
+	 * @param request
+	 * @param model
+	 * @param currencyId
+	 * @param pageNum
+	 * @param numPerPage
+	 * @return
+	 * @return String
+	 */
+	@RequestMapping(value = "/withdrawRecord")
+	public String withdrawRecord(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#withdrawRecord");
+		return "record/withdrawRecord";
+	}
+	
 
 	/**
 	 * 
 	 * @Title: walletAddress
-	 * @Description: 查询提币地址
+	 * @Description: 钱包地址管理
 	 * @param request
 	 * @param model
 	 * @param currencyIdList
 	 * @return
 	 * @return String
 	 */
-	@RequestMapping(value = "/walletAddress")
-	public String walletAddress(HttpServletRequest request, Model model, String currencyAddressId) {
-		return "wallet/walletAddress";
-		/*HttpSession session = request.getSession();
-		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-
-		if (null != currencyAddressId && !StringUtils.isBlank(currencyAddressId)) {
-			hashMap.put("currencyId", currencyAddressId);
+	@RequestMapping(value = "/walletAddressManager")
+	public String walletAddressManager(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
 		}
-
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		String currencyId = (String) session.getAttribute(SessionAttributes.SAVE_CURRENCYID_REVIEW);
-		model.addAttribute("review",currencyId);
-		
-		try {
-			String json = withdrawCoinService.getWithdrawAddress(request, hashMap);
-			if (null != json) {
-				PageVO<PageBean> result = (PageVO<PageBean>) Toolkits.fromJsonToPojo(json, PageVO.class);
-				if (!result.getCode().equals("200")) {
-					throw new Exception();
-				}
-				model.addAttribute("result", result.getData());
-			}
-			return "wallet/walletAddress";
-		} catch (Exception e) {
-			log.error("{} 查询提币地址 解析后台数据发生异常", e.toString());
-			model.addAttribute("result", null);
-			return "wallet/walletAddress";
-		}*/
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		model.addAttribute("pageFlag","#walletAddressManager");
+		return "wallet/walletAddressManager";
 	}
-	
 	
 	
 	/**
@@ -748,10 +414,53 @@ public class BaseController {
 	* @return String
 	 */
 	@RequestMapping(value = "/USDTWithdraw",method = RequestMethod.GET)
-	public String USDTWithdraw () {
+	public String USDTWithdraw (HttpServletRequest request,Model model,String symbol) {
+		HttpSession session = request.getSession();
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		
+		model.addAttribute("symbol",symbol);
 		return "wallet/USDTWithdraw";
 	}
 	
+	
+	/**
+	 * 
+	* @Title: recharge  
+	* @Description: usdt充值 
+	* @param model
+	* @return
+	* @return String
+	 */
+	@RequestMapping(value = "/recharge",method = RequestMethod.GET)
+	public String recharge (Model model,String symbol) {
+		model.addAttribute("symbol",symbol);
+		return "wallet/recharge";
+	}
+	
+	
+	
+	
+	//************************************************C2C交易，币币交易**************************
+
+	/**
+	 * 
+	 * @Title: c2cTransRecord
+	 * @Description: c2c交易页面
+	 * @param request
+	 * @return
+	 * @return String
+	 */
+	@RequestMapping(value = "/c2cTrans")
+	public String c2cTrans(HttpServletRequest request,Model model) {
+		
+		return "transaction/c2cTrans";
+	}
+
 	
 	
 	/**
@@ -762,14 +471,31 @@ public class BaseController {
 	* @return String
 	 */
 	@RequestMapping(value = "/bbTrans",method = RequestMethod.GET)
-	public String bbTrans () {
+	public String bbTrans (Model model,String symbol,String pairId) {
+		if (null == symbol) {
+			if (null == pairId) {
+				model.addAttribute("pairSymbol","BTC_USDT");
+				model.addAttribute("symbol","BTC");
+				//model.addAttribute("symbolToken","USDT");
+				//model.addAttribute("pairId","BTC_USDT的交易对id");
+				model.addAttribute("pairId","22222");
+			}
+		}else {
+			model.addAttribute("pairSymbol",symbol);
+			model.addAttribute("symbol",symbol.split("_")[0]);
+			//model.addAttribute("symbolToken",symbol.split("_")[1]);
+			model.addAttribute("pairId",pairId);
+		}
 		return "transaction/bbTrans";
 	}
 	
+	//=====================================================================C2C交易，币币交易===========================
 	
 	
 	
-	/** ===================================安全相关================================================*/
+	
+	
+	/** ===================================================================安全相关==============================*/
 	
 	/**
 	 * 
@@ -779,7 +505,20 @@ public class BaseController {
 	* @return String
 	 */
 	@RequestMapping(value = "/securityLog",method = RequestMethod.GET)
-	public String securityLog () {
+	public String securityLog (HttpServletRequest request,Model model) {
+		HttpSession session = request.getSession();
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
+		
+		model.addAttribute("pageFlag","#securityLog");
 		return "security/securityLog";
 	}
 	
@@ -795,45 +534,46 @@ public class BaseController {
 	@RequestMapping(value = "/paySetting",method = RequestMethod.GET)
 	public String paySetting (HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
 		
-		// 检查用户是否实名认证
-		// TODO
+		// 测试先关闭
+		/*if (null == auth) {
+			model.addAttribute("pageFlag","#realNameAuth");
+			return "security/realNameAuth";
+		}*/
 		
+		UserInfo userInfo = (UserInfo) session.getAttribute(SessionAttributes.USER_INFO);
+		String bankcard = (String) session.getAttribute(SessionAttributes.USER_ISBINDBANKCARD);
+		String alipay = (String) session.getAttribute(SessionAttributes.USER_ISBINDALIPAY);
+		String wechat = (String) session.getAttribute(SessionAttributes.USER_ISBINDWECHAT);
+		if (null != bankcard) {
+			model.addAttribute("bankcard","true");
+			model.addAttribute("bank", userInfo.getPayMethod().getBank());
+			model.addAttribute("name", userInfo.getPayMethod().getName());
+			model.addAttribute("branch", userInfo.getPayMethod().getBranch());
+			model.addAttribute("bankCardNum", userInfo.getPayMethod().getBankCard());
+			
+		}
+		if (null != alipay) {
+			model.addAttribute("alipay","true");
+			model.addAttribute("aliPayImgUrl", userInfo.getPayMethod().getAlipayImg());
+			model.addAttribute("aliPayNum", userInfo.getPayMethod().getAlipayAccount());
+			model.addAttribute("aliPayremark", userInfo.getPayMethod().getAlipayDesc());
+		}
+		if (null != wechat) {
+			model.addAttribute("wechat", "true");
+			model.addAttribute("wechatImgUrl", userInfo.getPayMethod().getWechatImg());
+			model.addAttribute("wechatNum", userInfo.getPayMethod().getWechatAccount());
+			model.addAttribute("wechatremark", userInfo.getPayMethod().getWechatDesc());
+		}
 		
-		
-		// 检查用户信息，是否绑定银行卡，以及是否绑定支付宝，微信
-		
-		// 仿数据
-		/*session.setAttribute("isBindBankCard", "true");
-		session.setAttribute("isBindAlipay", "true");
-		session.setAttribute("isBindWeChat", "true");
-		session.setAttribute("", "张三");
-		
-		String bankCard = (String) session.getAttribute("isBindBankCard");
-		String alipay = (String) session.getAttribute("isBindAlipay");
-		String wechat = (String) session.getAttribute("isBindWeChat");
-		String name = (String) session.getAttribute("name");*/
-		
-		model.addAttribute("bankCard","true");
-		model.addAttribute("alipay", "true");
-		model.addAttribute("wechat", "true");
-		model.addAttribute("name", "张三");
-		
-		model.addAttribute("bank", "建设银行");
-		model.addAttribute("branch", "深圳");
-		model.addAttribute("bankCardNum", "1111111111111133334");
-		
-		
-		model.addAttribute("aliPayImgUrl", "http://img05.tooopen.com/images/20150820/tooopen_sy_139205349641.jpg");
-		model.addAttribute("aliPayNum", "13660728071");
-		model.addAttribute("aliPayremark", "支付宝支付宝");
-		
-		
-		model.addAttribute("wechatImgUrl", "http://pic.pptbz.com/201506/2015070581208537.JPG");
-		model.addAttribute("wechatNum", "aaaaaaa");
-		model.addAttribute("wechatremark", "微信微信");
-		
-		
+		model.addAttribute("pageFlag","#paySetting");
 		return "security/paySetting";
 	}
 	
@@ -847,16 +587,44 @@ public class BaseController {
 	 */
 	@RequestMapping(value = "/withdrawDoubleValida",method = RequestMethod.GET)
 	public String withdrawDoubleValida (HttpServletRequest request,Model model) {
+		HttpSession session = request.getSession();
 		
-		// 查询用户是否绑定了手机
-		model.addAttribute("isBindPhone", "true");
-		model.addAttribute("phoneCode","13660728071");
+		UserInfo userInfo = (UserInfo) session.getAttribute(SessionAttributes.USER_INFO);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		String withdrawPhone = (String) session.getAttribute(SessionAttributes.USER_ISWITHDRAWPHONE);
+		String withdrawEmail = (String) session.getAttribute(SessionAttributes.USER_ISWITHDRAWEMAIL);
+		String phoneNum = userInfo.getPhone();
+		String email = userInfo.getEmail();
+		// 绑定手机
+		if (null != bindPhone) {
+			model.addAttribute("phoneCode", phoneNum.substring(phoneNum.length()-2, phoneNum.length()));
+		}
+		// 绑定邮箱
+		if (null != email && !StringUtils.isBlank(email)) {
+			model.addAttribute("email",email);
+		}
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
 		
-		// 查询用户是否绑定了邮箱
-		model.addAttribute("isBindEmail","true");
-		model.addAttribute("email","2035@qq.com");
+		// 是否开启了手机提币验证
+		if (null != withdrawPhone) {
+			model.addAttribute("isOpenPhone","true");
+		}
+		// 是否开启了邮箱提币验证
+		if (null != withdrawEmail) {
+			model.addAttribute("isOpenEmail","true");
+		}
+		
+		// 测试，暂时关闭
+		/*if (null == auth) {
+			model.addAttribute("pageFlag","#realNameAuth");
+			return "security/realNameAuth";
+		}*/
 		
 		
+		model.addAttribute("pageFlag","#withdrawDoubleValida");
 		return "security/withdrawDoubleValida";
 	}
 	
@@ -873,18 +641,17 @@ public class BaseController {
 		// 检查用户信息,是否绑定手机号
 		HttpSession session = request.getSession();
 		
-		// 仿数据
-		session.setAttribute("bindEmail", "123***@qq.com");
-		String bindEmail = (String) session.getAttribute("bindEmail");
-		if (null != bindEmail) {
-			// 存手机尾号
-			model.addAttribute("email",bindEmail);
-			model.addAttribute("bindEmail", "true");
-		} else {
-			model.addAttribute("bindEmail", "false");
+		UserInfo userInfo = (UserInfo) session.getAttribute(SessionAttributes.USER_INFO);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String bindEmail = (String) session.getAttribute(SessionAttributes.USER_ISBINDEMAIL);
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
 		}
-		
-		
+		model.addAttribute("pageFlag","#bindEmail");
+		if (null != bindEmail) {
+			model.addAttribute("bindEmail",userInfo.getEmail());
+		}
 		return "security/bindEmail";
 	}
 	
@@ -912,27 +679,18 @@ public class BaseController {
 	@RequestMapping(value = "/secondLoginProtect",method = RequestMethod.GET)
 	public String secondLoginProtect (HttpServletRequest request,Model model) {
 		
-		
-		// 检查用户是否绑定了手机
-		// TODO
-		
-		
-		
-		
-		// 检查用户信息,是否已经绑定二步登录
 		HttpSession session = request.getSession();
 		
-		// 仿数据
-		session.setAttribute("isBindSecondLogin", "true");
-		String isBindSecondLogin = (String) session.getAttribute("isBindSecondLogin");
-		if (null != isBindSecondLogin) {
-			// 存状态
-			model.addAttribute("secondLogin","false");
-		} else {
-			model.addAttribute("secondLogin", "true");
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String twoStep = (String) session.getAttribute(SessionAttributes.USER_ISTWOSTEP);
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
 		}
-		
-		
+		model.addAttribute("pageFlag","#secondLoginProtect");
+		if (null != twoStep) {
+			model.addAttribute("twoStep","true");
+		}
 		
 		return "security/secondLoginProtect";
 	}
@@ -949,19 +707,17 @@ public class BaseController {
 	public String bindPhone (HttpServletRequest request,Model model) {
 		// 检查用户信息,是否绑定手机号
 		HttpSession session = request.getSession();
-		
-		// 仿数据
-		session.setAttribute("bindPhone", "13697103161");
-		String bindPhone = (String) session.getAttribute("bindPhone");
+
+		UserInfo userInfo = (UserInfo) session.getAttribute(SessionAttributes.USER_INFO);
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		model.addAttribute("pageFlag","#bindPhone");
 		if (null != bindPhone) {
 			// 存手机尾号
-			model.addAttribute("phone",bindPhone.substring(bindPhone.length()-2,bindPhone.length()));
-			model.addAttribute("bindPhone", "true");
-		} else {
-			model.addAttribute("bindPhone", "false");
+			String phoneNum = userInfo.getPhone();
+			model.addAttribute("bindPhone", phoneNum.substring(phoneNum.length()-2, phoneNum.length()));
 		}
-		
 		return "security/bindPhone";
+		
 	}
 	
 	
@@ -974,15 +730,20 @@ public class BaseController {
 	 */
 	@RequestMapping(value = "/realNameAuth",method = RequestMethod.GET)
 	public String realNameAuth (HttpServletRequest request,Model model) {
-		// 判断用户是否已经提交实名认证
-		// TODO
-		
-		
-		// 判断用户实名认证处在的状态，返回不同的页面
-		// TODO
-		
-		
+		HttpSession session = request.getSession();
+		String bindPhone = (String) session.getAttribute(SessionAttributes.USER_ISBINDPHONE);
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		// 没有绑定手机
+		if (null == bindPhone) {
+			model.addAttribute("pageFlag","#bindPhone");
+			return "security/bindPhone";
+		}
+		model.addAttribute("pageFlag","#realNameAuth");
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
 		return "security/realNameAuth";
+		
 	}
 	
 	
@@ -1014,7 +775,8 @@ public class BaseController {
 	* @return String
 	 */
 	@RequestMapping(value = "/noticeDetail",method = RequestMethod.GET)
-	public String noticeDetail () {
+	public String noticeDetail (Model model,@RequestParam String noticeId) {
+		 model.addAttribute("noticeId",noticeId);
 		return "other/noticeDetail";
 	}
 	
@@ -1032,14 +794,10 @@ public class BaseController {
 		return "other/currencyDetail";
 	}
 	
-	@RequestMapping(value = "/zhifushezhi",method = RequestMethod.GET)
-	public String zhifushezhi () {
-		return "security/zhifushezhi";
-	}
-	
-	
 	
 	/**=============================================工单页面==========================*/
+	
+	
 	/**
 	 * 
 	* @Title: myWorkList  
@@ -1048,7 +806,12 @@ public class BaseController {
 	* @return String
 	 */
 	@RequestMapping(value = "/myWorkList",method = RequestMethod.GET)
-	public String myWorkList () {
+	public String myWorkList (HttpServletRequest request,Model model) {
+		HttpSession session = request.getSession();
+		String auth = (String) session.getAttribute(SessionAttributes.USER_ISAUTH);
+		if (null != auth) {
+			model.addAttribute("isAuth","true");
+		}
 		return "userInfo/myWorkList";
 	}
 	
@@ -1066,6 +829,56 @@ public class BaseController {
 		
 		return "userInfo/workListDetail";
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: emailActiveCheck  
+	* @Description: TODO  邮箱激活验证
+	* @param request
+	* @param token
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/emailActiveCheck", method = RequestMethod.GET)
+	public String emailActiveCheck(HttpServletRequest request, Model model,String token) {
+		HttpSession session = request.getSession();
+		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+		HashMap<String, String> map = new HashMap<>();
+		ResponseResult result = new ResponseResult();
+		if ("zh_CN".equals(locale.toString())) {
+			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "激活邮箱失败，请重新注册");
+		}
+		if ("en_US".equals(locale.toString())) {
+			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "Failed to activate mailbox,Please register again");
+		}
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		hashMap.put("activeId", token);
+		
+		try {
+			String json = securityConterService.emailActiveCheck(request, hashMap);
+			result = Toolkits.handleResp(json);
+			// 激活成功后跳转登录页面
+			if (result.getCode().equals("200")) {
+				return "firstLogin";
+			}else {
+				// 激活不成功跳转注册页面
+				model.addAttribute("activeFailed",Toolkits.defaultString(map.get("msg2")));
+				return "register";
+			}
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+			result.setData("");
+			log.error("{} 激活邮箱发生异常", e.toString());
+			return "";
+		}
+	}
+
+	
 	
 
 	/**

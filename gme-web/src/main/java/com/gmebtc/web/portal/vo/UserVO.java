@@ -35,6 +35,7 @@ public class UserVO implements Serializable{
 	 * 用户账户余额(BTC)
 	 */
 	private String balanceBTC;
+	private String balanceUSDT;
 	public String getUid() {
 		return uid;
 	}
@@ -65,10 +66,11 @@ public class UserVO implements Serializable{
 	public void setBalanceBTC(String balanceBTC) {
 		this.balanceBTC = balanceBTC;
 	}
-	@Override
-	public String toString() {
-		return "UserVO [uid=" + uid + ", accountId=" + accountId + ", account=" + account + ", balanceCNY=" + balanceCNY
-				+ ", balanceBTC=" + balanceBTC + "]";
+	public String getBalanceUSDT() {
+		return balanceUSDT;
+	}
+	public void setBalanceUSDT(String balanceUSDT) {
+		this.balanceUSDT = balanceUSDT;
 	}
 
 }

@@ -359,7 +359,7 @@ public final class Toolkits{
 		ResponseResult result = null;
 		if (null == json || "".equals(json)) {
 			result = new ResponseResult();
-			result.setCode("-1");
+			//result.setCode("-1");
 			result.setMessage("服务器发生异常");
 			result.setData("");
 			return result;
@@ -367,7 +367,7 @@ public final class Toolkits{
 			try {
 				result = (ResponseResult) fromJsonToPojo(json, ResponseResult.class);
 			} catch (Exception e) {
-				result.setCode("-1");
+				//result.setCode("-1");
 				result.setMessage("后台数据格式错误");
 				result.setData("");
 				return result;
@@ -392,11 +392,11 @@ public final class Toolkits{
 		ResponseResult result = new ResponseResult();
 		try {
 			result = (ResponseResult) fromJsonToPojo(json, ResponseResult.class);
-			if (result.getCode().startsWith("1")) {
+			if (result.getCode().toString().startsWith("1")) {
 				result.setMessage("服务器正在处理,请稍等");
 				log.info("后台返回状态码code:{}",result.getCode());
 				return result;
-			}else if (result.getCode().startsWith("4")) {
+			}else if (result.getCode().toString().startsWith("4")) {
 				if (result.getCode().equals(ResultCode.NO_PASS_VALIDATE)) {
 					result.setMessage("你没有通过验证,请重新验证后重试");
 					log.error("{} 后台返回状态码code:{}",result.getCode());

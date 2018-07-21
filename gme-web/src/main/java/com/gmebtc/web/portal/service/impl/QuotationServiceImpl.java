@@ -61,4 +61,20 @@ public class QuotationServiceImpl implements QuotationService {
 		String method = ConfigUtil.get("MARKET_TICKET");
         return SendRequestUtil.sendRequest(request, method);
 	}
+
+
+	/**
+	 * 
+	 * Title: indexTicker
+	 * Description:TODO 首页行情
+	 * @param request
+	 * @return
+	 * @throws Exception  
+	 * @see com.gmebtc.web.portal.service.QuotationService#indexTicker(javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public String indexTicker(HttpServletRequest request) throws Exception {
+		String method = ConfigUtil.get("MARKET_INDEXTICKET");
+        return SendRequestUtil.sendRequest(request, method);
+	}
 }

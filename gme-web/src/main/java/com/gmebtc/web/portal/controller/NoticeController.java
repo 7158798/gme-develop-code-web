@@ -48,60 +48,21 @@ public class NoticeController {
 	public Object getCoinList(HttpServletRequest request, Model model, CurrencyVO currencyVO) {
 		ResponseResult result = new ResponseResult();
 		HashMap<String, Object> hashMap = new HashMap<String,Object>();
-		if (null != currencyVO.getIsToken()) {
-			hashMap.put("isToken", currencyVO.getIsToken());
-		}
+		
 		
 		try {
-			/*String json = "{\r\n" + 
-					"	\"code\": 200,\r\n" + 
-					"	\"message\": \"成功\",\r\n" + 
-					"	\"data\": {\r\n" + 
-					"		\"data\": [{\r\n" + 
-					"				\"currencyId\": \"2\",\r\n" + 
-					"				\"isToken\": \"1\",\r\n" + 
-					"				\"currencySymbol\": \"USDT\",\r\n" + 
-					"				\"iconId\": \"1\",\r\n" + 
-					"				\"name\": \"USDT\"\r\n" +
-					"			},\r\n" + 
-					"			{\r\n" + 
-					"				\"currencyId\": \"7\",\r\n" + 
-					"				\"isToken\": \"0\",\r\n" + 
-					"				\"currencySymbol\": \"BTC\",\r\n" + 
-					"				\"iconId\": \"1\",\r\n" + 
-					"				\"name\": \"BTC\"\r\n" +
-					"			},\r\n" + 
-					"			{\r\n" + 
-					"				\"currencyId\": \"4\",\r\n" + 
-					"				\"isToken\": \"1\",\r\n" + 
-					"				\"currencySymbol\": \"ETH\",\r\n" + 
-					"				\"iconId\": \"1\",\r\n" + 
-					"				\"name\": \"ETH\"\r\n" +
-					"			},\r\n" + 
-					"			{\r\n" + 
-					"				\"currencyId\": \"5\",\r\n" + 
-					"				\"isToken\": \"1\",\r\n" + 
-					"				\"currencySymbol\": \"EOS\",\r\n" + 
-					"				\"iconId\": \"1\",\r\n" + 
-					"				\"name\": \"EOS\"\r\n" +
-					"			},\r\n" + 
-					"			{\r\n" + 
-					"				\"currencyId\": \"6\",\r\n" + 
-					"				\"isToken\": \"0\",\r\n" + 
-					"				\"currencySymbol\": \"LTC\",\r\n" + 
-					"				\"iconId\": \"1\",\r\n" + 
-					"				\"name\": \"LTC\"\r\n" +
-					"			}\r\n" + 
-					"		]\r\n" + 
-					"	}\r\n" + 
-					"}";
-			return json;*/
-			String json = noticeService.getCoinList(request,hashMap);
+			String json = "";
+			if (null != currencyVO.getIsToken()) {
+				hashMap.put("isToken", currencyVO.getIsToken());
+				json= noticeService.getCoinList(request,hashMap);
+			}else {
+				json = noticeService.getCoinList(request);
+			}
 			return Toolkits.handleResp(json);
 		} catch (Exception e) {
 			result.setCode(ResultCode.SYSTEM_ERROR);
 			result.setData("");
-			log.error("{} 所有币种 （没有条件）解析后台数据发生异常", e.toString());
+			log.error("{} 查询所有币种 解析后台数据发生异常", e.toString());
 			return result;
 		}
 	}
@@ -126,51 +87,6 @@ public class NoticeController {
 		}
 		
 		try {
-			/*String json = "";
-			if (currencyVO.getCurrencyId().equals("0e9be485-736e-11e8-b07b-4ccc6ad6addc")) {
-				json = "{\r\n" + 
-						"	\"code\": \"200\",\r\n" + 
-						"	\"message\": \"Successful\",\r\n" + 
-						"	\"data\": {\r\n" + 
-						"		\"data\": [{\r\n" + 
-						"			\"currencyId\": \"0e9be485-736e-11e8-b07b-4ccc6ad6addc\",\r\n" + 
-						"			\"currencySymbol\": \"AAA\"\r\n" + 
-						"		}, {\r\n" + 
-						"			\"currencyId\": \"0e9be485-736e-11e8-b07b-4ccc6ad6addc\",\r\n" + 
-						"			\"currencySymbol\": \"BBB\"\r\n" + 
-						"		}]\r\n" + 
-						"	}\r\n" + 
-						"}";
-			}else if (currencyVO.getCurrencyId().equals("2")) {
-				json = "{\r\n" + 
-						"	\"code\": \"200\",\r\n" + 
-						"	\"message\": \"Successful\",\r\n" + 
-						"	\"data\": {\r\n" + 
-						"		\"data\": [{\r\n" + 
-						"			\"currencyId\": \"fbfd45ca-708b-11e8-b07b-4ccc6ad6addc\",\r\n" + 
-						"			\"currencySymbol\": \"GGG\"\r\n" + 
-						"		}, {\r\n" + 
-						"			\"currencyId\": \"AFSAFDSFSFDSFSDFDSFASFDSFDSF\",\r\n" + 
-						"			\"currencySymbol\": \"HHH\"\r\n" + 
-						"		}]\r\n" + 
-						"	}\r\n" + 
-						"}";
-			}else if (currencyVO.getCurrencyId().equals("2")) {
-				json = "{\r\n" + 
-						"	\"code\": \"200\",\r\n" + 
-						"	\"message\": \"Successful\",\r\n" + 
-						"	\"data\": {\r\n" + 
-						"		\"data\": [{\r\n" + 
-						"			\"currencyId\": \"AFSAFDSFSFDSFSDFDSFASFDSFDSF\",\r\n" + 
-						"			\"currencySymbol\": \"ZZZ\"\r\n" + 
-						"		}, {\r\n" + 
-						"			\"currencyId\": \"2\",\r\n" + 
-						"			\"currencySymbol\": \"MMM\"\r\n" + 
-						"		}]\r\n" + 
-						"	}\r\n" + 
-						"}";
-			}
-			return json;*/
 			String json = noticeService.getCoinTradePairList(request,hashMap);
 			return Toolkits.handleResp(json);
 		} catch (Exception e) {
@@ -180,15 +96,6 @@ public class NoticeController {
 			return result;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -227,14 +134,15 @@ public class NoticeController {
 	 * @Param [request, noticeType:类型，1，行业资讯，2，系统公告，3，帮助, page, pageSize]
 	 * @Desc 获取公告
 	 */
-	@RequestMapping(value = "/getNotice", method = RequestMethod.POST)
+	@RequestMapping(value = "/getNotice", method = RequestMethod.GET)
 	public Object getNotice(HttpServletRequest request, @RequestParam String noticeType,
-			@RequestParam(defaultValue = "1") String page, @RequestParam String pageSize) {
+			@RequestParam(defaultValue = "1") String pageNum, @RequestParam(defaultValue="2") String numPerPage) {
 		ResponseResult result = new ResponseResult();
 		HashMap<String, String> hashMap = new HashMap<String, String>();
+		
 		hashMap.put("noticeType", noticeType);
-		hashMap.put("page", page);
-		hashMap.put("pageSize", pageSize);
+		hashMap.put("pageNum", pageNum);
+		hashMap.put("numPerPage", numPerPage);
 		try {
 			String json = noticeService.getNotice(request, hashMap);
 			return Toolkits.handleResp(json);
@@ -246,5 +154,36 @@ public class NoticeController {
 		}
 
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: getNoticeDetail  
+	* @Description: TODO 获取公告详情  
+	* @param request
+	* @param id
+	* @return
+	* @return Object
+	 */
+	@RequestMapping(value = "/getNoticeDetail", method = RequestMethod.GET)
+	public Object getNoticeDetail(HttpServletRequest request, @RequestParam String id) {
+		ResponseResult result = new ResponseResult();
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		
+		hashMap.put("noticeId", id);
+		
+		try {
+			String json = noticeService.getNoticeDetail(request, hashMap);
+			return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setData("");
+			log.error("{} 获取公告详情 发生异常", e.toString());
+			return result;
+		}
+
+	}
+
 
 }

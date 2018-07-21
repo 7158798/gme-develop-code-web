@@ -38,39 +38,53 @@ public class CheckUserInfoFilter extends HandlerInterceptorAdapter{
 			throws Exception {
 		HttpSession session = request.getSession();
 		
-		// 检查用户是否登录，
-		UserVO userVO = null;
-		userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
-		if (null == userVO) {
-			response.sendRedirect("http://192.168.0.148:8080/gme-web/firstLogin.html");
+		
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			String uid = userVO.getUid();
+			hashMap.put("uid", uid);
+			try {
+				String json = securityConterService.checkUserIdentify(request, hashMap);
+				ResponseResult result = Toolkits.handleResp(json);
+				if (null != result && result.getCode() == 200) {
+					UserInfo userInfo = (UserInfo) Toolkits.fromJsonToPojo(Toolkits.fromPojotoJson(result.getData()), UserInfo.class);
+					if (null != userInfo) {
+						// 将检查用户的信息存入session中
+						session.setAttribute(SessionAttributes.USER_INFO, userInfo);
+						if (userInfo.getIsBindPhone() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISBINDPHONE, "true");
+						}else if (userInfo.getIsBindEmail() == 1) { 
+							session.setAttribute(SessionAttributes.USER_ISBINDEMAIL, "true");
+						}else if (userInfo.getIsIdentityAuthApply() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISAUTH, "true");
+						}else if (userInfo.getIsAlipay() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISBINDALIPAY, "true");
+						}else if (userInfo.getIsWechat() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISBINDWECHAT, "true");
+						}else if (userInfo.getIsBankCard() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISBINDBANKCARD, "true");
+						}else if (userInfo.getIsTwoStep() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISTWOSTEP, "true");
+						}else if (userInfo.getIsWithdrawCoinCheckPhone() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISWITHDRAWPHONE, "true");
+						}else if (userInfo.getIsTwoStep() == 1) {
+							session.setAttribute(SessionAttributes.USER_ISWITHDRAWEMAIL, "true");
+						}
+					}
+					return true;
+				}else {
+					return true;
+				}
+			} catch (Exception e) {
+				return true;
+			}
+		}else {
+			response.sendRedirect("http://192.168.0.148:8081/gme-web/firstLogin.html");
 			return false;
 		}
 		
 		
-		HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("uid", "41");
-		try {
-			String json = securityConterService.checkUserIdentify(request, hashMap);
-			ResponseResult result = Toolkits.handleResp(json);
-			if (null != result && result.getCode().equals("200")) {
-				UserInfo userInfo = (UserInfo) Toolkits.fromJsonToPojo(Toolkits.fromPojotoJson(result.getData()), UserInfo.class);
-				if (null != userInfo) {
-					// 如果用户绑定了手机，将此状态存入session中
-					if (userInfo.getBindPhone() == true) {
-						session.setAttribute(SessionAttributes.USER_ISBINDPHONE, true);
-					}else {
-						session.setAttribute(SessionAttributes.USER_ISBINDPHONE, false);
-					}
-				}
-				return true;
-			}else {
-				session.setAttribute(SessionAttributes.USER_ISBINDPHONE, false);
-				return true;
-			}
-		} catch (Exception e) {
-			session.setAttribute(SessionAttributes.USER_ISBINDPHONE, false);
-			return true;
-		}
 	}
 
 	

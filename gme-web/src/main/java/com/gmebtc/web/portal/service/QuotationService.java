@@ -9,4 +9,6 @@ public interface QuotationService {
     String ticker(HttpServletRequest request,HashMap<String, String> hashMap) throws Exception;
     
     String ticker(HttpServletRequest request) throws Exception;
+    
+    String indexTicker(HttpServletRequest request) throws Exception;
 }

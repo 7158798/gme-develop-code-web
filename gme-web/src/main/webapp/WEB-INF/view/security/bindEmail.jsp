@@ -19,7 +19,7 @@
         	描述：
         -->
 			<div class="L_36" style="height: 594px;">
-				<div class="L_39" style="border-bottom: 2px solid #fafbfc;">
+				<div class="L_39">
 					邮箱绑定
 				</div>
 				<div class="L_85" id="L_85">
@@ -27,94 +27,33 @@
 					<input type="button" value="立即绑定" onclick="$('#L_85').css('display','none');$('#L_85_2').css('display','block');" />
 				</div>
 				<div class="L_85_2" id="L_85_2">
-					<p><span>邮箱：</span><input id="email" onblur="checkEmail(this.value);" type="tel" style="width: 604px;padding-left: 10px;height: 50px;line-height: 50px;border-radius: 3px;border: 1px solid #F2F5F7;" /></p>
-					<p style="margin-top: 20px;margin-bottom: 20px;"><span>验证码：</span><input id="emailCode" type="text" style="width: 426px;padding-left: 10px;height: 50px;line-height: 50px;border-radius: 3px;border: 1px solid #F2F5F7;" /><input type="button" id="sendEmailCode" value="获取验证码"  style="width: 164px;margin-left: 14px;height: 50px;line-height: 50px;border-radius: 3px;border: 1px solid #7495b4;background: #FFFFFF;color: #7495b4;"/></p>
-					<p><input type="button" onclick="bindEmail();" value="确定" style="margin-left: 160px;width: 614px;height: 50px;line-height: 50px;border: 0px;border-radius: 3px;background: #347ddd;color: #FFFFFF;" /></p>
+					<p><span>邮箱：</span><input id="email" type="tel" class="L_85_2_e" value="1914194652@qq.com" /></p>
+					<p style="margin-top: 20px;margin-bottom: 20px;"><span>验证码：</span><input id="emailCode" class="L_85_2_b"  type="text"  /><input type="button" onclick="sendEmailCode();" value="获取验证码" class="L_85_2_c"/></p>
+					<p><input type="button"  onclick="confirmBindEmail();" class="L_85_2_d" value="确定"  /></p>
 				</div>
 				<div class="L_85_3" id="L_85_3">
 					<p>已绑定邮箱：<span id="emailNum"></span>。用于安全通知，登陆，安全设置时输入。</p>
 				</div>
 			</div>
+			<div class="tc">
+				<div class="tc_1">
+					<div class="tc_1_1">
+						<span>信息提示</span>
+						<img src="img/L_10.png" onclick="$('.tc').css('display','none');" />
+					</div>
+					<div class="tc_1_2">
+						<p class="L_9">资金密码:<input type="password" id="zijinmima"/></p>
+						<div class="tc_1_3">
+							<input onclick="sendRequest();" type="button" value="确定" />
+							<input onclick="$('.tc').css('display','none');" type="button" value="取消" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" value="${bindEmail}" id="bindEmailNum"/>
 		<script type="text/javascript" src="js/style.js"></script>
-		
-		
-		
-		<script type="text/javascript">
-			var bindEmail = '${bindEmail}';
-			if (bindEmail == "false") {
-				// 绑定了邮箱
-				var email = '${email}';
-				$('#L_85').css('display','none');
-				$('#L_85_2').css('display','none');
-				$('#L_85_3').css('display','block');
-				$("#email").text(email);
-			} else {
-				
-			}
-		</script>
-		
-		
-		
-		
-		
-		<script type="text/javascript">
-		
-			// 检查邮箱格式
-			function checkEmail(email){
-				var myReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
-				if (myReg.test(email)) {
-					return true;
-				}
-				alert("邮箱格式不正确");
-				return false;
-			};
-		
-			// 发送验证码
-			function sendEmailCode(){
-				var email = $("#email").val();
-				if (checkEmail(email)){
-					$.ajax({
-						type: "POST",
-						url: "http://192.168.0.148:8080/gme-web/api/v1/security/sendEmail.json",
-						dataType: "json",
-						data: "email=" + email + "&type=6",
-						success: function (data){
-							alert(data.message);
-						}
-					});
-				}				
-			};
-		</script>
-		
-		
-		
-		<script type="text/javascript">
-			// 绑定邮箱
-			function bindEmail(){
-				var email = $("#email").val();
-				var emailCode = $("#emailCode").val();
-				if (checkEmail(email)){
-					$.ajax({
-						type: "POST",
-						url: "http://192.168.0.148:8080/gme-web/api/v1/security/bindEmail.json",
-						dataType: "json",
-						data: "email=" + email + "&emailCode=" + emailCode + "&tradeAuth=123",
-						success: function (data){
-							alert(data.message);
-							if (data.code == 200) {
-								var emailNum = data.data;
-								$('#L_85').css('display','none');
-								$('#L_85_2').css('display','none');
-								$('#L_85_3').css('display','block');
-								$("#emailNum").text(emailNum);
-							}
-						}
-					});
-				}
-			}
-		
-		</script>
-		
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/page/security/bindEmail.js"></script>
 		
 		
 	</body>

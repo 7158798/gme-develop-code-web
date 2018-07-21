@@ -34,13 +34,13 @@
 					<p><img src="img/L_12.png" />&nbsp;&nbsp;<span>USDT/CNY</span></p>
 					<p>
 						<span>实时价:</span>
-						<span id="realTime" style="font-size: 14px;color: #5c5c66;font-weight: 600;"></span>&nbsp;&nbsp;
+						<span id="realTime" class="L_75_11"></span>&nbsp;&nbsp;
 						<span>日涨跌:</span>
-						<span id="highsAndLows" style="font-size: 14px;color: #f05d5d;font-weight: 600;"></span>&nbsp;&nbsp;
+						<span id="highsAndLows" class="L_75_11 sybg_2_hong"></span>&nbsp;&nbsp;
 						<span>最高价:</span>
-						<span id="highest" style="font-size: 14px;color: #5c5c66;font-weight: 600;"></span>&nbsp;&nbsp;
+						<span id="highest" class="L_75_11"></span>&nbsp;&nbsp;
 						<span>最低价:</span>
-						<span id="lowest" style="font-size: 14px;color: #5c5c66;font-weight: 600;"></span>
+						<span id="lowest" class="L_75_11"></span>
 					</p>
 				</div>
 				<div class="L_76">
@@ -50,16 +50,16 @@
 							<a href="#">如何买入？</a>
 						</p>
 						<p style="margin-bottom: 10px;">
-							<!-- <span>买入价格CNY</span> -->
-							<input id="buyPrice" type="text" placeholder="请输入金额" onkeyup="return checkBuyCalcAmount(this.value)?this.value:this.value='' "/>
+							<span>买入价格CNY</span>
+							<input id="buyPrice" type="text" placeholder="请输入金额" onkeyup="return checkBuyCalcAmountC2C(this.value)?this.value:this.value='' "/>
 						</p>
 						<div class="L_81_1">
 							<span>买入量USDT</span>
-							<input id="buyCount" type="text" onkeyup="return checkBuyCalcAmount(this.value)?this.value:this.value='' " />
+							<input id="buyCount" type="text" onkeyup="return checkBuyCalcAmountC2C(this.value)?this.value:this.value='' " />
 						</div>
 						<div class="L_81_2">
 							<span>金额</span>
-							<input id="buyAmount" type="text" onkeyup="return checkBuyAmount(this.value)?this.value:this.value='' "/>
+							<input id="buyAmount" type="text" onkeyup="return checkBuyAmountC2C(this.value)?this.value:this.value='' "/>
 						</div>
 						<div class="L_81_3">
 							<div class="L_81_4">
@@ -71,35 +71,35 @@
 								<input id="bMaxLimit" type="text" onkeyup="return checkReg(this.value)?this.value:this.value='' "/>
 							</div>
 						</div>
-						<p style="font-size: 14px;color: #5c5c66;margin-bottom: 20px;">
+						<p class="L_81_1_1_1">
 							<span style="margin-right: 6px;">支付方式</span><img src="img/L_19.png" style="margin-right: 10px;" />
 							<span style="margin-right: 6px;">支付宝</span><input id="bAliPay" name="payMethod" type="checkbox" value="01"/>
 							<span style="margin-right: 6px;">微信</span><input id="bWechatPay" name="payMethod" type="checkbox" value="01"/>
 							<span style="margin-right: 6px;">银行转账</span><input id="bBankCard" name="payMethod" type="checkbox" value="01"/>
-							<span>(必须本人支付)</span>
-							<a href="#">《交易须知》</a>
+							<span class="L_81_1_1_2">(必须本人支付)</span>
+							<a href="#" class="L_81_1_1_3">《交易须知》</a>
 						</p>
-						<input type="button" id="buyButton" value="买入(CNY-USDT)" style="border-radius: 3px;color: #FFFFFF;height: 40px;width: 90%;border: 0px;background: #f05d5d;" />
+						<input type="button" id="buyButton" value="买入(CNY-USDT)" class="L_81_1_1_4" />
 						
 					</div>
 					<div class="L_82">
 						<p>卖出USDT&nbsp;&nbsp;&nbsp;(USDT余额<span>0.00000</span>)</p>
 						<p style="display: inline-block;width: 90%;margin-bottom: 16px;">
 							<a href="#" style="float: left;">如何卖出？</a>
-							<a href="USDTWithdraw.html" style="float: right;color: #5c5c66;">USDT提现</a>
-							<a href="" style="float: right;margin-right: 30px;color: #5c5c66;">USDT充值</a>
+							<a href="USDTWithdraw.html" class="L_82_21_1">USDT提现</a>
+							<a href="recharge.html" class="L_82_21_2">USDT充值</a>
 						</p>
 						<p style="margin-bottom: 10px;">
 							<span>卖出价格CNY</span>
-							<input id="sellPrice" type="text" placeholder="请输入金额" onkeyup="return checkSellCalcAmount(this.value)?this.value:this.value='' "/>
+							<input id="sellPrice" type="text" placeholder="请输入金额" onkeyup="return checkSellCalcAmountC2C(this.value)?this.value:this.value='' "/>
 						</p>
 						<div class="L_82_1">
 							<span>卖出量USDT</span>
-							<input id="sellCount" type="text" onkeyup="return checkSellCalcAmount(this.value)?this.value:this.value='' "/>
+							<input id="sellCount" type="text" onkeyup="return checkSellCalcAmountC2C(this.value)?this.value:this.value='' "/>
 						</div>
 						<div class="L_82_2">
 							<span>金额</span>
-							<input id="sellAmount" type="text" onkeyup="return checkSellAmount(this.value)?this.value:this.value='' " />
+							<input id="sellAmount" type="text" onkeyup="return checkSellCalcAmountC2C(this.value)?this.value:this.value='' " />
 						</div>
 						<div class="L_81_3" style="width: 90%;">
 							<div class="L_81_4">
@@ -111,19 +111,19 @@
 								<input id="sMaxLimit" type="text" onkeyup="return checkReg(this.value)?this.value:this.value='' "/>
 							</div>
 						</div>
-						<p style="font-size: 14px;color: #5c5c66;margin-bottom: 20px;">
+						<p class="L_81_1_1_1">
 							<span style="margin-right: 6px;">支付方式</span><img src="img/L_19.png" style="margin-right: 10px;" />
 							<span style="margin-right: 6px;">支付宝</span><input id="sAliPay" type="checkbox" />
 							<span style="margin-right: 6px;">微信</span><input id="sWechatPay" type="checkbox" />
 							<span style="margin-right: 6px;">银行转账</span><input id="sBankCard" type="checkbox" />
-							<span>(必须本人支付)</span>
-							<a href="#">《交易须知》</a>
+							<span class="L_81_1_1_2">(必须本人支付)</span>
+							<a href="#" class="L_81_1_1_3">《交易须知》</a>
 						</p>
-						<input type="button" id="sellButton" value="卖出(CNY-USDT)" style="border-radius: 3px;color: #FFFFFF;height: 40px;width: 90%;border: 0px;background: #03c087;" />
+						<input type="button" id="sellButton" value="卖出(CNY-USDT)" class="L_81_1_1_5" />
 						
 						
 					</div>
-					<div class="L_76_1">
+					<div class="L_76_1" id="L_76_1_b">
 						<div class="L_76_11">
 							<p><img src="img/L_47.png" /></p>
 							<p>只有商家才可以交易</p>
@@ -135,8 +135,8 @@
 					<p style="display: inline-block;width: 100%;"><span style="float: left;">市场挂单(只显示在线商家)</span>
 					</p>
 					<p>
-						<a id="buy" onclick="changeStyle(this);" style="margin-right: 40px;margin-left: 10px;color: #41b2ce;">购买</a>
-						<a id="sell" onclick="changeStyle(this);" style="color: #152137;">出售</a>
+						<a id="buy" >购买</a>
+						<a id="sell">出售</a>
 					</p>
 					
 					
@@ -148,9 +148,8 @@
 								<th>数量(USDT)</th>
 								<th>总计(CNY)</th>
 								<th>交易限额(CNY)</th>
-								<th>商家在线</th>
+								<th>商家姓名</th>
 								<th>成交单数</th>
-								<th>平均用时</th>
 								<th>付款方式</th>
 								<th></th>
 							</tr>
@@ -177,37 +176,11 @@
 							<th>建立时间</th>
 							<th>操作</th>
 						</tr>
-						<tr>
-							<td>20180603<img src="img/L_30.png" style="margin-left: 10px;" /></td>
-							<td>买入</td>
-							<td>6.65</td>
-							<td>1314.0000</td>
-							<td>1890.10</td>
-							<td>成功</td>
-							<td>周**</td>
-							<td>2018-08-21</td>
-							<td>
-								<a onclick="if($('#L_78_3').css('display')!='none'){$('#L_78_3').css('display','none')}else{$('#L_78_3').css('display','block')}">撤销</a>
-							</td>
-						</tr>
-						<tr>
-							<td>20180603<img src="img/L_30.png" style="margin-left: 10px;" /></td>
-							<td>买入</td>
-							<td>6.65</td>
-							<td>1314.0000</td>
-							<td>1890.10</td>
-							<td>成功</td>
-							<td>周**</td>
-							<td>2018-08-21</td>
-							<td>
-								<a>撤销</a>
-							</td>
-						</tr>
 					</table>
 				</div>
 				<div class="L_79">
-					<p style="font-size: 13px;color: #152137;font-weight: 600;margin-bottom: 10px;">交易须知：</p>
-					<ul style="font-size: 13px;color: #152137;">
+					<p class="L_79_1_1">交易须知：</p>
+					<ul class="L_79_1_2">
 						<li>1. <span> 超过<b style="color: #6b99d6;">3笔取消订单将禁止2天C2C交易</b></span></li>
 						<li>2. <span> 有<b style="color: #6b99d6;">2个</b>买单未完成，<b style="color: #6b99d6;">暂停</b>继续下单，完成后恢复</span></li>
 						<li>3. <span> 下单买入后<b style="color: #6b99d6;">冒充已付款</b>，卖方可申诉举报，一经查实将<b style="color: #6b99d6;">禁封</b>交易</span></li>
@@ -220,7 +193,7 @@
 				<div class="L_80">
 					<div class="L_49" style="width: 100%;margin-bottom: 60px;">
 						<div class="L_50" style="margin-top: 30px;">
-							<span style="font-size: 15px;color: #152137;float: left;">我的商家订单(支付设置)</span>
+							<span class="L_50_a">我的商家订单(支付设置)</span>
 							<span style="font-size: 15px;color: #152137;float: right;"><a href="transRecord.html">更多</a></span>
 						</div>
 						<div class="L_51">
@@ -259,38 +232,9 @@
 							<th>状态</th>
 							<th>对方姓名</th>
 							<th>建立时间</th>
-							<th>操作</th>
-						</tr>
-						<tr>
-							<td>20180603<img src="img/L_30.png" style="margin-left: 10px;" /></td>
-							<td>买入</td>
-							<td>6.65</td>
-							<td>1314.0000</td>
-							<td>1890.10</td>
-							<td>成功</td>
-							<td>周**</td>
-							<td>2018-08-21</td>
-							<td>
-								<a onclick="if($('#L_78_3').css('display')!='none'){$('#L_78_3').css('display','none')}else{$('#L_78_3').css('display','block')}">撤销</a>
-							</td>
-						</tr>
-						<tr>
-							<td>20180603<img src="img/L_30.png" style="margin-left: 10px;" /></td>
-							<td>买入</td>
-							<td>6.65</td>
-							<td>1314.0000</td>
-							<td>1890.10</td>
-							<td>成功</td>
-							<td>周**</td>
-							<td>2018-08-21</td>
-							<td>
-								<a>撤销</a>
-							</td>
 						</tr>
 					</table>
 					</div>
-					<a onclick="userPayFinish();">用户已付款</a>
-					<a onclick="busCheckFinish();">商家放行</a>
 				</div>
 			</div>
 		</div>
@@ -309,10 +253,11 @@
 			</div>
 		</div>
 		
+		<script type="text/javascript" src="js/page/transaction/c2cTrans.js"></script>
 		<script type="text/javascript" src="js/style.js"></script>
 		<script type="text/javascript" src="js/calc.js"></script>
+		<script type="text/javascript" src="js/utils.js"></script>
 		
-		<script type="text/javascript" src="js/c2cTrans.js"></script>
 		
 		
 	</body>

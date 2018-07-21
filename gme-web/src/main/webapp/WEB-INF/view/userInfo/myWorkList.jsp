@@ -20,10 +20,10 @@
 		<div class="L_93">
 			我的工单
 		</div>
-		<div class="L_94">
-			您尚未实名认证！为保障您的资金安全，在完成实名认证期间，您将不能进行C2C交易，提币等操作。
-			<a href="#">立即认证</a>
-		</div>
+			<div id="L_84" class="L_84">
+					您尚未实名认证！为保障您的资金安全，在完成实名认证之前，您将不能进行C2C交易，提币等操作。
+					<a href="realNameAuth.html" style="display: inline-block;background: #fb9a00;color: #FFFFFF;">立即认证</a>
+				</div>
 		<div class="L_95">
 			<div class="L_96">
 				<div class="L_96_1">
@@ -36,36 +36,12 @@
 						<a id="cjwtan" class="L_96_14_action" style="margin-right: 34px;" onclick="$('#cjwt').css('display','none');$('#gdjl').css('display','block');$('#gdjlan').removeClass('L_96_14_action');$('#cjwtan').addClass('L_96_14_action');">工单记录</a>
 					</p>
 					<div id="gdjl">
-						<div class="L_96_15">
-							<div class="L_96_121">
-								<img src="img/L_59.png" />
-							</div>
-							<div class="L_96_122">
-								<p>李天一他爹</p>
-								<p>如果充值信息无误，区块已经确认发送成功没有到账，请提供账户ID，充值币种，数量，充值时间和交易ID我们进行查询。</p>
-								<div class="L_96_1221">
-									<div class="L_96_1222">
-										<img src="img/L_50.png" />
-										<img src="img/L_51.png" />
-										<img src="img/L_52.png" />
-									</div>
-									<div class="L_96_1223">
-										<p>
-											<a href="workListDetail.html">查看详情 <img src="img/L_19.png" /></a>
-										</p>
-										<p>
-											<span>2018-06-07 17:10:36</span>
-											<span>单号:49870</span>
-											<span>关闭</span>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div class="L_96_16">
-							<a href="#">上一页</a>
-							<a>下一页</a>
+							<a id="nextPage">下一页</a>
+							<a id="prePage">上一页</a>
 						</div>
+						<input type="hidden" id="currentPage"/>
+						<input type="hidden" id="pageCount"/>
 					</div>
 					<div id="cjwt">
 						<p>1.如何修改/取消谷歌验证码？</p>
@@ -145,170 +121,11 @@
 				</div>
 			</div>
 		</div>
+		<input value="${isAuth}" id="isAuth" type="hidden">
 		<script type="text/javascript" src="js/style.js"></script>
-		
-		
-		<script type="text/javascript">
-			// 提交工单 选中问题类型样式更改
-			function changeStyle(obj){
-				$(obj).parent().children("a[class='L_96_14_action']").removeClass("L_96_14_action");
-				$(obj).attr("class","L_96_14_action");
-			}
-		</script>
-		
-		
-		<script type="text/javascript">
-			// 图片上传 触发事件	
-			$("#image").change(function(){
-				console.debug("aaaa");
-			})
-		</script>
-		
-		
-		
-		
-		<script type="text/javascript">
-			// 查询所有的币种
-			function getCurrencyList(){
-				$.ajax({
-					type: "GET",
-					url: "http://192.168.0.148:8080/gme-web/api/v1/operation/coinList.json",
-					dataType: "json",
-					success: function(data){
-						if (data.code == 200) {
-							$("#L_97_7").children().remove();
-							var dataChar = data.data.data;
-							for (var i = 0; i < dataChar.length; i++) {
-								var data = dataChar[i];
-								$("#L_97_7").append('<option value="'+data.currencyId+'">'+data.currencySymbol+'</option>');
-							}
-						}else {
-							alert(data.message);
-						}
-					}
-				})
-			}
-		</script>
-		
-		
-		
-		<script type="text/javascript">
-			// 提交工单
-			function submitWork(){
-				var type = $("#problemType").children("a[class='L_96_14_action']").text();
-				if (type == "充值") {
-					type = 1;
-				}
-				if (type == "提现") {
-					type = 2;
-				}
-				if (type == "申诉") {
-					type = 3;
-				}
-				if (type == "仲裁") {
-					type = 4;
-				}
-				if (type == "其他") {
-					type = 5;
-				}
-				var imgOne = "aaa";
-				var imgTwo = "bbb";
-				var imgThree = "ccc";
-				var currencyId = $("#L_97_7 option:selected").val();
-				var tradeId = $("#L_97_4").val();
-				var content = $("#L_97_5").val();
-				
-				if (tradeId == "") {
-					alert("无效的交易对id");
-					return;
-				}
-				if (content == "" || content.length <= 10) {
-					alert("文字资料太少");
-					return;
-				}
-				
-				$.ajax({
-					type: "POST",
-					url: "http://192.168.0.148:8080/gme-web/api/v1/operation/sendWorkList.json",
-					dataType: "json",
-					data: "workType=" + type + "&currencyId=" + currencyId + "&bizId=" + tradeId + "&workContent=" + content + "&imgOne=" + imgOne + "&imgTwo=" + imgTwo + "&imgThree" + imgThree,
-					success: function(data){
-						if (data.code == 200) {
-							window.location.href=window.location.href;
-						}else {
-							alert(data.message);
-						}
-					}
-				})
-			}
-		</script>
-		
-		
-		
-		<script type="text/javascript">
-			// 查询我的工单列表
-			function myWorkList(){
-				$.ajax({
-					type: "GET",
-					url: "http://192.168.0.148:8080/gme-web/api/v1/operation/workListInfo.json",
-					dataType: "json",
-					success: function(data){
-						if (data.code == 200) {
-							$("#gdjl div:first").remove();
-							var dataChar = data.data;
-							for (var i = 0; i < dataChar.length; i++) {
-								var data = dataChar[i];
-								var time = getFormatDateWithHours(data.dateTime);
-								var status = data.workStatus;
-								//var imgs = ["http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg","http://www.taopic.com/uploads/allimg/140421/318743-140421213T910.jpg"];
-								var imgs = data.imgs;
-								$("#gdjl").prepend('<div class="L_96_15"><div class="L_96_121"><img src="img/L_59.png" /></div><div class="L_96_122"><p>'+data.workContent+'</p></div></div>');
-								$("#gdjl").children().children().eq(1).prepend('<p>'+data.name+'</p>');
-								if (status == 1) {
-									$("#gdjl").children().children().eq(1).append('<div class="L_96_1221"><div class="L_96_1222"></div><div class="L_96_1223"><p><a>查看详情 <img src="img/L_19.png" /></a></p><p><span>'+time+'</span>&nbsp;<span>单号:'+data.workId+'</span>&nbsp;<span>未处理</span></p></div></div><input type="hidden" value="'+data.workId+'"/>');
-								}
-								if (status == 2) {
-									$("#gdjl").children().children().eq(1).append('<div class="L_96_1221"><div class="L_96_1222"></div><div class="L_96_1223"><p><a>查看详情 <img src="img/L_19.png" /></a></p><p><span>'+time+'</span>&nbsp;<span>单号:'+data.workId+'</span>&nbsp;<span>处理中</span></p></div></div><input type="hidden" value="'+data.workId+'"/>');
-								}
-								if (status == 3) {
-									$("#gdjl").children().children().eq(1).append('<div class="L_96_1221"><div class="L_96_1222"></div><div class="L_96_1223"><p><a>查看详情 <img src="img/L_19.png" /></a></p><p><span>'+time+'</span>&nbsp;<span>单号:'+data.workId+'</span>&nbsp;<span>已处理</span></p></div></div><input type="hidden" value="'+data.workId+'"/>');
-								}
-								for (var j = 0; j < imgs.length; j++) {
-									$("#gdjl").children().children().eq(1).children().eq(2).children().eq(0).append('<img src="'+imgs[j]+'" />');
-								}
-							}
-							
-							
-							// 查看详情注册点击事件
-							$(".L_96_15 a").each(function(){
-								$(this).click(function(){
-									var workId = $(this).parent().parent().parent().parent().parent().children().children().eq(-1).val();
-									console.debug(workId);
-									/* $.get("http://192.168.0.148:8080/gme-web/workListDetail.html",{subjectId:workId},function(data){
-										
-									}); */
-									window.location.href="http://192.168.0.148:8080/gme-web/workListDetail.html?subjectId=" + workId;
-								});
-							});
-							
-						}else {
-							alert(data.message);
-						}
-					}
-						
-				})
-			}		
-		</script>
-		
-		
-		<script type="text/javascript">
-			// 查询我的工单
-			myWorkList();
-			// 得到所有的币种
-			getCurrencyList();
-		</script>
-		
+		<script type="text/javascript" src="js/auth.js"></script>
 		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/page/userInfo/myWorkList.js"></script>
 		
 	</body>
 

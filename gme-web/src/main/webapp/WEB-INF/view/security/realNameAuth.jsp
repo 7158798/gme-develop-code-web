@@ -19,15 +19,22 @@
         	时间：2018-06-28
         	描述：
         -->
-		<div class="L_36">
+        <div id="authAfter" class="L_36">
+        	<div class="L_84" style="display: none">
+				您已经实名认证！
+			</div>
+        </div>
+        
+		<div id="auth" class="L_36">
 				<div class="L_84">
 					您尚未实名认证！为保障您的资金安全，在完成实名认证之前，您将不能进行C2C交易，提币等操作。
+					<a href="realNameAuth.html" style="display: inline-block;background: #fb9a00;color: #FFFFFF;">立即认证</a>
 				</div>
 				<div class="L_39">
 					用户信息实名登记
 				</div>
 				<div class="L_84" style="margin-bottom: 30px;">
-					<span style="font-weight: 500;font-size: 16px;color: #152137;">您的账号ID：</span><span style="font-weight: 600;font-size: 16px;color: #ff2805;">${uid}</span>
+					<span class="L_84_a">您的账号ID：</span><span style="font-weight: 600;font-size: 16px;color: #ff2805;">${uid}</span>
 				</div>
 				<div class="L_49">
 					<div class="L_83">
@@ -40,7 +47,7 @@
 						<p>3.手持身份证照片：需要您本人一只手持<span>您的身份证</span>，另一只手持一张有您手写的<span>gme账号ID的白纸</span>。 确保身份证和白纸在您的胸前，不遮挡您的脸部，并且身份证和白纸上的信息清晰可见！
 						</p>
 						<p>手持白纸请手写以下内容，内容不符者不予通过：<span>“本人知晓虚拟币投资风险巨大，自愿参与，自担风险，保证身份信息不提供给他人，不使用gme账号进行非法行为，如有违反，本人愿意承担法律风险。”</span></p>
-						<p style="margin-top: 48px;margin-bottom: 52px;color: #6c6f73;">以下图片仅作为示例，请提供您本人的身份材料照片。照片勿进行PS处理！</p>
+						<p class="L_83_a">以下图片仅作为示例，请提供您本人的身份材料照片。照片勿进行PS处理！</p>
 						<div class="L_83_2">
 							<div class="L_83_21">
 								<p style="margin-bottom: 26px;">上传身份证正面：</p>
@@ -72,9 +79,9 @@
 						</div>
 						<p>请严格按照要求上传材料照片，否则会造成您的认证不过审核，耽误您的宝贵时间！</p>
 						<input type="button" value="重新上传" class="L_83_3" />
-						<p class="L_83_4"><span style="color: #152137;">您的姓名：</span><input type="text" id="name"/></p>
-						<p class="L_83_4"><span style="color: #152137;">请再次输入您的姓名：</span><input type="text" id="confirmName"/></p>
-						<p class="L_83_4"><span style="color: #152137;">您的证件类型：</span>
+						<p class="L_83_4"><span id="L_83_4_a">您的姓名：</span><input type="text" id="name"/></p>
+						<p class="L_83_4"><span id="L_83_4_a">请再次输入您的姓名：</span><input type="text" id="confirmName"/></p>
+						<p class="L_83_4"><span id="L_83_4_a">您的证件类型：</span>
 							<select id="IDCardType">
 								<option value="1">身份证</option>
 								<option value="2">护照</option>
@@ -83,13 +90,26 @@
 								<option value="5">港澳居民通行证</option>
 							</select>
 						</p>
-						<p class="L_83_4"><span style="color: #152137;">您的证件号码：</span><input type="text" id="IDCard" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')"/></p>
+						<p class="L_83_4"><span id="L_83_4_a">您的证件号码：</span><input type="text" id="IDCard" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')"/></p>
 						<p class="L_83_5"><input id="button" type="button" value="确认无误并提交" /></p>
 					</div>
 				</div>
 			</div>
+			<input id="isAuth" type="hidden" value="${isAuth}"/>
 		<script type="text/javascript" src="js/style.js"></script>
 		
+		
+		<script type="text/javascript">
+			// 判断是否实名认证
+			var isAuth = $("#isAuth").val();
+			if (isAuth == "true") {
+				$("#authAfter").attr("display","block");
+				$("#auth").attr("display","none");
+			}else {
+				$("#authAfter").attr("display","none");
+				$("#auth").attr("display","block");
+			}
+		</script>
 		
 		<script type="text/javascript">
 			// 确认提交
@@ -116,11 +136,13 @@
 				}
 				$.ajax({
 					type: "POST",
-					url: "http://192.168.0.148:8080/gme-web/api/v1/security/identifyAuth.json",
+					url: "http://192.168.0.148:8081/gme-web/api/v1/security/identifyAuth.json",
 					dataType: "json",
 					data: "name=" + name + "&cardType=" + type + "&cardNumber=" + idCard + "&faceImgId=1" + "&backImgId=2" + "&handImgId=3",
 					success: function(data){
-						alert(data.message);	
+						if (data.code == 200) {
+							
+						}
 					}
 				});
 				

@@ -1,13 +1,14 @@
 package com.gmebtc.web.portal.service.impl;
 
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
 import com.gmebtc.web.portal.service.WithdrawCoinService;
 import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 
 /*
  * @Author zhou
@@ -86,7 +87,7 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
      */
     @Override
     public String widthrawCoin(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
-        String method = "widthrawCoin&";
+        String method = ConfigUtil.get("WALLET_ADDWITHDRAW");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
@@ -107,6 +108,23 @@ public class  WithdrawCoinServiceImpl implements WithdrawCoinService {
         String method = ConfigUtil.get("WALLET_WITHDRAWPAGE");
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
+
+
+    /**
+     * 
+     * Title: getWithdrawCharge
+     * Description:TODO 查询提现手续费
+     * @param request
+     * @param hashMap
+     * @return
+     * @throws Exception  
+     * @see com.gmebtc.web.portal.service.WithdrawCoinService#getWithdrawCharge(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+     */
+	@Override
+	public String getWithdrawCharge(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception {
+		String method = ConfigUtil.get("WALLET_WITHDRAWCHARGE");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
 
 
 

@@ -21,7 +21,7 @@ import com.gmebtc.web.portal.constant.ResultCode;
 import com.gmebtc.web.portal.constant.SessionAttributes;
 import com.gmebtc.web.portal.entity.User;
 import com.gmebtc.web.portal.result.ResponseResult;
-import com.gmebtc.web.portal.service.UserService;
+import com.gmebtc.web.portal.service.UserRegisterService;
 import com.gmebtc.web.portal.utils.Toolkits;
 
 /**
@@ -36,7 +36,7 @@ public class UserRegisterController {
 	private static final Logger log = LoggerFactory.getLogger(UserRegisterController.class);
 
     @Resource(name = "userService")
-    private UserService userService;
+    private UserRegisterService userService;
 
 
 
@@ -103,11 +103,11 @@ public class UserRegisterController {
             return result;
         }
         // 手机验证码是否为空
-        /*if (null == user.getIdentCode() || StringUtils.isBlank(user.getIdentCode())) {
+        if (null == user.getIdentCode() || StringUtils.isBlank(user.getIdentCode())) {
             result.setMessage(Toolkits.defaultString(map.get("msg2")));
             result.setData("");
             return result;
-        }*/
+        }
 
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("phoneCode", user.getPhoneCode());
@@ -162,12 +162,12 @@ public class UserRegisterController {
         
         result.setCode(ResultCode.FORM_INFO_ERROR);
         
-       /* String validateCode = (String) session.getAttribute(SessionAttributes.VALIDATE_CODE);
+        String validateCode = (String) session.getAttribute(SessionAttributes.VALIDATE_CODE);
         if (null == validateCode || !user.getImgCode().equalsIgnoreCase(validateCode)) {
         	result.setMessage(Toolkits.defaultString(map.get("msg6")));
             result.setData("");
             return result;
-        }*/
+        }
         if (null == user.getEmail() || StringUtils.isBlank(user.getEmail())) {
             result.setMessage(Toolkits.defaultString(map.get("msg1")));
             result.setData("");
@@ -196,10 +196,8 @@ public class UserRegisterController {
         hashMap.put("refereeId", user.getRefereeId());
 
         try {
-//        	String json = userService.userEmaillRegister(request,hashMap);
-//        	return Toolkits.handleResp(json);
-        	String json = "{'code':'200','message':'注册成功，请前往邮箱激活','data':'null'}";
-        	return json;
+        	String json = userService.userEmaillRegister(request,hashMap);
+        	return Toolkits.handleResp(json);
         } catch (Exception e) {
         	result.setCode(ResultCode.SYSTEM_ERROR);
         	result.setMessage(Toolkits.defaultString(map.get("msg5")));

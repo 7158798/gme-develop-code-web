@@ -19,11 +19,11 @@
         	描述：
         -->
 			<div class="L_36" style="height: 594px;">
-				<div class="L_84">
+				<div id="L_84" class="L_84">
 					您尚未实名认证！为保障您的资金安全，在完成实名认证之前，您将不能进行C2C交易，提币等操作。
-					<a href="#" style="display: inline-block;background: #fb9a00;color: #FFFFFF;">立即认证</a>
+					<a href="realNameAuth.html" style="display: inline-block;background: #fb9a00;color: #FFFFFF;">立即认证</a>
 				</div>
-				<div class="L_39" style="border-bottom: 2px solid #fafbfc;">
+				<div class="L_39">
 					两步登录保护设置
 				</div>
 				<div class="L_85_3" style="display: block;">
@@ -37,82 +37,11 @@
 					<p class="L_85_32"><input type="button" onclick="openCloseTwoStep();" id="button" /></p>
 				</div>
 			</div>
+			<input type="hidden" value="${twoStep}" id="twoStep"/>
 		<script type="text/javascript" src="js/style.js"></script>
-		
-		
-		
-		
-		<script type="text/javascript">
-			// 判断当前状态
-			var status = '$(secondLogin)';
-			if (status == "true") {
-				$("#currentStatus").text("开启");
-				$("#button").val("关闭两步登陆保护");
-			} else {
-				$("#currentStatus").text("关闭");
-				$("#button").val("开启两步登陆保护");
-			}
-		</script>
-		
-		
-		<script type="text/javascript">
-			// 发送验证码
-			function getIdentCode(type) {
-				//1短信
-				if (type == 1) {
-					$.ajax({
-						type: "POST",
-						url: "http://192.168.0.148:8080/gme-web/api/v1/sendPhoneCheckCode.json",
-						dataType: "json",
-						data: "type=8",
-						success: function(data){
-							alert(data.message);
-						}
-					})
-				}
-				// 2语音
-				if (type == 2) {
-					$.ajax({
-						type: "POST",
-						url: "http://192.168.0.148:8080/gme-web/api/v1/sendPhoneCheckCode.json",
-						dataType: "json",
-						data: "type=8" + "&sendByVoice=2",
-						success: function(data){
-							alert(data.message);
-						}
-					})
-				}
-			}
-		</script>
-		
-		
-		<script type="text/javascript">
-			// 关闭开启二步登录保护
-			function openCloseTwoStep() {
-				var status = $("#currentStatus").val();
-				var checkCode = $("#identCode").val();
-				var type;
-				if (status == "开启") {
-					type = 2;
-				}
-				if (status == "关闭") {
-					type = 1;
-				}
-				$.ajax({
-					type: "POST",
-					url: "http://192.168.0.148:8080/gme-web/api/v1/security/openCloseTwoStep.json",
-					dataType: "json",
-					data: "type=" + type + "&checkCode=" + checkCode,
-					success: function(data){
-						alert(data.message);
-						if (data.code == 200) {
-							// 刷新页面
-							window.location.reload();
-						}
-					}	
-				});
-			}
-		</script>
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/auth.js"></script>
+		<script type="text/javascript" src="js/page/security/secondLoginProtect.js"></script>
 		
 		
 	</body>

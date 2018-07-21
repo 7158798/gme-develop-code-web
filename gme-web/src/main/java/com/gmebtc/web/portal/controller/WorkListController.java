@@ -13,15 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.gmebtc.web.portal.constant.ResultCode;
+import com.gmebtc.web.portal.constant.SessionAttributes;
 import com.gmebtc.web.portal.entity.WorkList;
 import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.WorkListService;
 import com.gmebtc.web.portal.utils.Toolkits;
+import com.gmebtc.web.portal.vo.UserVO;
 
 /*
  * @Author zhou
@@ -52,51 +53,21 @@ public class WorkListController {
      */
     @RequestMapping(value = "/workListInfo",method = RequestMethod.GET)
     public Object getWorkListInfo (HttpServletRequest request,@RequestParam(defaultValue="1") String pageNum
-    								,@RequestParam(defaultValue="5") String numPerPage){
+    								,@RequestParam(defaultValue="10") String numPerPage){
+    	HttpSession session = request.getSession();
     	HashMap<String, String> hashMap = new HashMap<String, String>();
-		hashMap.put("uid", "44");
 		// 调试
-		/*hashMap.put("pageNum", pageNum);
-		hashMap.put("numPerPage", numPerPage);*/
+		hashMap.put("pageNum", pageNum);
+		hashMap.put("numPerPage", numPerPage);
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+		}
     
     	
         try {
-        	String json = "{\r\n" + 
-        			"	\"code\": \"200\",\r\n" + 
-        			"	\"message\": \"成功\",\r\n" + 
-        			"	\"data\": [{\r\n" + 
-        			"		\"workId\": \"3\",\r\n" + 
-        			"		\"dateTime\": 1529650574000,\r\n" + 
-        			"		\"workType\": \"4\",\r\n" + 
-        			"		\"name\": \"张三\",\r\n" + 
-        			"		\"workStatus\": 2,\r\n" + 
-        			"		\"currencySymbol\": null,\r\n" + 
-        			"		\"workContent\": \"第一个内容\",\r\n" + 
-        			"		\"imgs\": [\"http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg\", \"http://www.taopic.com/uploads/allimg/140421/318743-140421213T910.jpg\"]\r\n" + 
-        			"	}, {\r\n" + 
-        			"		\"workId\": \"4\",\r\n" + 
-        			"		\"dateTime\": 1529655574000,\r\n" + 
-        			"		\"workType\": \"2\",\r\n" + 
-        			"		\"name\": \"李四\",\r\n" + 
-        			"		\"workStatus\": 3,\r\n" + 
-        			"		\"currencySymbol\": null,\r\n" + 
-        			"		\"workContent\": \"第ER个内容\",\r\n" + 
-        			"		\"imgs\": [\"http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg\", \"http://www.taopic.com/uploads/allimg/140421/318743-140421213T910.jpg\"]\r\n" + 
-        			"	}, {\r\n" + 
-        			"		\"workId\": \"4\",\r\n" + 
-        			"		\"dateTime\": 1529655774000,\r\n" + 
-        			"		\"workType\": \"2\",\r\n" + 
-        			"		\"name\": \"王五\",\r\n" + 
-        			"		\"workStatus\": 1,\r\n" + 
-        			"		\"currencySymbol\": null,\r\n" + 
-        			"		\"workContent\": \"第三个内容\",\r\n" + 
-        			"		\"imgs\": [\"http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg\", \"http://www.taopic.com/uploads/allimg/140421/318743-140421213T910.jpg\"]\r\n" + 
-        			"	}],\r\n" + 
-        			"	\"ext\": null\r\n" + 
-        			"}";
-        	return json;
-//        	String json = workListService.getWorkListInfo(request,hashMap);
-//        	return Toolkits.handleResp(json);
+        	String json = workListService.getWorkListInfo(request,hashMap);
+        	return Toolkits.handleResp(json);
 		} catch (Exception e) {
 			ResponseResult result = new ResponseResult();
 			result.setCode(ResultCode.SYSTEM_ERROR);
@@ -185,8 +156,10 @@ public class WorkListController {
         hashMap.put("bizId", workList.getBizId());
         hashMap.put("workContent", workList.getWorkContent());
         hashMap.put("workImgId", workList.getImgOne() + "," + workList.getImgTwo() + "," + workList.getImgThree());
-        hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
+        UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+		}
         
         try {
         	String json = workListService.sendWorkList(request,hashMap);
@@ -242,7 +215,10 @@ public class WorkListController {
         hashMap.put("content", content);
         hashMap.put("replyImgId", replyImgId);
         hashMap.put("type", type);
-        hashMap.put("uid", "44");
+        UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+		}
         
         try {
         	String json = workListService.replyWorkList(request,hashMap);

@@ -104,7 +104,7 @@ public class OtcServiceImpl implements OtcService{
 	 */
 	@Override
 	public String userCancleOrder(HttpServletRequest request, HashMap<String, Object> hashMap) throws Exception {
-		String method = ConfigUtil.get("");
+		String method = ConfigUtil.get("OTC_USERCANCLEORDER");
 		return SendRequestUtil.sendMapRequest(request, hashMap, method);
 	}
 	

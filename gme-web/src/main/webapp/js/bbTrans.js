@@ -61,7 +61,12 @@ $("#buyButton").click(function(){
 		dataType: "json",
 		data: "price=" + price + "&amount=" + amount + "&tradeAuth=" + tradeAuth + "&type=1" + "&pairId=" + pairId,
 		success: function(data){
-			alert(data.message);
+			if (data.code == 200) {
+				// 刷新我的当前委托
+				entrustRecord(3);
+			}else {
+				alert(data.message);
+			}
 		}
 	});
 });
@@ -96,7 +101,12 @@ $("#sellButton").click(function(){
 		dataType: "json",
 		data: "price=" + price + "&amount=" + amount + "&tradeAuth=" + tradeAuth + "&type=2" + "&pairId=" + pairId,
 		success: function(data){
-			alert(data.message);
+			if (data.code == 200) {
+				// 刷新我的当前委托
+				entrustRecord(3);
+			}else {
+				alert(data.message);
+			}
 		}
 	});
 });
@@ -118,7 +128,6 @@ function currencyTransRecord(type){
 				var dataChar = data.data;
 				for (var i = 0; i < dataChar.length; i++) {
 					var data = dataChar[i];
-					console.debug(data.date)
 					var date = getFormatDateWithHours(data.date);
 					if (data.type == 1) {
 						$("#myTransRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.pairSymbol+"</td><td>"+data.price+"</td><td>"+data.amount+"</td><td>"+data.total+"</td><td>"+data.procedureFee+"</td></tr>");
@@ -146,42 +155,54 @@ function entrustRecord(type){
 		success: function(data){
 			if (data.code == 200) {
 				$("#myEntrustRecordTable tr:not(:first)").remove();
-				var dataCharBuy = data.data.buyOrders;
-				var dataCharSell = data.data.sellOrders;
+				var dataCharBuy = data.data.recordList[0].buyOrders;
+				var dataCharSell = data.data.recordList[0].sellOrders;
 				for (var i = 0; i < dataCharBuy.length; i++) {
 					var data =  dataCharBuy[i];
 					var date = getFormatDateWithHours(data.date);
 					//订单状态；1-委托中;2-全部成交;3-部分成交;4撤销;
+					
+					var statusStr = "";
 					if (data.status == 1) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>委托中</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "委托中";
 					}
 					if (data.status == 2) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>全部成交</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "全部成交";
 					}
 					if (data.status == 3) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>部分成交</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "部分成交";
 					}
 					if (data.status == 4) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>撤销</td><td><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "撤销";
 					}
+					
+					$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>买入</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>"+statusStr+"</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
 				}
 				
 				for (var i = 0; i < dataCharSell.length; i++) {
 					var data =  dataCharSell[i];
 					var date = getFormatDateWithHours(data.date);
 					//订单状态；1-委托中;2-全部成交;3-部分成交;4撤销;
+					
+					var statusStr = "";
+					var cancleStr = ""; 
+					
 					if (data.status == 1) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>卖出</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>委托中</td><td><a>撤销</a><a>详情</a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "委托中";
+						cancleStr = "<a>撤销</a>";
 					}
 					if (data.status == 2) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>卖出</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>全部成交</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "全部成交";
 					}
 					if (data.status == 3) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>卖出</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>部分成交</td><td><a>撤销</a><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "部分成交";
+						cancleStr = "<a>撤销</a>";
 					}
 					if (data.status == 4) {
-						$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>卖出</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>撤销</td><td><a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
+						statusStr = "撤销";
 					}
+					
+					$("#myEntrustRecordTable").append("<tr><td>"+date+"</td><td>卖出</td><td>"+data.price+"</td><td>"+data.number+"</td><td>"+data.finished+"</td><td>"+data.finished+"</td><td>"+statusStr+"</td><td>"+cancleStr+"<a>详情<img src='img/L_41.png' /></a></td><input type='hidden' value='"+data.orderId+"'/></tr>");
 				}
 				
 				
@@ -195,7 +216,7 @@ function entrustRecord(type){
 								$(this).attr("testStyle","");
 								var len = $(".L_91_3").length;
 								for (var i = 0; i < len; i++) {
-									// 如果是 详情信息再删除
+									// 如果是 详情信息在删除
 									if ($(this).parent().parent().next().children().children().attr("class") == "L_91_3") {
 										$(this).parent().parent().next().remove();
 									}
@@ -235,9 +256,6 @@ function entrustRecord(type){
 						});
 					}
 				});
-				
-				
-				
 				
 				
 				// 撤销
@@ -297,7 +315,8 @@ function realTimeTradeRecord(){
 
 
 // 买卖委托单
-function buySellOrder(pairId){
+function buySellOrder(){
+	var pairId = $("#pairId").val();
 	$.ajax({
 		type: "GET",
 		url: "http://192.168.0.148:8080/gme-web/api/v1/coin/buySellOrders.json",
@@ -350,45 +369,170 @@ function toNonExponential(num) {
 }
 
 
-//格式化时间 yyyy-MM-dd hh:mm:ss
-function getFormatDateWithHours(date) {
-	var date = new Date(date);
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    var strHours = date.getHours();
-    var strMin = date.getMinutes();
-    var strSeconds = date.getSeconds();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    if (strHours >= 0 && strHours <= 9) {
-    	strHours = "0" + strHours;
-    }
-    if (strMin >= 0 && strMin <= 9) {
-    	strMin = "0" + strMin;
-    }
-    if (strSeconds >= 0 && strSeconds <= 9) {
-    	strSeconds = "0" + strSeconds;
-    }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + strHours + seperator2 + strMin
-            + seperator2 + strSeconds;
-    return currentdate;
+
+//币种对行情
+function ticker(symbol){
+	var currencySymbol = symbol.split("_");
+	$.ajax({
+		type: "GET",
+		url: "http://192.168.0.148:8080/gme-web/api/v1/kline/ticker.json",
+		dataType: "json",
+		data: "symbol=" + currencySymbol[0] + "/" + currencySymbol[1],
+		success: function(data){
+			if (data.code == 200) {
+				var pairsymbol = data.data.symbol;
+				if(symbol != null) 
+					$("#pairSymbol").text(symbol); 
+					
+				if(data.data.priceForUsdt != null) 
+					$("#priceUSDT").text(data.data.priceForUsdt); 
+				
+				if(data.data.increase != null) 
+					$("#percent").text(data.data.increase); 
+				
+				if(data.data.highPriceToday != null) 
+					$("#maxLimit").text(data.data.highPriceToday); 
+				
+				if(data.data.lowPriceToday != null) 
+					$("#minLimit").text(data.data.lowPriceToday); 
+				
+				if(data.data.priceForCny != null) 
+					$("#priceCNY").text(getNumberValue(data.data.priceForCny)); 
+				
+				if(data.data.volume24Hour+currencySymbol[0] != null) 
+					$("#transCount").html(data.data.volume24Hour+"&nbsp;" +currencySymbol[0]); 
+			}
+		}
+	})
+	
 }
 
 
 
-//格式化时间 hh:mm:ss
+
+//=================================币种交易对列表==============================
+var L_USDT = [],
+L_BTC = [],
+L_ETH = [],
+L_DF = [],
+kxsj = [];
+
+
+function setCookie(name, value) {
+var Days = 30;
+var exp = new Date();
+exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+document.cookie = name + "=" + escape(value) + ";path=/;expires=" + exp.toGMTString();
+}
+
+function getCookie(name) {
+var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+if(arr = document.cookie.match(reg))
+	return unescape(arr[2]);
+else
+	return null;
+}
+var jsonneirong = "";
 
 
 
 
-var pairId = $("#pairId").val();
+
+function indexx() {
+	var url = "http://192.168.0.148:8080/gme-web/api/v1/kline/indexTicker.json";
+	$.get(url, function(rawData) {
+		if(rawData.code != 200) {
+			setTimeout("indexx()", 1000);
+		} else {
+			setTimeout("indexx()", 10000);
+			jsonneirong = rawData;
+			L_USDT = rawData.data[0].data;
+			L_BTC = rawData.data[1].data;
+			L_ETH = rawData.data[2].data;
+			for(var i = 0; i < rawData.data.length; i++) {
+				for(var j = 0; j < rawData.data[i].data.length; j++) {
+					for(var m = 0; m < getCookie("zixuan").split(",").length; m++) {
+						if(rawData.data[i].data[j].symbol == getCookie("zixuan").split(",")[m]) {
+							L_DF.push(rawData.data[i].data[j]);
+						}
+					}
+				}
+			}
+			xr(L_USDT);
+		}
+	});
+}
+
+
+
+function xr(obj) {
+	//setTimeout("qkxt(kxsj)", 1000);
+	kxsj = [];
+	//	alert(obj[0].increase);
+	if(obj == L_USDT) {
+		$("#USDTQ").removeClass().attr("class","L_89_12a action_L_89_12");
+		$("#ETHQ").removeClass().attr("class","L_89_12a");
+		$("#BTCQ").removeClass().attr("class","L_89_12a");
+		$("#ZXQQ").removeClass().attr("class","L_89_12a");
+	} else if(obj == L_ETH) {
+		$("#ETHQ").removeClass().attr("class","L_89_12a action_L_89_12");
+		$("#USDTQ").removeClass().attr("class","L_89_12a");
+		$("#BTCQ").removeClass().attr("class","L_89_12a");
+		$("#ZXQQ").removeClass().attr("class","L_89_12a");
+	} else if(obj == L_BTC) {
+		$("#BTCQ").removeClass().attr("class","L_89_12a action_L_89_12");
+		$("#USDTQ").removeClass().attr("class","L_89_12a");
+		$("#ETHQ").removeClass().attr("class","L_89_12a");
+		$("#ZXQQ").removeClass().attr("class","L_89_12a");
+	} else if(obj == L_DF) {
+		$("#ZXQQ").removeClass().attr("class","L_89_12a action_L_89_12");
+		$("#USDTQ").removeClass().attr("class","L_89_12a");
+		$("#ETHQ").removeClass().attr("class","L_89_12a");
+		$("#BTCQ").removeClass().attr("class","L_89_12a");
+	}
+	if(obj == L_DF) {
+		$("#pairArea").children().remove();
+		for(var i = 0; i < obj.length; i++) {
+			var fh="";
+			if(obj[i].increase < 0) {
+				fh="-";
+			} else {
+				fh="+";
+			}
+			$("#pairArea").append("<tr><td align='left'><img src='"+obj[i].img+"' height='20px;'>" + obj[i].pairSymbol + "</td><td class='"+ys+"'>" + obj[i].priceForUsdt + "</td><td class='"+ys+"'>"+fh + obj[i].increase * 100+ "%</td><input value='"+obj[i].pairSymbol+"' type='hidden'/><input type='hidden' value='"+obj[i].pairId+"'/></tr>"); 
+		}
+	}else {
+		$("#pairArea").children().remove();
+		for(var i = 0; i < obj.length; i++) {
+			var fh="";
+			if(obj[i].increase < 0) {
+				ys = "sybg_2_hong";
+				fh="-";
+			} else {
+				ys = "sybg_2_lv";
+				fh="+";
+			}
+			$("#pairArea").append("<tr><td align='left'><img src='"+obj[i].img+"' height='20px;'>&nbsp;" + obj[i].name + "</td><td class='"+ys+"'>" + obj[i].priceForUsdt + "</td><td class='"+ys+"'>" +fh + obj[i].increase * 100 + "%</td><input value='"+obj[i].pairSymbol+"' type='hidden'/><input type='hidden' value='"+obj[i].pairId+"'/></tr>"); 
+		}
+	}
+	
+	// 给每个交易对添加点击事件
+	$("#pairArea tr:not(:first)").children().each(function(){
+		$(this).click(function(){
+			var symbol = $(this).parent().children().eq(-2).val();
+			var pairId = $(this).parent().children().eq(-1).val();
+			window.location.href="http://192.168.0.148:8080/gme-web/bbTrans.html?symbol="+symbol+"&pairId=" + pairId;
+		});
+	});
+	
+}
+//==================================================币种交易对列表EDN==========================================
+
+
+
+
+
+
 // 我的成交记录
 currencyTransRecord(3);
 // 我的当前委托
@@ -396,7 +540,10 @@ entrustRecord(3);
 // 平台实时交易记录
 realTimeTradeRecord();
 // 买卖委托单
-buySellOrder(pairId);
-
+buySellOrder();
+//币种对行情
+ticker($("#pairSymbol").text());
+//币种交易对列表初始化 使用刚指定的配置项和数据显示图表。
+indexx();
 //k线30分钟
 sf(30);

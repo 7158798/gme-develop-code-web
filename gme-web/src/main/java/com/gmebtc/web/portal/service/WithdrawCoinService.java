@@ -62,4 +62,16 @@ public interface WithdrawCoinService {
      */
     String getWithdrawRecordPage(HttpServletRequest request,HashMap<String, Object> hashMap) throws Exception;
     
+    /**
+     * 
+    * @Title: getWithdrawCharge  
+    * @Description: TODO 查询提现手续费 
+    * @param request
+    * @param hashMap
+    * @return
+    * @throws Exception
+    * @return String
+     */
+    String getWithdrawCharge(HttpServletRequest request,HashMap<String, Object> hashMap) throws Exception;
+    
 }

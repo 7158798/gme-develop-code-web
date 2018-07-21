@@ -142,7 +142,8 @@ function getCookie(name) {
 var jsonneirong = "";
 
 function indexx() {
-	$.get('js/index.json', function(rawData) {
+	var url = "http://192.168.0.148:8080/gme-web/api/v1/kline/indexTicker.json";
+	$.get(url, function(rawData) {
 		if(rawData.code != 200) {
 			setTimeout("indexx()", 1000);
 		} else {
@@ -242,37 +243,56 @@ function xr(obj) {
 	}
 	var nr = "";
 	if(obj == L_DF) {
-		for(var i = 0; i <= obj.length; i++) {
+		for(var i = 0; i < obj.length; i++) {
 			var ys = "";
+			var fh="";
 			var djtb = "background: url(img/L_56.png) 50% 50% no-repeat scroll;";
-			if(obj[i].increase > 0) {
+			if(obj[i].increase < 0) {
 				ys = "sybg_2_hong";
+				fh="-";
 			} else {
 				ys = "sybg_2_lv";
+				fh="+";
 			}
-			var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src=" + obj[i].img + "><span>" + obj[i].name + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td><td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">" + obj[i].increase * 100 + "</td><td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td><td>" + obj[i].volume24Hour + "</td><td><div class='curve'></div></td></tr>";
+			var pairSymbol = obj[i].symbol;
+			var symbol = pairSymbol.split("_");
+			var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src='"+obj[i].img+"' height='20px;'>" +
+					"<span>" + symbol[0] + "/" + symbol[1] + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td>" +
+					"<td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">"+ fh  + obj[i].increase * 100 + "%</td>" +
+					"<td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td>" +
+					"<td>" + obj[i].volume24Hour + "</td><td><div class='curve'></div></td><input value='"+obj[i].pairSymbol+"' type='hidden'/>" +
+					"<input type='hidden' value='"+obj[i].pairId+"'/></tr>";
 			nr += t;
 			if(i == obj.length - 1) {
 				$("#USDT").empty();
-				$("#USDT").append("<tr><th>币种</th><th>最新成交价</th><th>折合CNY</th><th>日涨跌</th><th>24H最新价</th><th>24H最低价</th><th>24H成交量</th><th>价格趋势(3日)</th></tr>" + nr);
+//				$("#USDT").append("<tr><th>币种</th><th>最新成交价</th><th>折合CNY</th><th>日涨跌</th><th>24H最新价</th><th>24H最低价</th><th>24H成交量</th><th>价格趋势(3日)</th></tr>" + nr);
+				$("#USDT").append(nr);
 			}
 			kxsj.push(obj[i].day7KLine);
 		}
 	} else {
-		for(var i = 0; i <= obj.length; i++) {
+		for(var i = 0; i < obj.length; i++) {
 			var ys = "";
 			var djtb = "";
-			if(obj[i].increase > 0) {
+			var fh="";
+			if(obj[i].increase < 0) {
 				ys = "sybg_2_hong";
+				fh="-";
 			} else {
 				ys = "sybg_2_lv";
+				fh="+";
 			}
 			for(var j = 0; j < getCookie("zixuan").split(",").length; j++) {
 				//			alert(getCookie("zixuan").split(",")[j]);
 				//			alert(obj[i].symbol);
 				if(obj[i].symbol == getCookie("zixuan").split(",")[j]) {
 					djtb = "background: url(img/L_56.png) 50% 50% no-repeat scroll;"
-					var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src=" + obj[i].img + "><span>" + obj[i].name + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td><td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">" + obj[i].increase * 100 + "</td><td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td><td>" + obj[i].volume24Hour + "</td><td><div class='curve'></div></td></tr>";
+					var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src='"+obj[i].img+"' height='20px;'>" +
+							"<span>" + obj[i].name + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td>" +
+							"<td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">"+ fh + obj[i].increase * 100 + "%</td>" +
+							"<td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td><td>" + obj[i].volume24Hour + "</td>" +
+							"<td><div class='curve'></div></td><input value='"+obj[i].pairSymbol+"' type='hidden'/>" +
+							"<input type='hidden' value='"+obj[i].pairId+"'/></tr>";
 					//j=0;
 					//										if(L_DF.indexOf(obj[i]) != "-1") {
 					//					
@@ -283,7 +303,12 @@ function xr(obj) {
 					break;
 				} else {
 					djtb = "";
-					var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src=" + obj[i].img + "><span>" + obj[i].name + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td><td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">" + obj[i].increase * 100 + "</td><td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td><td>" + obj[i].volume24Hour + "</td><td><div class='curve'></div></td></tr>";
+					var t = "<tr><td><i onclick='iddjsj(this)' style='" + djtb + "' class=" + obj[i].symbol + "></i><img src='"+obj[i].img+"' height='20px;'>" +
+							"<span>" + obj[i].name + "</span></td><td class=" + ys + ">" + obj[i].priceForUsdt + "</td>" +
+							"<td class=" + ys + ">¥" + obj[i].priceForCny + "</td><td class=" + ys + ">" + fh  + obj[i].increase * 100 + "%</td>" +
+							"<td class=" + ys + ">" + obj[i].highPriceToday + "</td><td>" + obj[i].lowPriceToday + "</td>" +
+							"<td>" + obj[i].volume24Hour + "</td><td><div class='curve'></div></td><input value='"+obj[i].pairSymbol+"' type='hidden'/>" +
+							"<input type='hidden' value='"+obj[i].pairId+"'/></tr>";
 					//	j=0;
 				}
 			}
@@ -293,9 +318,19 @@ function xr(obj) {
 			nr += t;
 			if(i == obj.length - 1) {
 				$("#USDT").empty();
-				$("#USDT").append("<tr><th>币种</th><th>最新成交价</th><th>折合CNY</th><th>日涨跌</th><th>24H最新价</th><th>24H最低价</th><th>24H成交量</th><th>价格趋势(3日)</th></tr>" + nr);
+				//$("#USDT").append("<tr><th>币种</th><th>最新成交价</th><th>折合CNY</th><th>日涨跌</th><th>24H最新价</th><th>24H最低价</th><th>24H成交量</th><th>价格趋势(3日)</th></tr>" + nr);
+				$("#USDT").append(nr);
 			}
 
 		}
 	}
+	
+	// 给每个交易对添加点击事件
+	$("#USDT tr:not(:first)").each(function(){
+		$(this).children().eq(0).click(function(){
+			var symbol = $(this).parent().children().eq(-2).val();
+			var pairId = $(this).parent().children().eq(-1).val();
+			window.location.href="http://192.168.0.148:8080/gme-web/bbTrans.html?symbol="+symbol+"&pairId=" + pairId;
+		});
+	});
 }

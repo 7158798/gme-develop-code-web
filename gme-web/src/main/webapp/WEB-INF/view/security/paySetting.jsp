@@ -19,13 +19,13 @@
         	描述：
         -->
 			<div class="L_36" style="height: 100%;min-height:800px;">
-				<div class="L_39" style="border-bottom: 2px solid #fafbfc;">
+				<div class="L_39">
 					收款设置
 				</div>
-				<div class="L_85_3" style="display: block;color: #5c5c66;">
+				<div class="L_85_3" style="display: block;">
 					<p>设置收款方式，必须是本人账号。(支付时必须本人实际操作，非自动扣款。)</p>
 				</div>
-				<div class="L_86" style="border-bottom: 1px solid #fafbfc;">
+				<div class="L_86 L_86_a">
 					<span style="float: left;margin-right: 30px;">绑定银行卡</span>
 					<div class="slideOne" style="top: 30px;">
 						<input type="checkbox" value="None" onclick="c()" id="slideOne" name="check" />
@@ -88,127 +88,21 @@
 					<p>已绑定银行卡：<span id="bindBankCardText"></span></p><br/>
 					<input type="button" value="修改" onclick="updateBankCardInfo();"/>
 				</div>
+				<input type="hidden" value="${bankCard}" id="bankCard">
+				<input type="hidden" value="${name}" id="name">
+				<input type="hidden" value="${bank}" id="bank">
+				<input type="hidden" value="${branch}" id="branch">
+				<input type="hidden" value="${bankCardNum}" id="bankCardNum">
+				<input type="hidden" value="${alipay}" id="alipay">
+				<input type="hidden" value="${aliPayImgUrl}" id="aliPayImgUrl">
+				<input type="hidden" value="${aliPayNum}" id="aliPayNum">
+				<input type="hidden" value="${aliPayremark}" id="aliPayremark">
+				<input type="hidden" value="${wechat}" id="wechat">
+				<input type="hidden" value="${wechatImgUrl}" id="wechatImgUrl">
+				<input type="hidden" value="${wechatNum}" id="wechatNum">
+				<input type="hidden" value="${wechatremark}" id="wechatremark">
 				
-				
-				
-				<script type="text/javascript">
-					var name = '${name}';
-					var isBankCard = '${bankCard}';
-					var bindBankCardText = '${bankCardNum}';
-					
-					// 绑定了银行卡
-					if (isBankCard == "true") {
-						$("#bankCardText").text("开启");
-						$("#slideOne").attr("checked","checked");
-						$("#L_86_2").css("display", "block");
-						$("#bindBankCardText").text("****" + bindBankCardText.substring(bindBankCardText.length-4));
-					}else { // 没绑定银行卡
-						$("#bankCardText").text("关闭");
-						$("#slideOne").attr("checked",false);
-					}
-				</script>
-				
-				
-				
-				<script>
-					function c() {
-						var name = '${name}';
-						var isBankCard = '${bankCard}';
-						var bindBankCardText = '${bankCardNum}';
-						// 绑定了银行卡	
-						if (isBankCard == "true") {
-							if($("#slideOne").is(':checked')) {
-								$("#bankCardText").text("开启");
-								$("#L_86_2").css("display", "block");
-								$("#bindBankCardText").text("****" + bindBankCardText.substring(bindBankCardText.length-4));
-							}else {
-								$("#bankCardText").text("关闭");
-								$('#L_86_1').css('display', 'none');
-								$('#L_87_1').css('display', 'none');
-								$('#L_86_2').css('display', 'none');
-							}
-						}else { // 没绑定银行卡
-							if($("#slideOne").is(':checked')) {
-								$("#bankCardText").text("开启");
-								$('#L_86_1').css('display', 'block');
-								$("#bankCardTextName").text(name);
-								$("#bankCardTextName2").text(name);
-								$('#L_87_1').css('display', 'none');
-								$('#L_86_2').css('display', 'none');
-							}else {
-								$("#bankCardText").text("关闭");
-								$('#L_86_1').css('display', 'none');
-								$('#L_87_1').css('display', 'none');
-								$('#L_86_2').css('display', 'none');
-							}
-						}
-					}
-				</script>
-				
-				
-				<script type="text/javascript">
-					// 绑定银行卡
-					function confirmBindBankCard(){
-						var outBank = $("#outBank option:selected").val();
-						var outBranchBank = $("#outBranchBank").val();
-						var outBankCard = $("#outBankCard").val();
-						var outBankCardPayPassword = $("#outBankCardPayPassword").val();
-						if (!$("#confirmInfo").is(":checked")) {
-							alert("请阅读风险提示");
-							return;
-						}
-						if (outBank == "") {
-							alert("请选择开户银行");
-							return;
-						}
-						if (outBranchBank == "") {
-							alert("请填写开户支行");
-							return;
-						}
-						if (outBankCard == "") {
-							alert("请银行卡号");
-							return;
-						}
-						if (outBankCardPayPassword == "") {
-							alert("请输入资金密码");
-							return;
-						}
-						
-						$.ajax({
-							type: "POST",
-							url: "http://192.168.0.148:8080/gme-web/api/v1/security/payMethedBank.json",
-							dataType: "json",
-							data: "bank=" + outBank + "&branch=" + outBranchBank + "&bankCard=" + outBankCard + "&tradeAuth=" + outBankCardPayPassword,
-							success: function(data){
-								alert(data.message);
-								window.location.href=window.location.href;
-							}
-						});
-					}
-					
-				</script>
-				
-				
-				
-				<script type="text/javascript">
-					// 编辑修改银行卡信息
-					function updateBankCardInfo(){
-						$("#L_87_1").css("display","block");
-						$("#L_86_2").css("display", "none");
-						var name = '${name}';
-						var bank = '${bank}';
-						var branch = '${branch}';
-						var bindBankCardText = '${bankCardNum}';
-						$("#bankCardTextName2").text(name);
-						$("#outBank option[value='"+bank+"']").attr("selected","selected");
-						$("#outBranchBank").val(branch);
-						$("#outBankCard").val(bindBankCardText);
-					}
-				</script>
-				
-				
-				
-				<div class="L_86" style="border-bottom: 1px solid #fafbfc;">
+				<div class="L_86 L_86_a">
 					<span style="float: left;margin-right: 30px;">绑定支付宝</span>
 					<div class="slideOne" style="top: 30px;">
 						<input type="checkbox" value="None" onclick="cc()" id="slideOne2" name="check" />
@@ -236,112 +130,7 @@
 					<input type="button" value="修改" onclick="updateAliPayInfo();"/>
 				</div>
 				
-				
-				
-				<script type="text/javascript">
-					var name = '${name}';
-					var isAlipay = '${alipay}';
-					var aliPayNumText = '${aliPayNum}';
-					
-					// 绑定了支付宝
-					if (isAlipay == "true") {
-						$("#aliPayText").text("开启");
-						$("#slideOne2").attr("checked","checked");
-						$("#L_86_4").css("display", "block");
-						$("#aliPayTextNum").text("****" + aliPayNumText.substring(aliPayNumText.length-4));
-					}else { // 没绑定支付宝
-						$("#aliPayText").text("关闭");
-						$("#slideOne2").attr("checked",false);
-					}
-				</script>
-				
-
-				
-				<script>
-					function cc() {
-						var name = '${name}';
-						var isAlipay = '${alipay}';
-						var aliPayNumText = '${aliPayNum}';
-						// 绑定了支付宝	
-						if (isAlipay == "true") {
-							if($("#slideOne2").is(':checked')) {
-								$("#aliPayText").text("开启");
-								$("#L_86_4").css("display", "block");
-								$("#aliPayTextNum").text("****" + aliPayNumText.substring(aliPayNumText.length-4));
-							}else {
-								$("#aliPayText").text("关闭");
-								$('#L_86_3').css('display', 'none');
-								$('#L_86_4').css('display', 'none');
-								$('#L_88_1').css('display', 'none');
-							}
-						}else { // 没绑定支付宝
-							if($("#slideOne2").is(':checked')) {
-								$("#aliPayText").text("开启");
-								$('#L_86_3').css('display', 'block');
-								$("#aliPayTextName").text(name);
-								$("#aliPayTextName2").text(name);
-								$('#L_86_4').css('display', 'none');
-								$('#L_88_1').css('display', 'none');
-							}else {
-								$("#aliPayText").text("关闭");
-								$('#L_86_3').css('display', 'none');
-								$('#L_86_4').css('display', 'none');
-								$('#L_88_1').css('display', 'none');
-							}
-						}
-						
-					}
-				</script>
-				
-				
-				<script type="text/javascript">
-				 	// 绑定支付宝
-					function bindAliPay(){
-						var outAliPayNum = $("#outAliPayNum").val();
-						var outRemark = $("#outRemark").val();
-						var outAliPayPayPassword = $("#outAliPayPayPassword").val();
-						if (outAliPayNum == "") {
-							alert("请输入支付宝账号");
-							return;
-						}
-						if (outAliPayPayPassword == "") {
-							alert("请输入资金密码");
-							return;
-						}
-						
-						$.ajax({
-							type: "POST",
-							url: "http://192.168.0.148:8080/gme-web/api/v1/security/payMethodAlipayWeChat.json",
-							dataType: "json",	
-							data: "qrImgId=1" + "&type=1" + "&account=" + outAliPayNum + "&remark=" + outRemark + "&tradeAuth=" + outAliPayPayPassword,
-							success: function(data){
-								alert(data.message);
-								window.location.href=window.location.href;
-							}
-						});
-					}
-				</script>
-				
-				<script type="text/javascript">
-					// 编辑修改支付宝信息
-					function updateAliPayInfo(){
-						$("#L_86_4").css("display","none");
-						$("#L_88_1").css("display", "block");
-						var name = '${name}';
-						var aliPayImgUrl = '${aliPayImgUrl}';
-						var aliPayNum = '${aliPayNum}';
-						var remark = '${aliPayremark}';
-						
-						$("#aliPayTextName2").text(name);
-						$("#aliPayImgStyle").css("background","url("+aliPayImgUrl+") no-repeat 50% 50% scroll");
-						$("#outAliPayNum").val(aliPayNum);
-						$("#outRemark").val(remark);
-					}
-				</script>
-				
-				
-				
-				<div class="L_86" style="border-bottom: 1px solid #fafbfc;">
+				<div class="L_86 L_86_a">
 					<span style="float: left;margin-right: 30px;">绑定微信&nbsp;&nbsp;&nbsp;</span>
 					<div class="slideOne" style="top: 30px;">
 						<input type="checkbox" value="None" onclick="ccc()" id="slideOne3" name="check" />
@@ -369,117 +158,14 @@
 					<input type="button" onclick="updateWechatInfo();" value="修改" />
 				</div>
 				
-				
-				
-				<script type="text/javascript">
-					var name = '${name}';
-					var isWehchat = '${wechat}';
-					var wechatNumText = '${wechatNum}';
-					
-					// 绑定了微信
-					if (isWehchat == "false") {
-						$("#wechatText").text("开启");
-						$("#slideOne3").attr("checked","checked");
-						$("#L_86_6").css("display", "block");
-						$("#wechatTextNum").text("****" + wechatNumText.substring(wechatNumText.length-4));
-					}else { // 没绑定微信
-						$("#wechatText").text("关闭");
-						$("#slideOne3").attr("checked",false);
-					}
-				</script>
-				
-				
-				<script>
-					function ccc() {
-						var name = '${name}';
-						var isWehchat = '${wechat}';
-						var wechatNumText = '${wechatNum}';
-						// 绑定了微信
-						if (isWehchat == "false") {
-							if($("#slideOne3").is(':checked')) {
-								$("#wechatText").text("开启");
-								$("#L_86_6").css("display", "block");
-								$("#wechatTextNum").text("****" + wechatNumText.substring(wechatNumText.length-4));
-							}else {
-								$("#wechatText").text("关闭");
-								$('#L_86_5').css('display', 'none');
-								$('#L_88_2').css('display', 'none');
-								$('#L_86_6').css('display', 'none');
-							}
-						}else { // 没绑定微信
-							if($("#slideOne3").is(':checked')) {
-								$("#wechatText").text("开启");
-								$('#L_86_5').css('display', 'block');
-								$("#wechatTextName").text(name);
-								$("#wechatTextName2").text(name);
-								$('#L_88_2').css('display', 'none');
-								$('#L_86_6').css('display', 'none');
-							}else {
-								$("#wechatText").text("关闭");
-								$('#L_86_5').css('display', 'none');
-								$('#L_88_2').css('display', 'none');
-								$('#L_86_6').css('display', 'none');
-							}
-						}
-						
-					}
-				</script>
-				
-				
-				<script type="text/javascript">
-				 	// 绑定微信
-					function bindWechat(){
-						var outWechatNum = $("#outWechatNum").val();
-						var outWechatRemark = $("#outWechatRemark").val();
-						var outWechatPayPassword = $("#outWechatPayPassword").val();
-						if (outWechatNum == "") {
-							alert("请输入微信账号");
-							return;
-						}
-						if (outWechatPayPassword == "") {
-							alert("请输入资金密码");
-							return;
-						}
-						
-						$.ajax({
-							type: "POST",
-							url: "http://192.168.0.148:8080/gme-web/api/v1/security/payMethodAlipayWeChat.json",
-							dataType: "json",	
-							data: "qrImgId=1" + "&type=2" + "&account=" + outWechatNum + "&remark=" + outWechatRemark + "&tradeAuth=" + outWechatPayPassword,
-							success: function(data){
-								alert(data.message);
-								window.location.href=window.location.href;
-							}
-						});
-					}
-				</script>
-				
-				<script type="text/javascript">
-					// 编辑修改微信信息
-					function updateWechatInfo(){
-						$("#L_86_6").css("display","none");
-						$("#L_88_2").css("display", "block");
-						var name = '${name}';
-						var wechatImgUrl = '${wechatImgUrl}';
-						var wechatNum = '${wechatNum}';
-						var remark = '${wechatremark}';
-						
-						$("#wechatTextName2").text(name);
-						$("#wechatImgStyle").css("background","url("+wechatImgUrl+") no-repeat 50% 50% scroll");
-						$("#outWechatNum").val(wechatNum);
-						$("#outWechatRemark").val(remark);
-					}
-				</script>
-
-
-				
-				<div class="L_85_3" style="display: block;color: #5c5c66;">
+				<div class="L_85_3" style="display: block;">
 					<p>注意</p>
 					<p style="margin-top: 20px;margin-bottom: 14px;">1.请绑定您的本人收款信息</p>
 					<p>2.支付时必须本人实际操作，非自动扣款。</p>
 				</div>
 			</div>
 		<script type="text/javascript" src="js/style.js"></script>
+		<script type="text/javascript" src="js/page/security/paySetting.js"></script>
 	</body>
 
 </html>

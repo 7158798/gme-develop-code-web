@@ -12,7 +12,7 @@
 					"nameEn": "btc",
 					"img": "img/L_58.png",
 					"priceForCny": 11.00,
-					"priceForUsdt": null,
+					"priceForUsdt": 232323,
 					"volume24Hour": 0E-8,
 					"increase": -0.1222,
 					"highPriceToday": 0E-8,

@@ -1,13 +1,13 @@
 package com.gmebtc.web.portal.service.impl;
 
-import com.gmebtc.web.portal.entity.Coin;
-import com.gmebtc.web.portal.service.IndexService;
-import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+
+import org.springframework.stereotype.Service;
+
+import com.gmebtc.web.portal.service.IndexService;
+import com.gmebtc.web.portal.utils.SendRequestUtil;
 
 /*
  * @Author zhou

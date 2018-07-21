@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 public interface SecurityConterService {
-    String modifyLoginPwd(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
     String resetPayPasswordFirst(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
     
@@ -13,8 +12,6 @@ public interface SecurityConterService {
     String sendEmail(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
     String identifyAuth(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
-
-    String checkHasIdentify(HttpServletRequest request) throws Exception;
 
     String payMethedBank(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
 
@@ -35,4 +32,12 @@ public interface SecurityConterService {
     String getSecurityOperationHistory(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
     
     String systemTime(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    
+    String getMessageCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+
+    String checkPhoneCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    String openCloseTwoStep(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    String closeWithdrawValidata(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    String closePayMethod(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception;
+    
 }

@@ -32,29 +32,47 @@ public class UserInfo implements Serializable{
 	 */
 	private PayMethod payMethod;
 	/**
+	 * isIdentityAuthApply: 是否实名认证
+	 */
+	private Integer isIdentityAuthApply;
+	/**
+	 * authStatus: 认证状态:1-未认证;2-认证中;3-已通过认证;4-未通过认证;
+	 */
+	private Integer authStatus;
+	
+	/**
 	 * isAlipay:是否开启支付宝
 	 */
-	private Boolean alipay;
+	private Integer isAlipay;
 	/**
 	 *isBankCard:是否开启银行卡
 	 */
-	private Boolean bankCard;
+	private Integer isBankCard;
 	/**
 	 *isWechat: 是否开启微信
 	 */
-	private Boolean wechat;
+	private Integer isWechat;
 	/**
 	 *isBindEmail:是否绑定邮箱
 	 */
-	private Boolean bindEmail;
-	/**
-	 *isAuthIdCard: 是否实名认证
-	 */
-	private Boolean authIdCard;
+	private Integer isBindEmail;
 	/**
 	 *isBindPhone: 是否绑定手机
 	 */
-	private Boolean bindPhone;
+	private Integer isBindPhone;
+	/**
+	 * isTwoStep: 是否开启二步登录
+	 */
+	private Integer isTwoStep;
+	/**
+	 * isWithdrawCoinCheckPhone: 是否开启手机提币验证登录
+	 */
+	private Integer isWithdrawCoinCheckPhone;
+	/**
+	 * isWithdrawCoinCheckEmail: 是否开启邮箱提币验证登录
+	 */
+	private Integer isWithdrawCoinCheckEmail;
+	
 	public String getIdCard() {
 		return idCard;
 	}
@@ -79,41 +97,66 @@ public class UserInfo implements Serializable{
 	public void setPayMethod(PayMethod payMethod) {
 		this.payMethod = payMethod;
 	}
-	public Boolean getAlipay() {
-		return alipay;
+	public Integer getIsIdentityAuthApply() {
+		return isIdentityAuthApply;
 	}
-	public void setAlipay(Boolean alipay) {
-		this.alipay = alipay;
+	public void setIsIdentityAuthApply(Integer isIdentityAuthApply) {
+		this.isIdentityAuthApply = isIdentityAuthApply;
 	}
-	public Boolean getBankCard() {
-		return bankCard;
+	public Integer getAuthStatus() {
+		return authStatus;
 	}
-	public void setBankCard(Boolean bankCard) {
-		this.bankCard = bankCard;
+	public void setAuthStatus(Integer authStatus) {
+		this.authStatus = authStatus;
 	}
-	public Boolean getWechat() {
-		return wechat;
+	public Integer getIsAlipay() {
+		return isAlipay;
 	}
-	public void setWechat(Boolean wechat) {
-		this.wechat = wechat;
+	public void setIsAlipay(Integer isAlipay) {
+		this.isAlipay = isAlipay;
 	}
-	public Boolean getBindEmail() {
-		return bindEmail;
+	public Integer getIsBankCard() {
+		return isBankCard;
 	}
-	public void setBindEmail(Boolean bindEmail) {
-		this.bindEmail = bindEmail;
+	public void setIsBankCard(Integer isBankCard) {
+		this.isBankCard = isBankCard;
 	}
-	public Boolean getAuthIdCard() {
-		return authIdCard;
+	public Integer getIsWechat() {
+		return isWechat;
 	}
-	public void setAuthIdCard(Boolean authIdCard) {
-		this.authIdCard = authIdCard;
+	public void setIsWechat(Integer isWechat) {
+		this.isWechat = isWechat;
 	}
-	public Boolean getBindPhone() {
-		return bindPhone;
+	public Integer getIsBindEmail() {
+		return isBindEmail;
 	}
-	public void setBindPhone(Boolean bindPhone) {
-		this.bindPhone = bindPhone;
+	public void setIsBindEmail(Integer isBindEmail) {
+		this.isBindEmail = isBindEmail;
 	}
+	public Integer getIsBindPhone() {
+		return isBindPhone;
+	}
+	public void setIsBindPhone(Integer isBindPhone) {
+		this.isBindPhone = isBindPhone;
+	}
+	public Integer getIsTwoStep() {
+		return isTwoStep;
+	}
+	public void setIsTwoStep(Integer isTwoStep) {
+		this.isTwoStep = isTwoStep;
+	}
+	public Integer getIsWithdrawCoinCheckPhone() {
+		return isWithdrawCoinCheckPhone;
+	}
+	public void setIsWithdrawCoinCheckPhone(Integer isWithdrawCoinCheckPhone) {
+		this.isWithdrawCoinCheckPhone = isWithdrawCoinCheckPhone;
+	}
+	public Integer getIsWithdrawCoinCheckEmail() {
+		return isWithdrawCoinCheckEmail;
+	}
+	public void setIsWithdrawCoinCheckEmail(Integer isWithdrawCoinCheckEmail) {
+		this.isWithdrawCoinCheckEmail = isWithdrawCoinCheckEmail;
+	}
+	
 	
 }

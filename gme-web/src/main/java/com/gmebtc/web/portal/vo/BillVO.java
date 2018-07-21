@@ -19,20 +19,20 @@ public class BillVO extends BaseVO implements Serializable{
 	 */
 	private String currencyId;
 	/**
-	 * operationType: 操作类型
+	 * bizType: 业务类型1-提现;2-充值;3-交易;4-C2C
 	 */
-	private String operationType;
+	private String bizType;
 	public String getCurrencyId() {
 		return currencyId;
 	}
 	public void setCurrencyId(String currencyId) {
 		this.currencyId = currencyId;
 	}
-	public String getOperationType() {
-		return operationType;
+	public String getBizType() {
+		return bizType;
 	}
-	public void setOperationType(String operationType) {
-		this.operationType = operationType;
+	public void setBizType(String bizType) {
+		this.bizType = bizType;
 	}
 
 }

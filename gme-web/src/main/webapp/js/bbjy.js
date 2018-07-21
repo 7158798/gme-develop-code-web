@@ -1,43 +1,6 @@
 
 var myChart = echarts.init(document.getElementById('main'));
 
-// 格式化时间 yyyy-MM-dd hh:mm:ss
-function getFormatDateWithHours(date) {
-	var date = new Date(date);
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes()
-            + seperator2 + date.getSeconds();
-    return currentdate;
-}
-
-
-//格式化时间 yyyy-MM-dd
-function getFormatDate(date) {
-	var date = new Date(date);
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
-    return currentdate;
-}
-
 
 // 指定图表的配置项和数据
 
@@ -139,7 +102,16 @@ function sf(type){
 	if (type==30) {
 		$("#klineStyle").children().eq(3).attr("style","color: #41b2ce;");
 	}
-	kline(type+"min");
+	
+	if(type == 1)
+	{ 
+		fzm(type+"min");
+	}
+	else
+	{ 
+		kline(type+"min");
+	}
+	
 }
 
 //小时线
@@ -185,9 +157,9 @@ function month(type){
 
 // 获取k线数据
 function kline(type) {
-	var url = "http://192.168.0.148:8080/gme-web/api/v1/kline/kline.json";
-	
-	$.get(url,{symbol:"btc_usdt",type:type}, function(rawData) {
+	var url = "http://192.168.0.148:8081/gme-web/api/v1/kline/kline.json";
+	var symbol = $("#pairSymbol").text();
+	$.get(url,{symbol:symbol,type:type}, function(rawData) {
 
 		var data;
 		if (type.indexOf("min") > -1) {
@@ -517,13 +489,13 @@ function kline(type) {
 
 
 function fzm(type) {
-	var url = "http://192.168.0.148:8080/gme-web/api/v1/kline/kline.json";
-	
-	$.get(url,{symbol:"btc_usdt",type:type}, function(rawData) {
+	var url = "http://192.168.0.148:8081/gme-web/api/v1/kline/kline.json";
+	var symbol = $("#pairSymbol").text();
+	$.get(url,{symbol:symbol,type:type}, function(rawData) {
 		
 		
-		var data = splitData(rawData);
-
+		var data = splitDataWithHours(eval(rawData.data));
+ 
 		myChart.setOption(option = {
 			backgroundColor: '',
 			animation: false,
@@ -747,9 +719,11 @@ function fzm(type) {
 	});
 }
 // 使用刚指定的配置项和数据显示图表。
-fzm();
+fzm("1min");
 
+// 深度图
 function sdt() {
+	
 	$.get('js/sdt.json', function(rawData) {
 		var dom = document.getElementById("container");
 		var myChart = echarts.init(dom);

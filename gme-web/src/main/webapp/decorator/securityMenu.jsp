@@ -26,15 +26,11 @@
 			</div>
 		</div>
 		<div class="header_2">
-			<div class="header_dengluhou">
-				<ul>
-					<li><a href="#" class="whate">19019382@qq.com<i></i></a></li>
-					<li><span class="zyw">中文版</span>
-						<div class="yybb">
-							<a href="#">ENGLISH</a> <a href="#">한국어</a>
-						</div></li>
-				</ul>
+			<div id="isLogin" class="header_dengluhou">
 			</div>
+			<input id="LOGIN_SECONDLOGIN_ACCOUNT" type="hidden" value="${LOGIN_SECONDLOGIN.account}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTID" type="hidden" value="${LOGIN_SECONDLOGIN.accountId}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTBTC" type="hidden" value="${LOGIN_SECONDLOGIN.balanceBTC}">
 			<div class="header_zhuti">
 				<ul>
 					<span>主题</span>
@@ -52,42 +48,61 @@
         -->
         <div class="L_34">
 			<div class="L_35">
-				<ul>
+				<ul id="titleColor">
 					<li class="L_37">
-						<img src="img/L_31.png" /> 安全设置
+						<i class="L_37_1_1"></i>
+						安全设置
 					</li>
 					<li class="L_38">
-						<a href="realNameAuth.html">身份认证</a>
+						<a id="realNameAuth" href="realNameAuth.html">身份认证</a>
 					</li>
 					<li class="L_38">
-						<a href="bindPhone.html">手机绑定</a>
+						<a id="bindPhone" href="bindPhone.html">手机绑定</a>
 					</li>
 					<li class="L_38">
-						<a href="secondLoginProtect.html">两步登录保护</a>
+						<a id="secondLoginProtect" href="secondLoginProtect.html">两步登录保护</a>
 					</li>
-					<!-- <li class="L_38 ">
-						<a href="api.html">API Keys</a>
-					</li> -->
 					<li class="L_38 ">
-						<a href="resetPassword.html">修改登录密码</a>
+						<a id="resetPassword" href="resetPassword.html">修改登录密码(自动登出)</a>
+					</li>
+					<li class="L_38 ">
+						<a id="resetPayPassword" href="resetPayPassword.html">修改资金密码(自动登出)</a>
 					</li>
 					<li class="L_38">
-						<a href="bindEmail.html">邮箱绑定</a>
+						<a id="bindEmail" href="bindEmail.html">邮箱绑定</a>
 					</li>
 					<li class="L_38">
-						<a href="withdrawDoubleValida.html">提币双重验证</a>
+						<a id="withdrawDoubleValida" href="withdrawDoubleValida.html">提币双重验证</a>
 					</li>
 					<li class="L_38">
-						<a href="paySetting.html">支付设置</a>
+						<a id="paySetting" href="paySetting.html">支付设置</a>
 					</li>
 					<li class="L_38">
-						<a href="securityLog.html">安全日志</a>
+						<a id="securityLog" href="securityLog.html">安全日志</a>
 					</li>
 				</ul>
 			</div>
 			
+			
 			<sitemesh:write property='body' />
+			
 		</div>
+		<div class="tc">
+			<div class="tc_1">
+				<div class="tc_1_1">
+					<span>信息提示</span>
+					<img src="img/L_10.png" onclick="$('.tc').css('display','none');" />
+				</div>
+				<div class="tc_1_2">
+					<p>您确定要退出系统吗？如果是请点击确定，如果不是请点击取消。</p>
+					<div class="tc_1_3">
+						<input type="button" onclick="confirmLogout();" value="确定" />
+						<input type="button" onclick="cancleLogout();" value="取消" />
+					</div>
+					</div>
+				</div>
+			</div>
+			
 		<div class="footer">
 			<div class="aqgxfw_30">
 				<div class="aqgxfw_31">
@@ -130,5 +145,10 @@
 					Resrved</div>
 			</div>
 		</div>
+		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript">
+			var flag = '${pageFlag}';
+			$(flag).parent().attr("class","L_38 action_38");
+		</script>
 </body>
 </html>

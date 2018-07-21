@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 
 	<head>
@@ -37,7 +38,7 @@
 				</div>
 				<div class="header_daohang">
 					<ul>
-					<li><a href="#">首页</a></li>
+					<li><a href="index.html">首页</a></li>
 					<li><a href="c2cTrans.html">C2C交易</a></li>
 					<li><a href="bbTrans.html">币币交易</a></li>
 					<li><a href="accounts.html">我的财务</a></li>
@@ -47,26 +48,52 @@
 				</ul>
 				</div>
 			</div>
-			<div class="header_2">
-				<div class="header_denglu">
-					<ul>
-						<li>
-							<a href="firstLogin.html" class="whate">登录</a>
-						</li>
-						<li>|</li>
-						<li>
-							<a href="register.html" class="whate">注册</a>
-						</li>
-						<li>
-							<span class="zyw">中文版</span>
-							<div class="yybb">
-								<a href="#">ENGLISH</a>
-								<a href="#">한국어</a>
+				<c:choose>
+					<c:when test="${LOGIN_SECONDLOGIN == null}">
+						<div class="header_2">
+							<div class="header_denglu">
+								<ul>
+									<li>
+										<a href="firstLogin.html" class="whate">登录</a>
+									</li>
+									<li>|</li>
+									<li>
+										<a href="register.html" class="whate">注册</a>
+									</li>
+									<li>
+										<span class="zyw">中文版</span>
+										<div class="yybb">
+											<a href="#">ENGLISH</a>
+											<a href="#">한국어</a>
+										</div>
+									</li>
+								</ul>
 							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
+						</div>
+					</c:when>
+					<c:otherwise>
+					<div class="header_2">
+						<div class="header_dengluhou">
+							<ul>
+								<li>
+									<a href="accounts.html" class="header_dengluhou_a" class="whate">
+										<c:out value="${LOGIN_SECONDLOGIN.account}"/><i></i>
+									</a>
+									<div class="header_dengluhou_dlzt">
+										<p><span>ID:</span><span><c:out value="${LOGIN_SECONDLOGIN.accountId}"/></span>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+										<a onclick="$('.tc').css('display','block');">退出</a></p>
+										<p><span>总资产：</span><b><c:out value="${LOGIN_SECONDLOGIN.balanceBTC}"/>BTC</b></p>
+									</div>
+								</li>
+								<li><span class="zyw">中文版</span>
+								<div class="yybb">
+									<a href="#">ENGLISH</a> <a href="#">한국어</a>
+								</div></li>
+								</ul>
+							</div>
+						</div>
+					</c:otherwise>
+				</c:choose>
 		</div>
 		<!--
         	作者：李德芳
@@ -100,15 +127,15 @@
 						<span></span>
 					</div>
 					<script>
-						document.getElementById("tabb").style.bottom = "-" + (document.body.offsetWidth * (500 / 1920) - 40) + "px";
-						document.getElementById("wrap").style.height = document.body.offsetWidth * (500 / 1920) + "px";
+						document.getElementById("tabb").style.bottom = "-" + (document.body.offsetWidth * (498 / 1920) - 40) + "px";
+						document.getElementById("wrap").style.height = document.body.offsetWidth * (498 / 1920) + "px";
 						window.onresize = function() {
 							if(document.body.offsetWidth > 1200) {
-								document.getElementById("tabb").style.bottom = "-" + (document.body.offsetWidth * (500 / 1920) - 40) + "px";
-								document.getElementById("wrap").style.height = document.body.offsetWidth * (500 / 1920) + "px";
+								document.getElementById("tabb").style.bottom = "-" + (document.body.offsetWidth * (498 / 1920) - 40) + "px";
+								document.getElementById("wrap").style.height = document.body.offsetWidth * (498 / 1920) + "px";
 							} else {
-								document.getElementById("tabb").style.bottom = "-" + (1200 * (500 / 1920) - 40) + "px";
-								document.getElementById("wrap").style.height = 1200 * (500 / 1920) + "px";
+								document.getElementById("tabb").style.bottom = "-" + (1200 * (498 / 1920) - 40) + "px";
+								document.getElementById("wrap").style.height = 1200 * (498 / 1920) + "px";
 							}
 
 						}
@@ -227,6 +254,21 @@
 				</div>
 			</div>
 		</div>
+		<div class="tc">
+			<div class="tc_1">
+				<div class="tc_1_1">
+					<span>信息提示</span>
+					<img src="img/L_10.png" onclick="$('.tc').css('display','none');" />
+				</div>
+				<div class="tc_1_2">
+					<p>您确定要退出系统吗？如果是请点击确定，如果不是请点击取消。</p>
+					<div class="tc_1_3">
+						<input onclick="confirmLogout();" type="button" value="确定" />
+						<input onclick="cancleLogout();" type="button" value="取消" />
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- content -->
 
 		<div class="footer">
@@ -273,7 +315,8 @@
 			</div>
 		</div>
 		<script type="text/javascript" src="js/style.js"></script>
-		<script type="text/javascript" src="js/index.js"></script>
+		<script type="text/javascript" src="js/page/index.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 	</body>
 
 </html>

@@ -4,15 +4,17 @@ import java.io.Serializable;
 
 public class ResponseResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String code;
+	private Integer code;
     private String message;
     private Object data;
 
-    public String getCode() {
+
+    
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(String code) {
+	public void setCode(Integer code) {
 		this.code = code;
 	}
 

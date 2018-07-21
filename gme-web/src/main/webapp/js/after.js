@@ -44,62 +44,122 @@ $('.line2input2').RangeSlider({min: 0,max: 100,step: 0.01,callback: change});
 
 /*li变色开始*/
 function lichange1(shuzhi) {
-	if(shuzhi > 1 && shuzhi < 25) {
-		if($(".line2 li:nth-child(2)").css('background') != '#03c382') {
-			$(".line2 li:nth-child(1)").css({'background': '#03c382'});
-		}
-		$(".line2 li:nth-child(2)").css({'background': '#f0f3f5'});
-		$(".line2 li:nth-child(3)").css({'background': '#f0f3f5'});
-		$(".line2 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi >= 25 && shuzhi < 50) {
-		if($(".line2 li:nth-child(3)").css('background') != '#03c382') {		
-			$(".line2 li:nth-child(2)").css({'background': '#03c382'});
-			$(".line2 li:nth-child(1)").css({'background': '#03c382'});
-		} 
+	if ($("body").attr("class")!="dark-body") {
+		if(shuzhi > 1 && shuzhi < 25) {
+			if($(".line2 li:nth-child(2)").css('background') != '#03c382') {
+				$(".line2 li:nth-child(1)").css({'background': '#03c382'});
+			}
+			$(".line2 li:nth-child(2)").css({'background': '#f0f3f5'});
 			$(".line2 li:nth-child(3)").css({'background': '#f0f3f5'});
 			$(".line2 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi >= 50 && shuzhi < 75) {
-		if($(".line2 li:nth-child(4)").css('background') != '#03c382') {
+		} else if(shuzhi >= 25 && shuzhi < 50) {
+			if($(".line2 li:nth-child(3)").css('background') != '#03c382') {		
+				$(".line2 li:nth-child(2)").css({'background': '#03c382'});
+				$(".line2 li:nth-child(1)").css({'background': '#03c382'});
+			} 
+				$(".line2 li:nth-child(3)").css({'background': '#f0f3f5'});
+				$(".line2 li:nth-child(4)").css({'background': '#f0f3f5'});
+		} else if(shuzhi >= 50 && shuzhi < 75) {
+			if($(".line2 li:nth-child(4)").css('background') != '#03c382') {
+				$(".line2 li:nth-child(3)").css({'background': '#03c382'});
+				$(".line2 li:nth-child(2)").css({'background': '#03c382'});
+				$(".line2 li:nth-child(1)").css({'background': '#03c382'});
+			} 
+				$(".line2 li:nth-child(4)").css({'background': '#f0f3f5'});
+		} else if(shuzhi >= 75 && shuzhi < 100) {
+			$(".line2 li:nth-child(4)").css({'background': '#03c382'});
 			$(".line2 li:nth-child(3)").css({'background': '#03c382'});
 			$(".line2 li:nth-child(2)").css({'background': '#03c382'});
 			$(".line2 li:nth-child(1)").css({'background': '#03c382'});
-		} 
-			$(".line2 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi >= 75 && shuzhi < 100) {
-		$(".line2 li:nth-child(4)").css({'background': '#03c382'});
-		$(".line2 li:nth-child(3)").css({'background': '#03c382'});
-		$(".line2 li:nth-child(2)").css({'background': '#03c382'});
-		$(".line2 li:nth-child(1)").css({'background': '#03c382'});
+		}
+	} else{
+		if(shuzhi > 1 && shuzhi < 25) {
+			if($(".line2 li:nth-child(2)").css('background') != '#027d58') {
+				$(".line2 li:nth-child(1)").css({'background': '#027d58'});
+			}
+			$(".line2 li:nth-child(2)").css({'background': '#222f47'});
+			$(".line2 li:nth-child(3)").css({'background': '#222f47'});
+			$(".line2 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi >= 25 && shuzhi < 50) {
+			if($(".line2 li:nth-child(3)").css('background') != '#027d58') {		
+				$(".line2 li:nth-child(2)").css({'background': '#027d58'});
+				$(".line2 li:nth-child(1)").css({'background': '#027d58'});
+			} 
+				$(".line2 li:nth-child(3)").css({'background': '#222f47'});
+				$(".line2 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi >= 50 && shuzhi < 75) {
+			if($(".line2 li:nth-child(4)").css('background') != '#027d58') {
+				$(".line2 li:nth-child(3)").css({'background': '#027d58'});
+				$(".line2 li:nth-child(2)").css({'background': '#027d58'});
+				$(".line2 li:nth-child(1)").css({'background': '#027d58'});
+			} 
+				$(".line2 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi >= 75 && shuzhi < 100) {
+			$(".line2 li:nth-child(4)").css({'background': '#027d58'});
+			$(".line2 li:nth-child(3)").css({'background': '#027d58'});
+			$(".line2 li:nth-child(2)").css({'background': '#027d58'});
+			$(".line2 li:nth-child(1)").css({'background': '#027d58'});
+		}
 	}
 }
 
 function lichange2(shuzhi2){
+	if ($("body").attr("class")!="dark-body") {
 		if(shuzhi2 > 1 && shuzhi2 < 25) {
-		if($(".line21 li:nth-child(2)").css('background') != '#fd6777') {
-			$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
-		}
-		$(".line21 li:nth-child(2)").css({'background': '#f0f3f5'});
-		$(".line21 li:nth-child(3)").css({'background': '#f0f3f5'});
-		$(".line21 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi2 >= 25 && shuzhi2 < 50) {
-		if($(".line21 li:nth-child(3)").css('background') != '#fd6777') {		
-			$(".line21 li:nth-child(2)").css({'background': '#fd6777'});
-			$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
-		} 
+			if($(".line21 li:nth-child(2)").css('background') != '#fd6777') {
+				$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
+			}
+			$(".line21 li:nth-child(2)").css({'background': '#f0f3f5'});
 			$(".line21 li:nth-child(3)").css({'background': '#f0f3f5'});
 			$(".line21 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi2 >= 50 && shuzhi2 < 75) {
-		if($(".line21 li:nth-child(4)").css('background') != '#fd6777') {
+		} else if(shuzhi2 >= 25 && shuzhi2 < 50) {
+			if($(".line21 li:nth-child(3)").css('background') != '#fd6777') {		
+				$(".line21 li:nth-child(2)").css({'background': '#fd6777'});
+				$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
+			} 
+				$(".line21 li:nth-child(3)").css({'background': '#f0f3f5'});
+				$(".line21 li:nth-child(4)").css({'background': '#f0f3f5'});
+		} else if(shuzhi2 >= 50 && shuzhi2 < 75) {
+			if($(".line21 li:nth-child(4)").css('background') != '#fd6777') {
+				$(".line21 li:nth-child(3)").css({'background': '#fd6777'});
+				$(".line21 li:nth-child(2)").css({'background': '#fd6777'});
+				$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
+			} 
+				$(".line21 li:nth-child(4)").css({'background': '#f0f3f5'});
+		} else if(shuzhi2 >= 75 && shuzhi2 < 100) {
+			$(".line21 li:nth-child(4)").css({'background': '#fd6777'});
 			$(".line21 li:nth-child(3)").css({'background': '#fd6777'});
 			$(".line21 li:nth-child(2)").css({'background': '#fd6777'});
 			$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
-		} 
-			$(".line21 li:nth-child(4)").css({'background': '#f0f3f5'});
-	} else if(shuzhi2 >= 75 && shuzhi2 < 100) {
-		$(".line21 li:nth-child(4)").css({'background': '#fd6777'});
-		$(".line21 li:nth-child(3)").css({'background': '#fd6777'});
-		$(".line21 li:nth-child(2)").css({'background': '#fd6777'});
-		$(".line21 li:nth-child(1)").css({'background': '#fd6777'});
+		}
+	} else{
+		if(shuzhi2 > 1 && shuzhi2 < 25) {
+			if($(".line21 li:nth-child(2)").css('background') != '#bd3242') {
+				$(".line21 li:nth-child(1)").css({'background': '#bd3242'});
+			}
+			$(".line21 li:nth-child(2)").css({'background': '#222f47'});
+			$(".line21 li:nth-child(3)").css({'background': '#222f47'});
+			$(".line21 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi2 >= 25 && shuzhi2 < 50) {
+			if($(".line21 li:nth-child(3)").css('background') != '#bd3242') {		
+				$(".line21 li:nth-child(2)").css({'background': '#bd3242'});
+				$(".line21 li:nth-child(1)").css({'background': '#bd3242'});
+			} 
+				$(".line21 li:nth-child(3)").css({'background': '#222f47'});
+				$(".line21 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi2 >= 50 && shuzhi2 < 75) {
+			if($(".line21 li:nth-child(4)").css('background') != '#bd3242') {
+				$(".line21 li:nth-child(3)").css({'background': '#bd3242'});
+				$(".line21 li:nth-child(2)").css({'background': '#bd3242'});
+				$(".line21 li:nth-child(1)").css({'background': '#bd3242'});
+			} 
+				$(".line21 li:nth-child(4)").css({'background': '#222f47'});
+		} else if(shuzhi2 >= 75 && shuzhi2 < 100) {
+			$(".line21 li:nth-child(4)").css({'background': '#bd3242'});
+			$(".line21 li:nth-child(3)").css({'background': '#bd3242'});
+			$(".line21 li:nth-child(2)").css({'background': '#bd3242'});
+			$(".line21 li:nth-child(1)").css({'background': '#bd3242'});
+		}
 	}
 }
 

@@ -24,15 +24,11 @@
 			</div>
 		</div>
 		<div class="header_2">
-			<div class="header_dengluhou">
-				<ul>
-					<li><a href="#" class="whate">19019382@qq.com<i></i></a></li>
-					<li><span class="zyw">中文版</span>
-						<div class="yybb">
-							<a href="#">ENGLISH</a> <a href="#">한국어</a>
-						</div></li>
-				</ul>
+			<div id="isLogin" class="header_dengluhou">
 			</div>
+			<input id="LOGIN_SECONDLOGIN_ACCOUNT" type="hidden" value="${LOGIN_SECONDLOGIN.account}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTID" type="hidden" value="${LOGIN_SECONDLOGIN.accountId}">
+			<input id="LOGIN_SECONDLOGIN_ACCOUNTBTC" type="hidden" value="${LOGIN_SECONDLOGIN.balanceBTC}">
 			<div class="header_zhuti">
 				<ul>
 					<span>主题</span>
@@ -87,5 +83,7 @@
 				Resrved</div>
 		</div>
 	</div>
+	
+	<script type="text/javascript" src="js/login.js"></script>
 </body>
 </html>

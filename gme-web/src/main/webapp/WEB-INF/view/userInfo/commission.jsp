@@ -14,7 +14,7 @@
 	<body class="">
 		<div class="L_34">
 			<div class="L_36">
-				<div class="L_39" style="border-bottom: 1px solid #E6EAF0;">
+				<div class="L_39" >
 					我的推广链接
 				</div>
 				<div class="L_43">
@@ -57,32 +57,6 @@
 						</tr>
 					</table>
 					<p>我的有效推荐用户个数为：1</p>
-					<div class="L_41">
-						<span>1</span>
-						<span style="background: #2B6FC9;color: #FFFFFF;">2</span>
-						<span>上一页</span>
-						<span>下一页</span>
-					</div>
-					<div class="L_39" style="width: 100%;">
-						我的最近30天佣金
-					</div>
-					<table class="L_46">
-						<tr>
-							<th style="width: 30%;">类型</th>
-							<th>金额</th>
-							<th>笔数</th>
-						</tr>
-						<tr>
-							<td>2018-05-23 16:20:00</td>
-							<td>蒙面超人</td>
-							<td>蒙面超人</td>
-						</tr>
-						<tr>
-							<td>2018-05-23 16:20:00</td>
-							<td>咸蛋超人</td>
-							<td>蒙面超人</td>
-						</tr>
-					</table>
 					<div class="L_41">
 						<span>1</span>
 						<span style="background: #2B6FC9;color: #FFFFFF;">2</span>

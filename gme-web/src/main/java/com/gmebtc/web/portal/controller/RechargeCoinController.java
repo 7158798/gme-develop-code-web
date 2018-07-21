@@ -1,5 +1,6 @@
 package com.gmebtc.web.portal.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -54,8 +55,8 @@ public class RechargeCoinController {
      * @throws
      */
     @RequestMapping(value = "/getWalletRechargeRecord",method = RequestMethod.GET)
-    public Object getWalletRechargeRecord (HttpServletRequest request, @RequestParam(required=false) String currencyId
-                                    ,@RequestParam String pageNum,@RequestParam String numPerPage) {
+    public Object getWalletRechargeRecord (HttpServletRequest request, @RequestParam(required=false) String currencyId,@RequestParam(required=false) String status
+                                    ,@RequestParam(defaultValue="1") String pageNum,@RequestParam(defaultValue="10") String numPerPage,String startTime,String endTime) {
     	HttpSession session = request.getSession();
         // 获取当前本地语言
         Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
@@ -81,13 +82,33 @@ public class RechargeCoinController {
         }*/
         
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+			if (null != startTime && !StringUtils.isBlank(startTime)) {
+				hashMap.put("startTime", simple.parse(startTime).getTime());
+			}
+			if (null != endTime && !StringUtils.isBlank(endTime)) {
+				hashMap.put("endTime", simple.parse(endTime).getTime());
+			}
+		} catch (Exception e) {
+			log.error("{} 查询充值记录  页面时间转换失败");
+		}
+        
         if (currencyId != null) {
         	hashMap.put("currencyId", currencyId);
+        }
+        if (status != null) {
+        	hashMap.put("status", status);
         }
         
         hashMap.put("pageNum", pageNum);
         hashMap.put("numPerPage", numPerPage);
-        hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+        UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+		}
+		
+		
         try {
         	String json = rechargeCoinService.getWalletRechargeRecord(request, hashMap);
         	return Toolkits.handleResp(json);
@@ -114,7 +135,7 @@ public class RechargeCoinController {
      */
     @RequestMapping(value = "/getRechargeAddress",method = RequestMethod.GET)
     @ResponseBody
-    public Object getRechargeAddress (HttpServletRequest request,String currencyId) {
+    public Object getRechargeAddress (HttpServletRequest request,@RequestParam(required=false) String currencyId) {
     	 HttpSession session = request.getSession();
          Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
          Map<String,String> map = new HashMap<String,String>();
@@ -137,7 +158,10 @@ public class RechargeCoinController {
         	hashMap.put("currencyId",currencyId);
         }
         
-        hashMap.put("uid","1");
+        UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+		}
         
         try {
         	String json = rechargeCoinService.getRechargeAddress(request,hashMap);

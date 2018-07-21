@@ -46,13 +46,15 @@ public class UserLoginFilter extends HandlerInterceptorAdapter{
 		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
 		if (null == userVO) {
 			// 没有登录，并且被拦截，跳转到登录页面
-			response.sendRedirect("http://192.168.0.148:8080/gme-web/firstLogin.html");
+			response.sendRedirect("http://192.168.0.148:8081/gme-web/firstLogin.html");
 			return false;
 		}
 		
 		return true;
+		
 	}
 
+	
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {

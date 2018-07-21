@@ -1,15 +1,14 @@
 package com.gmebtc.web.portal.service.impl;
 
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
 import com.gmebtc.web.portal.service.SecurityConterService;
 import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 
 /*
  * @Author zhou
@@ -19,20 +18,7 @@ import java.util.HashMap;
 @Service(value = "securityConterService")
 public class SecurityConterServiceImpl implements SecurityConterService {
 
-    /**
-     * @throws Exception 
-     * @Author zhou
-     * @Date 2018/5/30 18:50
-     * @Param [request, hashMap]
-     * @Desc 修改登录密码
-     */
-    @Override
-    public String modifyLoginPwd(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
-        String method = "modifyLoginPwd&";
-        return SendRequestUtil.sendMapRequest(request, hashMap, method);
-    }
 
-    
 
     /**
      * @throws Exception 
@@ -60,19 +46,6 @@ public class SecurityConterServiceImpl implements SecurityConterService {
         return SendRequestUtil.sendMapRequest(request, hashMap, method);
     }
 
-
-    /**
-     * @throws Exception 
-     * @Author zhou
-     * @Date 2018/5/30 20:27
-     * @Param [request]
-     * @Desc 检验是否实名认证
-     */
-    @Override
-    public String checkHasIdentify(HttpServletRequest request) throws Exception {
-        String method = "checkHasIdentify&";
-        return SendRequestUtil.sendRequest(request, method);
-    }
 
 
     /**
@@ -213,7 +186,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
 	/**
 	 * 
 	 * Title: getSecurityLogList
-	 * Description: 查询安全日志
+	 * Description: 查询安全登录日志
 	 * @param request
 	 * @param hashMap
 	 * @return  
@@ -222,8 +195,9 @@ public class SecurityConterServiceImpl implements SecurityConterService {
 	 */
 	@Override
 	public String getSecurityLogList(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
-		String method = ConfigUtil.get("aa");
-		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+		String method = ConfigUtil.get("ADMIN_LOGINLOG");
+		//return SendRequestUtil.sendMapRequest(request, hashMap, method);
+		return SendRequestUtil.sendRequest(request, method);
 	}
 
 
@@ -231,7 +205,7 @@ public class SecurityConterServiceImpl implements SecurityConterService {
 	/**
 	 * 
 	 * Title: getSecurityOperationHistory
-	 * Description: 查询安全设置历史
+	 * Description: 查询操作日志
 	 * @param request
 	 * @param hashMap
 	 * @return  
@@ -240,10 +214,37 @@ public class SecurityConterServiceImpl implements SecurityConterService {
 	 */
 	@Override
 	public String getSecurityOperationHistory(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
-		String method = ConfigUtil.get("aa");
-		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+		String method = ConfigUtil.get("ADMIN_OPERATIONLOG");
+		//return SendRequestUtil.sendMapRequest(request, hashMap, method);
+		return SendRequestUtil.sendRequest(request, method);
 	}
 
+	
+	 /**
+     * @throws Exception 
+     * @Author zhou
+     * @Date 2018/5/28 18:09
+     * @Param [request, user:短信验证码用户信息]
+     * @Desc 发送短信验证码
+     */
+    @Override
+    public String getMessageCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("USER_SENDSMSCODE");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+    }
+
+    /**
+     * @throws Exception 
+     * @Author zhou
+     * @Date 2018/5/28 18:34
+     * @Param [request, user]
+     * @Desc 验证验证码
+     */
+    @Override
+    public String checkPhoneCode(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+        String method = ConfigUtil.get("USER_CHECKIDENTCODE");
+        return SendRequestUtil.sendMapRequest(request, hashMap, method);
+    }
 
 
 	/**
@@ -261,4 +262,56 @@ public class SecurityConterServiceImpl implements SecurityConterService {
 		String method = ConfigUtil.get("aa");
 		return SendRequestUtil.sendMapRequest(request, hashMap, method);
 	}
+
+	
+	/**
+	 * 
+	 * Title: openCloseTwoStep
+	 * Description:TODO 开启或者关闭二步登录保护
+	 * @param request
+	 * @param hashMap
+	 * @return
+	 * @throws Exception  
+	 * @see com.gmebtc.web.portal.service.SecurityConterService#openCloseTwoStep(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+	 */
+	@Override
+	public String openCloseTwoStep(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+		String method = ConfigUtil.get("USER_OPENCLOSETWOSTEP");
+		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
+
+	
+	/**
+	 * 
+	 * Title: openCloseWithdrawValidata
+	 * Description:TODO 开启关闭提币双重认证
+	 * @param request
+	 * @param hashMap
+	 * @return
+	 * @throws Exception  
+	 * @see com.gmebtc.web.portal.service.SecurityConterService#openCloseWithdrawValidata(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+	 */
+	@Override
+	public String closeWithdrawValidata(HttpServletRequest request, HashMap<String, String> hashMap)
+			throws Exception {
+		String method = ConfigUtil.get("aa");
+		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
+
+	/**
+	 * 
+	 * Title: closePayMethod
+	 * Description:TODO 关闭支付方式
+	 * @param request
+	 * @param hashMap
+	 * @return
+	 * @throws Exception  
+	 * @see com.gmebtc.web.portal.service.SecurityConterService#closePayMethod(javax.servlet.http.HttpServletRequest, java.util.HashMap)
+	 */
+	@Override
+	public String closePayMethod(HttpServletRequest request, HashMap<String, String> hashMap) throws Exception {
+		String method = ConfigUtil.get("aa");
+		return SendRequestUtil.sendMapRequest(request, hashMap, method);
+	}
+
 }

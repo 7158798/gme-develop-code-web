@@ -27,15 +27,9 @@
 					<div class="L_28">
 						<ul>
 							<li>
-								<a href="#" class="gg_action">
+								<a href="notice.html" class="gg_action">
 									<div class="L_28_1"></div>
 									<span>官方公告</span>
-								</a>
-							</li>
-							<li class="">
-								<a href="#">
-									<div class="L_28_2"></div>
-									<span>行业资讯</span>
 								</a>
 							</li>
 							<li class="">
@@ -44,33 +38,25 @@
 									<span>币种介绍</span>
 								</a>
 							</li>
-							<li class="">
-								<a href="#">
-									<div class="L_28_4"></div>
-									<span>帮助</span>
-								</a>
-							</li>
 						</ul>
 					</div>
 					<div class="L_29">
-						<ul>
-							<li>
-								<a href="noticeDetail.html">
-									<span>【GME】以太BOE上线交易公告</span>
-									<span>2018-05-31 19:11:31</span>
-								</a>
-							</li>
+						<ul id="noticeTitleList">
 						</ul>
 						<div class="L_30">
-							<a href="#">下一页</a>
-							<a href="#">上一页</a>
+							<a id="nextPage">下一页</a>
+							<a id="prePage">上一页</a>
 						</div>
+						<input type="hidden" id="currentPage"/>
+						<input type="hidden" id="pageCount"/>
 					</div>
 					
 				</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="js/style.js"></script>
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/page/other/notice.js"></script>	
 		
 		
 	</body>

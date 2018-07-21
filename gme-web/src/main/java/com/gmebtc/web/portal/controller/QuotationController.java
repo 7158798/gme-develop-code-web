@@ -1,27 +1,25 @@
 package com.gmebtc.web.portal.controller;
 
-import com.gmebtc.web.portal.constant.ResultCode;
-import com.gmebtc.web.portal.result.ResponseResult;
-import com.gmebtc.web.portal.service.QuotationService;
-import com.gmebtc.web.portal.utils.Toolkits;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import com.gmebtc.web.portal.constant.ResultCode;
+import com.gmebtc.web.portal.result.ResponseResult;
+import com.gmebtc.web.portal.service.QuotationService;
+import com.gmebtc.web.portal.utils.Toolkits;
 
 /*
  * @Author zhou
@@ -81,47 +79,48 @@ public class QuotationController {
      */
     @RequestMapping(value = "/ticker",method = RequestMethod.GET)
     public Object ticker (HttpServletRequest request,@RequestParam(required=false) String symbol){
-    	HttpSession session = request.getSession();
         HashMap<String, String> hashMap = new HashMap<String, String>();
         ResponseResult result = new ResponseResult();
         
         try {
-        	/*String json = "{\r\n" + 
-        			"	\"code\": \"200\",\r\n" + 
-        			"	\"message\": \"成功\",\r\n" + 
-        			"	\"data\": {\r\n" + 
-        			"		\"realTime\": \"8.88 \",\r\n" + 
-        			"		\"highsAndLows\": \"6.66 \",\r\n" + 
-        			"		\"highest\": \"9.99 \",\r\n" + 
-        			"		\"lowest\": \"6.88 \"\r\n" + 
-        			"	}\r\n" + 
-        			"}";
-        	String json2 = "{\r\n" + 
-        			"	\"code\": \"200\",\r\n" + 
-        			"	\"message\": \"成功\",\r\n" + 
-        			"	\"data\": {\r\n" + 
-        			"		\"realTime\": \"23.3 \",\r\n" + 
-        			"		\"highsAndLows\": \"54 \",\r\n" + 
-        			"		\"highest\": \"23 \",\r\n" + 
-        			"		\"lowest\": \"65 \"\r\n" + 
-        			"	}\r\n" + 
-        			"}";
-        	return json;*/
-        	
         	if (null != symbol) {
             	hashMap.put("symbol", symbol);
             	String json = quotationService.ticker(request,hashMap);
-            	log.info("请求的方法：QuotationController - ticker" );
             	return Toolkits.handleResp(json);
             }else {
             	String json = quotationService.ticker(request);
-            	log.info("请求的方法：QuotationController - ticker" );
             	return Toolkits.handleResp(json);
             }
 		} catch (Exception e) {
 			result.setCode(ResultCode.SYSTEM_ERROR);
 			result.setData("");
-			log.error("{} 获取行情发生异常.",e.toString());
+			log.error("{} 获取币行情发生异常.",e.toString());
+			return result;
+		}
+        
+    }
+    
+    
+    
+    /**
+     * 
+    * @Title: indexTicker  
+    * @Description: TODO 首页行情 
+    * @param request
+    * @return
+    * @return Object
+     */
+    @RequestMapping(value = "/indexTicker",method = RequestMethod.GET)
+    public Object indexTicker (HttpServletRequest request){
+        ResponseResult result = new ResponseResult();
+        
+        try {
+        	String json = quotationService.indexTicker(request);
+        	return Toolkits.handleResp(json);
+		} catch (Exception e) {
+			result.setCode(ResultCode.SYSTEM_ERROR);
+			result.setData("");
+			log.error("{} 获取首页行情发生异常.",e.toString());
 			return result;
 		}
         

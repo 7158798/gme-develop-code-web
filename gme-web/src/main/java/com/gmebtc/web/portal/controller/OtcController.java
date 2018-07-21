@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.gmebtc.web.portal.constant.ResultCode;
+import com.gmebtc.web.portal.constant.SessionAttributes;
 import com.gmebtc.web.portal.entity.BusOTCOrder;
 import com.gmebtc.web.portal.result.ResponseResult;
 import com.gmebtc.web.portal.service.OtcService;
 import com.gmebtc.web.portal.utils.Toolkits;
 import com.gmebtc.web.portal.vo.C2CTransRecordVO;
-import com.gmebtc.web.portal.vo.PageBean;
-import com.gmebtc.web.portal.vo.PageVO;
+import com.gmebtc.web.portal.vo.UserVO;
 
 /**
  * 
@@ -104,6 +104,7 @@ public class OtcController {
 			map.put("msg7", "请先绑定微信");
 			map.put("msg8", "请先绑定银行卡");
 			map.put("msg9", "服务器异常,请稍后重试");
+			map.put("msg10", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Please enter the price");
@@ -115,11 +116,18 @@ public class OtcController {
 			map.put("msg7", "Please bind WeChat first");
 			map.put("msg8", "Please bind your bank card first");
 			map.put("msg9", "Server exception,please try again later");
+			map.put("msg10", "You haven't logged in yet,please login and try again");
 		}
 
 		result.setCode(ResultCode.FORM_INFO_ERROR);
 		result.setData("");
 
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null == userVO) {
+			result.setMessage(Toolkits.defaultString(map.get("msg10")));
+			return result;
+		}
+		
 		if (null == busOTCOrder.getPrice()) {
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
 			return result;
@@ -145,11 +153,9 @@ public class OtcController {
 			return result;
 		}
 
-		// 检查用户信息,是否绑定支付方式
-		// Todo
 
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		hashMap.put("uid", userVO.getUid());
 		hashMap.put("currencyId", "gme-otc-rpc-service");
 		hashMap.put("number", busOTCOrder.getNumber());
 		hashMap.put("minMoney", busOTCOrder.getMinMoney());
@@ -157,18 +163,11 @@ public class OtcController {
 		hashMap.put("price", busOTCOrder.getPrice());
 		hashMap.put("payMethod", busOTCOrder.getPayMethod());
 		hashMap.put("type", busOTCOrder.getType());
-
+		
+		
 		try {
 			String json = otcService.busBuyAndSell(request, hashMap);
 			return Toolkits.handleResp(json);
-			/*
-			 * String json = "{\r\n" + "	\"code\": \"200\",\r\n" +
-			 * "	\"message\": \"成功\",\r\n" + "	\"data\": {\r\n" +
-			 * "		\"realTime \": \"8.88 \",\r\n" +
-			 * "		\"highsAndLows \": \"6.66 \",\r\n" +
-			 * "		\"highest \": \"9.99 \",\r\n" + "		\"lowest \": \"6.88 \"\r\n"
-			 * + "	}\r\n" + "}"; return json;
-			 */
 		} catch (Exception e) {
 			result.setCode(ResultCode.SYSTEM_ERROR);
 			result.setMessage(Toolkits.defaultString(map.get("msg9")));
@@ -210,14 +209,6 @@ public class OtcController {
 		try {
 			String json = otcService.getDeityList(request, hashMap);
 			return Toolkits.handleResp(json);
-			/*
-			 * String json = "{\r\n" + "	\"code\": \"200\",\r\n" +
-			 * "	\"message\": \"成功\",\r\n" + "	\"data\": {\r\n" +
-			 * "		\"realTime \": \"8.88 \",\r\n" +
-			 * "		\"highsAndLows \": \"6.66 \",\r\n" +
-			 * "		\"highest \": \"9.99 \",\r\n" + "		\"lowest \": \"6.88 \"\r\n"
-			 * + "	}\r\n" + "}"; return json;
-			 */
 		} catch (Exception e) {
 			result.setCode(ResultCode.SYSTEM_ERROR);
 			result.setMessage(Toolkits.defaultString(map.get("msg1")));
@@ -240,40 +231,44 @@ public class OtcController {
 	@RequestMapping(value = "/busOrderList", method = RequestMethod.GET)
 	public Object getBusOrderList(HttpServletRequest request, String symbol) {
 		HttpSession session = request.getSession();
+		
 		// 获取当前本地语言
 		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 		Map<String, String> map = new HashMap<String, String>();
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("symbol", symbol);
 		hashMap.put("pageCount", "20");
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-
-		try {
-			String json = otcService.getDeityList(request, hashMap);
-			return Toolkits.handleResp(json);
-			/*
-			 * String json = "{\r\n" + "	\"code\": \"200\",\r\n" +
-			 * "	\"message\": \"成功\",\r\n" + "	\"data\": {\r\n" +
-			 * "		\"realTime \": \"8.88 \",\r\n" +
-			 * "		\"highsAndLows \": \"6.66 \",\r\n" +
-			 * "		\"highest \": \"9.99 \",\r\n" + "		\"lowest \": \"6.88 \"\r\n"
-			 * + "	}\r\n" + "}"; return json;
-			 */
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				String json = otcService.getDeityList(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} 查询我的商家挂单 发生异常.", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} 查询我的商家挂单 发生异常.", e.toString());
 			return result;
 		}
+
+		
 	}
 
 	
@@ -289,7 +284,8 @@ public class OtcController {
 	* @return Object
 	 */
 	@RequestMapping(value = "/userOrderHistory", method = RequestMethod.GET)
-	public Object c2cUserOrderHistory(HttpServletRequest request, C2CTransRecordVO c2cTransRecordVO) {
+	public Object c2cUserOrderHistory(HttpServletRequest request, C2CTransRecordVO c2cTransRecordVO,
+								@RequestParam(defaultValue="1") String pageNum,@RequestParam(defaultValue="10") String numPerPage) {
 		HttpSession session = request.getSession();
 		// 获取当前本地语言
 		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
@@ -319,7 +315,6 @@ public class OtcController {
 		}
 
 		
-		hashMap.put("symbol", "usdt");
 		if (null != c2cTransRecordVO.getSymbol()) {
 			hashMap.put("symbol", c2cTransRecordVO.getSymbol());
 		}
@@ -330,244 +325,29 @@ public class OtcController {
 			hashMap.put("status", c2cTransRecordVO.getStatus());
 		}
 
-		hashMap.put("pageNum", c2cTransRecordVO.getPageNum());
-		hashMap.put("numPerPage", c2cTransRecordVO.getNumPerPage());
-		hashMap.put("uid", "1111");
-
-		try {
-
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			/*String json = otcService.c2cUserOrderHistory(request, hashMap);
-			return Toolkits.handleResp(json);*/
-			String json = "{\r\n" + 
-					"	\"code\": \"200\",\r\n" + 
-					"	\"message\": \"Successful\",\r\n" + 
-					"	\"data\": {\r\n" + 
-					"		\"currentPage\": 1,\r\n" + 
-					"		\"numPerPage\": 10,\r\n" + 
-					"		\"totalCount\": 28,\r\n" + 
-					"		\"recordList\": [{\r\n" + 
-					"			\"entryOrderId\": \"\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 1,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-10 10:48\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"1\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 1,\r\n" + 
-					"			\"type\": 1,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-10 09:38\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"1\",\r\n" + 
-					"			\"bankBranch\": \"1\",\r\n" + 
-					"			\"bankCardNumber\": \"1\",\r\n" + 
-					"			\"alipayAccount\": \"1\",\r\n" + 
-					"			\"alipayImg\": \"1\",\r\n" + 
-					"			\"wxAccount\": \"1\",\r\n" + 
-					"			\"wxImg\": \"1\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"2\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 1,\r\n" + 
-					"			\"type\": 1,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"1\",\r\n" + 
-					"			\"bankBranch\": \"1\",\r\n" + 
-					"			\"bankCardNumber\": \"1\",\r\n" + 
-					"			\"alipayAccount\": \"1\",\r\n" + 
-					"			\"alipayImg\": \"1\",\r\n" + 
-					"			\"wxAccount\": \"1\",\r\n" + 
-					"			\"wxImg\": \"1\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"3\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 3,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"4\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 7,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"5\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 3,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"6\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 7,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"7\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 3,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"8\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 7,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}, {\r\n" + 
-					"			\"entryOrderId\": \"9\",\r\n" + 
-					"			\"currencyId\": \"\",\r\n" + 
-					"			\"uid\": \"1111\",\r\n" + 
-					"			\"price\": 10.00000000,\r\n" + 
-					"			\"number\": 1.00000000,\r\n" + 
-					"			\"amount\": 1.00000000,\r\n" + 
-					"			\"status\": 3,\r\n" + 
-					"			\"type\": 2,\r\n" + 
-					"			\"payMethod\": \"010101\",\r\n" + 
-					"			\"createTime\": \"2018-07-07 18:30\",\r\n" + 
-					"			\"targetUid\": \"11\",\r\n" + 
-					"			\"targetName\": \"ld\",\r\n" + 
-					"			\"bankName\": \"中商银行\",\r\n" + 
-					"			\"bankBranch\": \"酹太想爱你支行\",\r\n" + 
-					"			\"bankCardNumber\": \"42108234234324324321\",\r\n" + 
-					"			\"alipayAccount\": \"242\",\r\n" + 
-					"			\"alipayImg\": \"2342\",\r\n" + 
-					"			\"wxAccount\": \"242\",\r\n" + 
-					"			\"wxImg\": \"2342\"\r\n" + 
-					"		}],\r\n" + 
-					"		\"pageCount\": 3,\r\n" + 
-					"		\"beginPageIndex\": 1,\r\n" + 
-					"		\"endPageIndex\": 3,\r\n" + 
-					"		\"countResultMap\": null\r\n" + 
-					"	},\r\n" + 
-					"	\"ext\": null\r\n" + 
-					"}";
-			return json;
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		hashMap.put("pageNum", pageNum);
+		hashMap.put("numPerPage", numPerPage);
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				String json = otcService.c2cUserOrderHistory(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} c2c用户订单分页查询  解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} c2c用户订单分页查询  解析后台数据发生异常", e.toString());
 			return result;
 		}
+
+		
 	}
 	
 	
@@ -591,9 +371,11 @@ public class OtcController {
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -602,26 +384,35 @@ public class OtcController {
 
 		hashMap.put("payMethod", payMethod);
 		hashMap.put("orderId", orderId);
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
 
-		try {
+				// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
+				/*
+				 * Boolean flag = (Boolean)
+				 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
+				 * model.addAttribute("list", null); return "record/withdrawRecord"; }
+				 */
 
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-
-			String json = otcService.busCancleOrder(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				String json = otcService.busCancleOrder(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} c2c商家取消订单 解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} c2c商家取消订单 解析后台数据发生异常", e.toString());
 			return result;
 		}
+
+		
 	}
 	
 	
@@ -643,9 +434,11 @@ public class OtcController {
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 		
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -653,26 +446,35 @@ public class OtcController {
 		
 		
 		hashMap.put("orderId", orderId);
-		hashMap.put("uid", "91f9cfcf-7a95-11e8-ad83-4ccc6ad6addc");
-		
-		try {
-			
-			// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
-			/*
-			 * Boolean flag = (Boolean)
-			 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
-			 * model.addAttribute("list", null); return "record/withdrawRecord"; }
-			 */
-			
-			String json = otcService.userCancleOrder(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				
+				// 先判断用户是否绑定过手机，如果没有绑定手机，就不需要向后台请求数据
+				/*
+				 * Boolean flag = (Boolean)
+				 * session.getAttribute(SessionAttributes.USER_ISBINDPHONE); if (!flag) {
+				 * model.addAttribute("list", null); return "record/withdrawRecord"; }
+				 */
+				
+				String json = otcService.userCancleOrder(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} 用户撤销订单  解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} 用户撤销订单  解析后台数据发生异常", e.toString());
 			return result;
 		}
+		
+		
 	}
 	
 	
@@ -687,7 +489,8 @@ public class OtcController {
 	* @return Object
 	 */
 	@RequestMapping(value = "/busOrderHistory", method = RequestMethod.GET)
-	public Object c2cBusOrderHistory(HttpServletRequest request, C2CTransRecordVO c2cTransRecordVO) {
+	public Object c2cBusOrderHistory(HttpServletRequest request, C2CTransRecordVO c2cTransRecordVO,
+									@RequestParam(defaultValue="1") String pageNum,@RequestParam(defaultValue="10") String numPerPage) {
 		HttpSession session = request.getSession();
 		// 获取当前本地语言
 		Locale locale = (Locale) session.getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
@@ -695,9 +498,11 @@ public class OtcController {
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -713,7 +518,7 @@ public class OtcController {
 				hashMap.put("endTime", endTime);
 			}
 		} catch (Exception e) {
-			log.error("{} 我的商家接单  页面时间转换失败");
+			log.error("{} 我的商家接单  时间转换失败");
 		}
 
 		
@@ -728,20 +533,29 @@ public class OtcController {
 			hashMap.put("status", c2cTransRecordVO.getStatus());
 		}
 
-		hashMap.put("pageNum", c2cTransRecordVO.getPageNum());
-		hashMap.put("numPerPage", c2cTransRecordVO.getNumPerPage());
-		hashMap.put("objectUid", "11");
-
-		try {
-			String json = otcService.c2cBusOrderHistory(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		hashMap.put("pageNum", pageNum);
+		hashMap.put("numPerPage", numPerPage);
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("objectUid", userVO.getUid());
+			try {
+				String json = otcService.c2cBusOrderHistory(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} 查询我的商家接单 解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} 查询我的商家接单 解析后台数据发生异常", e.toString());
 			return result;
 		}
+
+		
 	}
 	
 	
@@ -766,9 +580,11 @@ public class OtcController {
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -776,18 +592,27 @@ public class OtcController {
 
 		hashMap.put("payPassword", payPassword);
 		hashMap.put("orderId", orderId);
-		hashMap.put("uid", "1111");
-
-		try {
-			String json = otcService.userPayFinish(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				String json = otcService.userPayFinish(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} 用户已付款 解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} 用户已付款 解析后台数据发生异常", e.toString());
 			return result;
 		}
+
+		
 	}
 	
 	
@@ -812,9 +637,11 @@ public class OtcController {
 		ResponseResult result = new ResponseResult();
 		if ("zh_CN".equals(locale.toString())) {
 			map.put("msg1", "服务器异常,请稍后重试");
+			map.put("msg2", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Server exception,please try again later");
+			map.put("msg2", "You haven't logged in yet,please login and try again");
 		}
 		
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -822,18 +649,28 @@ public class OtcController {
 		
 		hashMap.put("payPassword", payPassword);
 		hashMap.put("orderId", orderId);
-		hashMap.put("uid", "1111");
-		
-		try {
-			String json = otcService.busCheckFinish(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg1")));
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				String json = otcService.busCheckFinish(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg1")));
+				result.setData("");
+				log.error("{} 商家放行  解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg2")));
 			result.setData("");
-			log.error("{} 商家放行  解析后台数据发生异常", e.toString());
 			return result;
 		}
+		
+		
+		
 	}
 	
 	
@@ -864,11 +701,13 @@ public class OtcController {
 			map.put("msg1", "资金密码不能为空");
 			map.put("msg2", "订单数量不能为空");
 			map.put("msg3", "服务器异常,请稍后重试");
+			map.put("msg4", "你还没有登录,请登录后重试");
 		}
 		if ("en_US".equals(locale.toString())) {
 			map.put("msg1", "Capital cipher can not be empty");
 			map.put("msg2", "The order quantity cannot be empty");
 			map.put("msg3", "Server exception,please try again later");
+			map.put("msg4", "You haven't logged in yet,please login and try again");
 		}
 		
 		result.setCode(ResultCode.FORM_INFO_ERROR);
@@ -890,20 +729,27 @@ public class OtcController {
 		hashMap.put("amount", amount);
 		hashMap.put("orderNum", orderNum);
 		hashMap.put("type", type);
-		hashMap.put("uid", "1111");
-		
-		try {
-			String json = otcService.userBuySell(request, hashMap);
-			return Toolkits.handleResp(json);
-		} catch (Exception e) {
-			result.setCode(ResultCode.SYSTEM_ERROR);
-			result.setMessage(Toolkits.defaultString(map.get("msg3")));
+		UserVO userVO = (UserVO) session.getAttribute(SessionAttributes.LOGIN_SECONDLOGIN);
+		if (null != userVO) {
+			hashMap.put("uid", userVO.getUid());
+			try {
+				String json = otcService.userBuySell(request, hashMap);
+				return Toolkits.handleResp(json);
+			} catch (Exception e) {
+				result.setCode(ResultCode.SYSTEM_ERROR);
+				result.setMessage(Toolkits.defaultString(map.get("msg3")));
+				result.setData("");
+				log.error("{} c2c用户 下单 解析后台数据发生异常", e.toString());
+				return result;
+			}
+		}else {
+			result.setCode(ResultCode.USER_ISNOTLOGIN);
+			result.setMessage(Toolkits.defaultString(map.get("msg4")));
 			result.setData("");
-			log.error("{} c2c用户 下单 解析后台数据发生异常", e.toString());
 			return result;
 		}
+		
 	}
-	
 	
 	
 	

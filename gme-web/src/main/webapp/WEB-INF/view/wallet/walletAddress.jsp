@@ -71,7 +71,6 @@
 					}
 				});
 			}
-		
 		</script>
 		
 		<script type="text/javascript">
@@ -138,7 +137,7 @@
 					type: 'POST',
 					url: "http://192.168.0.148:8080/gme-web/api/v1/wallet/withdrawAddressAdd.json",
 					dataType: "json",
-					data: "currencyId=" + currencyId + "&address=" + address + "&remark=" + remark + "&tradeAuth=" + "111" + "&symbol=" + symbol,
+					data: "currencyId=" + currencyId + "&address=" + address + "&remark=" + remark + "&tradeAuth=" + "111",
 					success: function(data){
 						if (data.code == 200) {
 							//$("tbody").append('<tr><input type="hidden" value="'+currencyId+'"/><td>'+symbol+'</td><td>'+address+'</td><td>'+remark+'</td><td><a>删除</a></td></tr>');	

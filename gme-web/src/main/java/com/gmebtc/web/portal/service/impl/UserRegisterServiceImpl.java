@@ -4,10 +4,9 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.gmebtc.web.portal.service.UserService;
+import com.gmebtc.web.portal.service.UserRegisterService;
 import com.gmebtc.web.portal.utils.ConfigUtil;
 import com.gmebtc.web.portal.utils.SendRequestUtil;
 
@@ -18,7 +17,7 @@ import com.gmebtc.web.portal.utils.SendRequestUtil;
  * @Desc 用户基本信息service实现类
  */
 @Service(value = "userService")
-public class UserRegisterServiceImpl implements UserService{
+public class UserRegisterServiceImpl implements UserRegisterService{
 
 
     // 获得eolinker的基础参数
